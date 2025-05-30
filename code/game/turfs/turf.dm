@@ -168,7 +168,7 @@
 				can_see_sky = SEE_SKY_YES
 			return can_see_sky()
 		A = get_area(CT)
-		if(!istype(CT, /turf/open/transparent/openspace))
+		if(!istype(CT, /turf/open/transparent))
 			can_see_sky = SEE_SKY_NO
 			return can_see_sky()
 

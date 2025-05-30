@@ -374,6 +374,23 @@
 						if(T.landsound)
 							playsound(T, T.landsound, 100, FALSE)
 						T.Entered(src)
+					if(istype(src.loc, /turf/open/transparent/glass)) //glass floors may break if you jump on them.
+						var/turf/open/transparent/glass/T = src.loc
+						if(prob(40))
+							playsound(T, pick('sound/combat/hits/onglass/glassbreak (1).ogg','sound/combat/hits/onglass/glassbreak (2).ogg','sound/combat/hits/onglass/glassbreak (3).ogg'), 50, FALSE)
+							T.ChangeTurf(/turf/open/transparent/openspace, flags = CHANGETURF_INHERIT_AIR)
+							visible_message(span_danger("\the [T] shatters under [src]'s landing!"))
+							T.cut_overlay("damage25")
+							for(var/turf/open/transparent/glass/turfie in range(1,T)) //turns surrounding glass to shit also at a chance
+								if(prob(25))
+									var/obj/item/natural/glass/shard/glass_shard = new /obj/item/natural/glass/shard(turfie)
+									glass_shard.throw_at(turfie) //so they fall down hopefully
+									turfie.ChangeTurf(/turf/open/transparent/openspace, flags = CHANGETURF_INHERIT_AIR)
+							T.Entered(src)
+						else
+							visible_message(span_danger("\the [T] cracks under [src]'s weight, but holds up."))
+							T.add_overlay("damage25")
+							playsound(T, 'sound/combat/hits/onglass/glasshit.ogg', 50, FALSE)
 				else
 					throw_at(A, 1, 1, src, spin = FALSE)
 				return
