@@ -233,7 +233,7 @@
 	name = "bright bronze key"
 	desc = "Clean and presentable, this key is well-cared for and unweathered."
 	icon_state = "brownkey"
-	lockid = "sund_gameroom"
+	lockid = "sund_parlor"
 
 /obj/item/roguekey/sund/sund_bawdymaster
 	name = "ornate dark key"
