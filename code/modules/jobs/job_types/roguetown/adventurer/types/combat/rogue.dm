@@ -1,6 +1,6 @@
 /datum/advclass/rogue
-	name = "Rogue"
-	tutorial = "Thieves, scoundrels, and silver-tongued charlatans from all walks of life."
+	name = "Pickpocket"
+	tutorial = "A pickpocket fleeing their home to escape the gallows, a common thief wishing to climb higher. Remember, murder may just get you in more trouble."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/rogue
