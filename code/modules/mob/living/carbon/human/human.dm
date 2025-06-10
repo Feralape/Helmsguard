@@ -912,3 +912,16 @@
 
 /mob/living/carbon/human/Topic(href, href_list)
 	..()
+
+/mob/living/carbon/human/revive(full_heal = FALSE, admin_revive = FALSE)
+	. = ..()
+	if(faction)
+		LAZYADD(GLOB.alive_player_list_faction[faction], src)
+
+/mob/living/carbon/human/death(gibbed, nocutscene)
+	LAZYREMOVE(GLOB.alive_player_list_faction[faction], src)
+	. = ..()
+
+/mob/living/carbon/human/Destroy()
+	LAZYREMOVE(GLOB.alive_player_list_faction[faction], src)
+	. = ..()

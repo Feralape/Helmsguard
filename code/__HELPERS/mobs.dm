@@ -144,6 +144,9 @@ GLOBAL_LIST_INIT(oldhc, sortList(list(
 
 
 GLOBAL_LIST_EMPTY(species_list)
+///helps us select bois by their faction.
+GLOBAL_LIST_EMPTY(alive_player_list_faction)
+
 
 /proc/age2agedescription(age)
 	switch(age)
