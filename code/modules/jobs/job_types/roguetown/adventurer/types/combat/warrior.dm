@@ -1,7 +1,6 @@
 /datum/advclass/sfighter
-	name = "Warrior"
-	tutorial = "Trained warriors and estemeed swordsmen from all corners of the world, \
-	warriors are defined by martial prowess - whether with a blade or their bare fists."
+	name = Vagrant"
+	tutorial = "Wandering peasants, milita, deserters... many and varied folk turn to the path of the vagrant. Very few meet anything greater than the bottom of a tankard or the wrong end of a noose."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/sfighter
