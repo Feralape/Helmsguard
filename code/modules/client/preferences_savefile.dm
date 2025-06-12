@@ -506,7 +506,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		char_accent = "No accent"
 
 //	S["pronouns"] >> pronouns
-	S["voice_type"] >> voice_type
+//	S["voice_type"] >> voice_type
 	//try to fix any outdated data if necessary
 	if(needs_update >= 0)
 		update_character(needs_update, S)		//needs_update == savefile_version if we need an update (positive integer)
