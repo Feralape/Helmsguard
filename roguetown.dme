@@ -737,6 +737,7 @@
 #include "code\game\gamemodes\dynamic\dynamic_rulesets_midround.dm"
 #include "code\game\gamemodes\dynamic\dynamic_rulesets_roundstart.dm"
 #include "code\game\gamemodes\extended\extended.dm"
+#include "code\game\gamemodes\extended_war\extended_war.dm"
 #include "code\game\gamemodes\roguetown\chaosmode.dm"
 #include "code\game\gamemodes\roguetown\roguetown.dm"
 #include "code\game\gamemodes\roguetown\roguewar.dm"

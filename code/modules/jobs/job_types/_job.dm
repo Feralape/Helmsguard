@@ -172,6 +172,9 @@
 	if(!ishuman(H))
 		return
 
+	if(faction)
+		LAZYADD(GLOB.alive_player_list_faction[faction], src)
+
 	if(spells && H.mind)
 		for(var/S in spells)
 			H.mind.AddSpell(new S)
