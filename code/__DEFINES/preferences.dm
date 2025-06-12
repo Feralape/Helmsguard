@@ -127,7 +127,7 @@
 #define THEY_THEM_F		"they/them (Feminine)"
 
 GLOBAL_LIST_INIT(pronouns_list, list(HE_HIM, SHE_HER, THEY_THEM, THEY_THEM_F))
-*/
+
 // Voice types (LETHALSTONE)
 
 #define VOICE_TYPE_MASC	"Male"
@@ -135,3 +135,4 @@ GLOBAL_LIST_INIT(pronouns_list, list(HE_HIM, SHE_HER, THEY_THEM, THEY_THEM_F))
 #define VOICE_TYPE_ANDR	"Androgynous"
 
 GLOBAL_LIST_INIT(voice_types_list, list(VOICE_TYPE_MASC, VOICE_TYPE_FEM, VOICE_TYPE_ANDR))
+*/
