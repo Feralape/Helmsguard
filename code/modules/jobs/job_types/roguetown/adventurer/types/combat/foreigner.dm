@@ -31,15 +31,15 @@
 			beltl = /obj/item/rogueweapon/sword/sabre/mulyeog
 			belt = /obj/item/storage/belt/rogue/leather/black
 			backr = /obj/item/storage/backpack/rogue/satchel
-			H.mind.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)		//to encourage use of the scabbard as a shield	
-			H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE) 			//this shouldn't be enough to allow them to craft shit, rather just repair their prone-to-break armor
+			H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+			H.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)		//to encourage use of the scabbard as a shield	
+			H.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+			H.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+			H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+			H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+			H.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+			H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+			H.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE) 			//this shouldn't be enough to allow them to craft shit, rather just repair their prone-to-break armor
 			backpack_contents = list(/obj/item/recipe_book/survival = 1, /obj/item/flashlight/flare/torch/lantern)
 			H.change_stat("strength", 2)
 			H.change_stat("endurance", 1)
@@ -58,20 +58,20 @@
 			belt = /obj/item/storage/belt/rogue/leather/
 			beltl = /obj/item/flashlight/flare/torch/lantern
 			backl = /obj/item/storage/backpack/rogue/satchel
-			H.mind.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)		
-			H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
+			H.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)		
+			H.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+			H.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+			H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+			H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+			H.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+			H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+			H.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
 			backpack_contents = list(/obj/item/recipe_book/survival = 1)
 			H.set_blindness(0)
 			var/weapons = list("Naginata","Quarterstaff")
 			var/weapon_choice = input("Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 			switch(weapon_choice)
-				if ("Naginata")
+				if("Naginata")
 					r_hand = /obj/item/rogueweapon/spear/naginata
 				if("Quarterstaff")
 					backr = /obj/item/rogueweapon/woodstaff/quarterstaff/steel

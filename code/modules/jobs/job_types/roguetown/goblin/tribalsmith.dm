@@ -7,7 +7,7 @@
 	spawn_positions = 0
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = list()
-	allowed_patrons = list(/datum/patron/inhuman/graggar)
+	allowed_patrons = list(/datum/patron/inhumen/graggar)
 	tutorial = "Goblin rensposible for fresh iron and steel"
 	display_order = JDO_GOBLINSMITH
 	outfit = /datum/outfit/job/roguetown/goblinsmith
@@ -22,19 +22,18 @@
 	cloak = /obj/item/clothing/cloak/apron/blacksmith
 	backl = /obj/item/storage/backpack/rogue/satchel
 
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, pick(0,0,1), TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, pick(1,1,2), TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/crafting, 2 , TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/masonry, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/engineering, pick(2,2,3), TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sewing, pick(1,1,2), TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/traps, pick(1,1,2), TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/blacksmithing, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/armorsmithing, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/weaponsmithing, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/carpentry, 3, TRUE)
-		H.change_stat("strength", 1)
-		H.change_stat("endurance", 1)
-		H.change_stat("speed", -2)
+	H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, pick(0,0,1), TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, pick(1,1,2), TRUE)
+	H.adjust_skillrank(/datum/skill/craft/crafting, 2 , TRUE)
+	H.adjust_skillrank(/datum/skill/craft/masonry, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/engineering, pick(2,2,3), TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sewing, pick(1,1,2), TRUE)
+	H.adjust_skillrank(/datum/skill/craft/traps, pick(1,1,2), TRUE)
+	H.adjust_skillrank(/datum/skill/craft/blacksmithing, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/armorsmithing, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/weaponsmithing, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/carpentry, 3, TRUE)
+	H.change_stat("strength", 1)
+	H.change_stat("endurance", 1)
+	H.change_stat("speed", -2)

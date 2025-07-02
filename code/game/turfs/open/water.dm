@@ -84,7 +84,6 @@
 	var/const/BASE_STAM_DRAIN = 15
 	var/const/MIN_STAM_DRAIN = 1
 	var/const/STAM_PER_LEVEL = 5
-	var/const/NPC_SWIM_LEVEL = SKILL_LEVEL_APPRENTICE
 	var/const/UNSKILLED_ARMOR_PENALTY = 40
 	if(!isliving(swimmer))
 		return 0
@@ -96,7 +95,7 @@
 		return 0 // going with the flow
 	if(swimmer.buckled)
 		return 0
-	var/swimming_skill_level = swimmer.mind ? swimmer.mind.get_skill_level(/datum/skill/misc/swimming) : NPC_SWIM_LEVEL
+	var/swimming_skill_level = swimmer.get_skill_level(/datum/skill/misc/swimming) 
 	. = max(BASE_STAM_DRAIN - (swimming_skill_level * STAM_PER_LEVEL), MIN_STAM_DRAIN)
 //	. += (swimmer.checkwornweight()*2)
 	if(!swimmer.check_armor_skill())
@@ -263,8 +262,7 @@
 
 /turf/open/water/get_slowdown(mob/user)
 	var/returned = slowdown
-	if(user?.mind && swim_skill)
-		returned = returned - (user.mind.get_skill_level(/datum/skill/misc/swimming))
+	returned = returned - (user.get_skill_level(/datum/skill/misc/swimming))
 	return returned
 
 //turf/open/water/Initialize()

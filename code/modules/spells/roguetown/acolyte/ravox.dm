@@ -211,8 +211,8 @@
 					count++
 				else if(diff < 0)
 					chance -= 10
-			var/holymod = user.mind?.get_skill_level(/datum/skill/magic/holy) * 10
-			pull_distance += floor((user.mind?.get_skill_level(/datum/skill/magic/holy) - 1) / 2)	//+1 pull dist at Jman and Master Holy skill
+			var/holymod = user.get_skill_level(/datum/skill/magic/holy) * 10
+			pull_distance += floor((user.get_skill_level(/datum/skill/magic/holy) - 1) / 2)	//+1 pull dist at Jman and Master Holy skill
 			chance += holymod
 			user.visible_message(span_boldwarning("[user] yanks on a transluscent chain sticking out of [target]!"))
 			if(count > 3)	//More than half of the stats are in our favor.

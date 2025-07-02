@@ -6,7 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 
-	allowed_races = NOBLE_RACES_TYPES	//No noble constructs.
+	allowed_races = RACES_NO_CONSTRUCT	//No noble constructs.
 	allowed_sexes = list(MALE, FEMALE)
 	outfit = /datum/outfit/job/roguetown/hand
 	advclass_cat_rolls = list(CTAG_HAND = 20)
@@ -19,7 +19,7 @@
 	max_pq = null
 	round_contrib_points = 3
 	cmode_music = 'sound/music/combat_noble.ogg'
-	advjob_examine = TRUE
+
 /*
 /datum/job/roguetown/hand/special_job_check(mob/dead/new_player/player)
 	if(!player)
@@ -69,26 +69,25 @@
 /datum/outfit/job/roguetown/hand/handclassic/pre_equip(mob/living/carbon/human/H)
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/guard
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel = 1, /obj/item/storage/keyring/sund/sund_steward = 1)
+	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/dtace = 1, /obj/item/storage/keyring/hand = 1)
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/vest/hand
 	pants = /obj/item/clothing/under/roguetown/tights/black
 	id = /obj/item/scomstone/garrison
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/tracking, 1, TRUE)
-		H.change_stat("strength", 2)
-		H.change_stat("perception", 3)
-		H.change_stat("intelligence", 3)
+	H.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/lockpicking, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/tracking, 1, TRUE)
+	H.change_stat("strength", 2)
+	H.change_stat("perception", 3)
+	H.change_stat("intelligence", 3)
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
@@ -103,7 +102,7 @@
 //Spymaster start. More similar to the rogue adventurer - loses heavy armor and sword skills for more sneaky stuff. 
 /datum/outfit/job/roguetown/hand/spymaster/pre_equip(mob/living/carbon/human/H)
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/dtace = 1, /obj/item/storage/keyring/sund/sund_steward = 1, /obj/item/lockpickring/mundane)
+	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/dtace = 1, /obj/item/storage/keyring/hand = 1, /obj/item/lockpickring/mundane)
 	if(H.dna.species.type in NON_DWARVEN_RACE_TYPES)
 		shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/shadowrobe
 		cloak = /obj/item/clothing/cloak/half/shadowcloak
@@ -118,23 +117,22 @@
 		armor = /obj/item/clothing/suit/roguetown/armor/leather/vest/hand
 		pants = /obj/item/clothing/under/roguetown/tights/black
 		id = /obj/item/scomstone/garrison
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 6, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/tracking, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 5, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/stealing, 5, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, 5, TRUE) // not like they're gonna break into the vault.
+	H.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 6, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/tracking, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sneaking, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/stealing, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/lockpicking, 5, TRUE) // not like they're gonna break into the vault.
 	H.change_stat("strength", -1)
 	H.change_stat("perception", 2)
 	H.change_stat("speed", 3)
@@ -143,12 +141,10 @@
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_BLINDFIGHTING, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_LIGHT_STEP, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_PERFECT_TRACKER, TRAIT_GENERIC)
 
 /datum/advclass/hand/advisor
-	name = "Court Advisor"
+	name = "Advisor"
 	tutorial = " You have played researcher and confidant to the Noble-Family for so long that you are a vault of knowledge, something you exploit with potent conviction. Let no man ever forget the knowledge you wield. You've read more books than any blademaster or spymaster could ever claim to."
 	outfit = /datum/outfit/job/roguetown/hand/advisor
 
@@ -158,36 +154,36 @@
 /datum/outfit/job/roguetown/hand/advisor/pre_equip(mob/living/carbon/human/H)
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/guard
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel = 1, /obj/item/storage/keyring/sund/sund_steward = 1, /obj/item/reagent_containers/glass/bottle/rogue/poison = 1) //starts with a vial of poison, like all wizened evil advisors do!
+	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/dtace = 1, /obj/item/storage/keyring/hand = 1, /obj/item/reagent_containers/glass/bottle/rogue/poison = 1) //starts with a vial of poison, like all wizened evil advisors do!
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/vest/hand
 	pants = /obj/item/clothing/under/roguetown/tights/black
 	id = /obj/item/scomstone/garrison
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/tracking, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/alchemy, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/lockpicking, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/magic/arcane, 2, TRUE)
+	H.change_stat("intelligence", 4)
+	H.change_stat("perception", 3)
+	ADD_TRAIT(H, TRAIT_MAGEARMOR, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_ARCYNE_T2, TRAIT_GENERIC)
 	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 5, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/tracking, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/alchemy, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/magic/arcane, 2, TRUE)
-		H.change_stat("intelligence", rand(4,5))
-		H.change_stat("perception", 3)
-		H.mind.adjust_spellpoints(15)
-		ADD_TRAIT(H, TRAIT_MAGEARMOR, TRAIT_GENERIC)
-		ADD_TRAIT(H, TRAIT_ARCYNE_T2, TRAIT_GENERIC)
+		H?.mind.adjust_spellpoints(15)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
 	if(H.age == AGE_OLD)
 		H.change_stat("speed", -1)
 		H.change_stat("strength", -1)
 		H.change_stat("intelligence", 1)
 		H.change_stat("perception", 1)
-		H.mind.adjust_spellpoints(3)
+		H?.mind.adjust_spellpoints(3)
 
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 

@@ -1,12 +1,10 @@
 /datum/job/roguetown/cook
 	title = "Cook"
 	flag = COOK
-	department_flag = RABBLE
+	department_flag = PEASANTS
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
-
-	selection_color = JCOLOR_RABBLE
 
 	allowed_races = RACES_ALL_KINDS
 	tutorial = "There are many mouths to feed in town, and most look to you for it. You work under the care of the innkeeper and craft such culinary delights that even the crown stops by from time to time. All the while, you try to get the rest of the staff up to speed as well--before you get too many burn marks on your body from slaving over your hot hearths."
@@ -20,26 +18,25 @@
 
 /datum/outfit/job/roguetown/cook/pre_equip(mob/living/carbon/human/H)
 	..()
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/cooking, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/crafting, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sewing, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/labor/butchering, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/labor/farming, 2, TRUE)
-		if(H.age == AGE_MIDDLEAGED)
-			H.mind.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/labor/farming, 1, TRUE)
-		if(H.age == AGE_OLD)
-			H.mind.adjust_skillrank(/datum/skill/craft/cooking, 2, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/labor/farming, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/cooking, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/crafting, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sewing, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/labor/butchering, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/labor/farming, 2, TRUE)
+	if(H.age == AGE_MIDDLEAGED)
+		H.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/labor/farming, 1, TRUE)
+	if(H.age == AGE_OLD)
+		H.adjust_skillrank(/datum/skill/craft/cooking, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/labor/farming, 1, TRUE)
 	belt = /obj/item/storage/belt/rogue/leather
-	beltl = /obj/item/storage/keyring/sund/sund_inn
+	beltl = /obj/item/roguekey/tavern
 	backr = /obj/item/storage/backpack/rogue/satchel
 	cloak = /obj/item/clothing/cloak/apron/cook
 	head = /obj/item/clothing/head/roguetown/cookhat

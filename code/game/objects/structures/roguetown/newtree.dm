@@ -93,7 +93,7 @@
 		var/exp_to_gain = 0
 		var/myskill = SKILL_LEVEL_NOVICE // default for NPCs
 		if(L.mind)
-			myskill = L.mind.get_skill_level(/datum/skill/misc/climbing)
+			myskill = L.get_skill_level(/datum/skill/misc/climbing)
 			if(HAS_TRAIT(L, TRAIT_WOODWALKER))
 				exp_to_gain = L.STAINT
 			else

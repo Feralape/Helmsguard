@@ -26,7 +26,7 @@
 	cmode_music = 'sound/music/combat_knight.ogg'
 
 /datum/outfit/job/roguetown/captain
-	neck = /obj/item/clothing/neck/roguetown/chaincoif
+	neck = /obj/item/clothing/neck/roguetown/bevor
 	armor = /obj/item/clothing/suit/roguetown/armor/plate
 	shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
 	pants = /obj/item/clothing/under/roguetown/chainlegs
@@ -52,7 +52,7 @@
 			S.name = "Captain Tabard ([index])"
 		var/prev_real_name = H.real_name
 		var/prev_name = H.name
-		var/honorary = "Sir"
+		var/honorary = "Ser"
 		if(should_wear_femme_clothes(H))
 			honorary = "Dame"
 		H.real_name = "[honorary] [prev_real_name]"
@@ -80,32 +80,32 @@
 	..()
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	backpack_contents = list(
-		/obj/item/storage/keyring/sund/sund_knight = 1,
+		/obj/item/storage/keyring/sheriff = 1,
 		/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1,
 		)
+	H.adjust_skillrank(/datum/skill/combat/swords, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axes, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
+	H.change_stat("strength", 2)
+	H.change_stat("perception", 1)
+	H.change_stat("intelligence", 2)
+	H.change_stat("constitution", 2)
+	H.change_stat("endurance", 2)
+	H.change_stat("fortune", 1)
 	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 5, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 5, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 2, TRUE)
-		H.change_stat("strength", 2)
-		H.change_stat("perception", 1)
-		H.change_stat("intelligence", 2)
-		H.change_stat("constitution", 2)
-		H.change_stat("endurance", 2)
-		H.change_stat("fortune", 1)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/movemovemove)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/takeaim)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/onfeet)
@@ -160,8 +160,10 @@
 		"Bucket Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/bucket,
 		"Knight Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/knight,
 		"Visored Sallet"	= /obj/item/clothing/head/roguetown/helmet/sallet/visored,
+		"Armet"				= /obj/item/clothing/head/roguetown/helmet/heavy/knight/armet,
 		"Hounskull Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/hounskull,
-		"Klappvisier Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/klappvisier,
+		"Etruscan Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/etruscan,
+		"Slitted Kettle"	= /obj/item/clothing/head/roguetown/helmet/heavy/knight/skettle,
 		"None"
 	)
 	var/helmchoice = input("Choose your Helm.", "TAKE UP HELMS") as anything in helmets
@@ -181,31 +183,31 @@
 	head = /obj/item/clothing/head/roguetown/helmet/heavy/bucket
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	backpack_contents = list(
-		/obj/item/storage/keyring/sund/sund_knight = 1,
+		/obj/item/storage/keyring/sheriff = 1,
 		/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1,
 		)
+	H.adjust_skillrank(/datum/skill/combat/swords, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 4, TRUE)
+	H.change_stat("strength", 2)
+	H.change_stat("perception", 1)
+	H.change_stat("intelligence", 2)
+	H.change_stat("constitution", 2)
+	H.change_stat("endurance", 2)
+	H.change_stat("fortune", 1)
 	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 5, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 5, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 4, TRUE)
-		H.change_stat("strength", 2)
-		H.change_stat("perception", 1)
-		H.change_stat("intelligence", 2)
-		H.change_stat("constitution", 2)
-		H.change_stat("endurance", 2)
-		H.change_stat("fortune", 1)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/movemovemove)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/takeaim)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/onfeet)
@@ -253,12 +255,103 @@
 		"Bucket Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/bucket,
 		"Knight Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/knight,
 		"Visored Sallet"	= /obj/item/clothing/head/roguetown/helmet/sallet/visored,
+		"Armet"				= /obj/item/clothing/head/roguetown/helmet/heavy/knight/armet,
 		"Hounskull Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/hounskull,
-		"Klappvisier Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/klappvisier,
+		"Etruscan Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/etruscan,
+		"Slitted Kettle"	= /obj/item/clothing/head/roguetown/helmet/heavy/knight/skettle,
 		"None"
 	)
 	var/helmchoice = input("Choose your Helm.", "TAKE UP HELMS") as anything in helmets
 	if(helmchoice != "None")
 		head = helmets[helmchoice]
 
+/obj/effect/proc_holder/spell/self/convertrole
+	name = "Recruit Beggar"
+	desc = "Recruit someone to your cause."
+	overlay_state = "recruit_bog"
+	antimagic_allowed = TRUE
+	recharge_time = 100
+	/// Role given if recruitment is accepted
+	var/new_role = "Beggar"
+	/// Faction shown to the user in the recruitment prompt
+	var/recruitment_faction = "Beggars"
+	/// Message the recruiter gives
+	var/recruitment_message = "Serve the beggars, %RECRUIT!"
+	/// Range to search for potential recruits
+	var/recruitment_range = 3
+	/// Say message when the recruit accepts
+	var/accept_message = "I will serve!"
+	/// Say message when the recruit refuses
+	var/refuse_message = "I refuse."
 
+/obj/effect/proc_holder/spell/self/convertrole/cast(list/targets,mob/user = usr)
+	. = ..()
+	var/list/recruitment = list()
+	for(var/mob/living/carbon/human/recruit in (get_hearers_in_view(recruitment_range, user) - user))
+		//not allowed
+		if(!can_convert(recruit))
+			continue
+		recruitment[recruit.name] = recruit
+	if(!length(recruitment))
+		to_chat(user, span_warning("There are no potential recruits in range."))
+		return
+	var/inputty = input(user, "Select a potential recruit!", "[name]") as anything in recruitment
+	if(inputty)
+		var/mob/living/carbon/human/recruit = recruitment[inputty]
+		if(!QDELETED(recruit) && (recruit in get_hearers_in_view(recruitment_range, user)))
+			INVOKE_ASYNC(src, PROC_REF(convert), recruit, user)
+		else
+			to_chat(user, span_warning("Recruitment failed!"))
+	else
+		to_chat(user, span_warning("Recruitment cancelled."))
+
+/obj/effect/proc_holder/spell/self/convertrole/proc/can_convert(mob/living/carbon/human/recruit)
+	//wtf
+	if(QDELETED(recruit))
+		return FALSE
+	//need a mind
+	if(!recruit.mind)
+		return FALSE
+	//only migrants and peasants
+	if(!(recruit.job in GLOB.peasant_positions) && \
+		!(recruit.job in GLOB.yeoman_positions) && \
+		!(recruit.job in GLOB.allmig_positions) && \
+		!(recruit.job in GLOB.mercenary_positions))
+		return FALSE
+	//need to see their damn face
+	if(!recruit.get_face_name(null))
+		return FALSE
+	return TRUE
+
+/obj/effect/proc_holder/spell/self/convertrole/proc/convert(mob/living/carbon/human/recruit, mob/living/carbon/human/recruiter)
+	if(QDELETED(recruit) || QDELETED(recruiter))
+		return FALSE
+	recruiter.say(replacetext(recruitment_message, "%RECRUIT", "[recruit]"), forced = "[name]")
+	var/prompt = alert(recruit, "Do you wish to become a [new_role]?", "[recruitment_faction] Recruitment", "Yes", "No")
+	if(QDELETED(recruit) || QDELETED(recruiter) || !(recruiter in get_hearers_in_view(recruitment_range, recruit)))
+		return FALSE
+	if(prompt != "Yes")
+		if(refuse_message)
+			recruit.say(refuse_message, forced = "[name]")
+		return FALSE
+	if(accept_message)
+		recruit.say(accept_message, forced = "[name]")
+	if(new_role)
+		recruit.job = new_role
+		SEND_SIGNAL(SSdcs, COMSIG_GLOB_ROLE_CONVERTED, recruiter, recruit, new_role)
+	return TRUE
+
+/obj/effect/proc_holder/spell/self/convertrole/guard
+	name = "Recruit Guardsmen"
+	new_role = "Watchman"
+	overlay_state = "recruit_guard"
+	recruitment_faction = "Watchman"
+	recruitment_message = "Serve the town guard, %RECRUIT!"
+	accept_message = "FOR THE CROWN!"
+	refuse_message = "I refuse."
+
+/obj/effect/proc_holder/spell/self/convertrole/guard/convert(mob/living/carbon/human/recruit, mob/living/carbon/human/recruiter)
+	. = ..()
+	if(!.)
+		return
+	recruit.verbs |= /mob/proc/haltyell

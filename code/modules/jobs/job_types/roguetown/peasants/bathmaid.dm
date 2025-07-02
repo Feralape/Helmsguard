@@ -1,10 +1,8 @@
 /datum/job/roguetown/nightmaiden
-	title = "Rake"
-	f_title = "Wench"
+	title = "Bathhouse Attendant"
+	f_title = "Bathhouse Attendant"
 	flag = WENCH
-	department_flag = RABBLE
-	selection_color = JCOLOR_RABBLE
-
+	department_flag = PEASANTS
 	faction = "Station"
 	total_positions = 5
 	spawn_positions = 5
@@ -13,7 +11,7 @@
 	allowed_races = RACES_ALL_KINDS
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED)
 
-	tutorial = "As a Wench, you are a master of charm and allure, skilled in the art of companionship. Your role is to provide comfort, entertainment, and solace to those who seek your services. Whether through conversation, music, or more intimate means, you ensure your patrons leave with their spirits lifted and their burdens lightened. Your craft is as much about understanding the human heart as it is about physical skill."
+	tutorial = "Dancing, music, or practicioners of the body. You've worked up a reputation as an entertainer, and sometime in life, the bathmaster has chosen to onboard you for one of these talents. In the bathhouse, your place on the hierarchy is determined by how long you've been in the game - and how much mammon you're worth."
 
 	outfit = /datum/outfit/job/roguetown/nightmaiden
 	advclass_cat_rolls = list(CTAG_NIGHTMAIDEN = 20)
@@ -38,8 +36,8 @@
 	// This is just a base outfit, the actual outfits are defined in the advclasses
 
 /datum/advclass/nightmaiden
-	name = "Wench"
-	tutorial = "Your role is to provide comfort, entertainment, and solace to those who seek your services. Whether through conversation, music, or more intimate means, you ensure your patrons leave with their spirits lifted and their burdens lightened. Your craft is as much about understanding the human heart as it is about physical skill."
+	name = "Bath Attendant"
+	tutorial = "A fresh initiate, most would decry the humble bath maid as a desperate fool tempting others into bedsheets for money--only sometimes, you say! You work underneath your betters in the communal bathhouse, keeping it and the guests in turn as tidy as they please. Wash laundry, tend mild wounds, and deftly wash your patrons with soap, for this is your craft."
 	outfit = /datum/outfit/job/roguetown/nightmaiden/attendant
 	category_tags = list(CTAG_NIGHTMAIDEN)
 
@@ -47,10 +45,11 @@
 	..()
 	head = /obj/item/clothing/head/roguetown/armingcap
 	shoes = /obj/item/clothing/shoes/roguetown/sandals
-	neck = /obj/item/storage/belt/rogue/pouch/coins/poor
-	r_hand = /obj/item/soap/bath
-	belt =	/obj/item/storage/belt/rogue/leather/cloth
-	beltl = /obj/item/storage/keyring/sund/sund_bawdyroom
+	neck = /obj/item/clothing/neck/roguetown/collar
+	belt =	/obj/item/storage/belt/rogue/leather/cloth/lady
+	beltl = /obj/item/roguekey/nightmaiden
+	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
+	backl = /obj/item/storage/backpack/rogue/satchel
 	if(should_wear_femme_clothes(H))
 		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt
 		armor = /obj/item/clothing/suit/roguetown/shirt/dress/gen/sexy/random
@@ -60,25 +59,25 @@
 	backpack_contents = list(
 		/obj/item/soap/bath = 1
 	)
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/stealing, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/music, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/cooking, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sneaking, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/stealing, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/music, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/whipsflails, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/cooking, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/crafting, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/lockpicking, 1, TRUE)
 
-		H.change_stat("constitution", 3)
-		H.change_stat("strength", 1)
-		H.change_stat("endurance", 2)
+	H.change_stat("constitution", 3)
+	H.change_stat("strength", 1)
+	H.change_stat("endurance", 2)
 	ADD_TRAIT(H, TRAIT_NUTCRACKER, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_CICERONE, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
@@ -86,11 +85,8 @@
 
 /datum/advclass/nightmaiden/concubine
 	name = "Concubine"
-	title = "Concubine"
-	f_title = "Concubine"
-	tutorial = "Unlike your fellow bath attendants who maintain a professional facade, you have abandoned all pretense. You are a prized possession of the nobility, adorned in exotic silks and gold. Your role is to provide companionship, entertainment, and pleasure."
+	tutorial = "Unlike your fellow bath attendants who maintain a professional facade, you have abandoned all pretense. You are a prized possession of the nobility, adorned in exotic silks and gold. Your role is to provide companionship, entertainment, and pleasure. Working underneath the finespun courtesans, you're a step above the bath attendants in your craft."
 	outfit = /datum/outfit/job/roguetown/nightmaiden/concubine
-	allowed_sexes = list(FEMALE)
 	category_tags = list(CTAG_NIGHTMAIDEN)
 
 /datum/outfit/job/roguetown/nightmaiden/concubine/pre_equip(mob/living/carbon/human/H)
@@ -108,27 +104,23 @@
 		/obj/item/candle/eora = 1,
 		/obj/item/rogueweapon/whip = 1,
 		/obj/item/clothing/mask/rogue/blindfold = 1,
-		/obj/item/storage/keyring/sund/sund_bawdyroom = 1
 	)
 	
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/stealing, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/music, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sewing, 3, TRUE)
-		H.change_stat("constitution", 1)
-		H.change_stat("endurance", 1)
-		H.change_stat("speed", 1)
-		H.change_stat("strength", 1)
-		H.change_stat("endurance", 2)
+	H.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sneaking, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/stealing, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/music, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sewing, 3, TRUE)
+	H.change_stat("perception", 3)
+	H.change_stat("strength", 1)
+	H.change_stat("endurance", 2)
 	ADD_TRAIT(H, TRAIT_LIGHT_STEP, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_GOODLOVER, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
@@ -188,22 +180,21 @@
 		/obj/item/toy/cards/deck = 1,
 	)
 
-	if(H.mind)
-		H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/music, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/crafting, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/riding, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
-		H.change_stat("speed", 3)
-		H.change_stat("endurance", 2)
-		H.change_stat("perception", 1)
+	H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sneaking, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/lockpicking, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/music, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/crafting, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
+	H.change_stat("speed", 3)
+	H.change_stat("endurance", 2)
+	H.change_stat("perception", 1)
 	ADD_TRAIT(H, TRAIT_KEENEARS, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_GOODLOVER, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)

@@ -15,6 +15,7 @@
 	var/maxStepsTick = 7 // can move a screen's width in one turn
 	var/resisting = FALSE
 	var/pickpocketing = FALSE
+	var/del_on_deaggro = null
 	var/last_aggro_loss = null
 	var/wander = TRUE
 	var/ai_when_client = FALSE
@@ -502,9 +503,6 @@
 	if (L.alpha == 0 && L.rogue_sneaking)
 		return FALSE
 
-	if(L.alpha <= 100) //if mostly invisible dont see it, surely this wont go wrong.
-		return FALSE
-
 	if(!is_in_zweb(src.z,L.z))
 		return FALSE
 
@@ -545,7 +543,7 @@
 						if(should_target(L))
 							retaliate(L)
 						// don't detect sneaking enemies if you're looking above you
-						if (!is_checking_above && world.time >= next_passive_detect && L.alpha > 100 && prob(STAPER / 2))
+						if (!is_checking_above && world.time >= next_passive_detect && L.alpha == 0 && L.rogue_sneaking && prob(STAPER / 2))
 							if (!npc_detect_sneak(L, -20)) // attempt a passive detect with 20% increased difficulty
 								next_passive_detect = world.time + STAPER SECONDS
 
@@ -554,7 +552,7 @@
 			// VALIDATE TARGET
 			if(target)
 				if(!should_target(target))
-					if (target.alpha <= 100) // attempt one detect since we were just fighting them and have lost them
+					if (target.alpha == 0 && target.rogue_sneaking) // attempt one detect since we were just fighting them and have lost them
 						if (npc_detect_sneak(target))
 							retaliate(target)
 					else
@@ -838,7 +836,7 @@
 	if(L == src)
 		return
 	if(mode != NPC_AI_OFF)
-		if (L.alpha <= 100)
+		if(L.alpha == 0 && L.rogue_sneaking)
 			// we just got hit by something hidden so try and find them
 			if (prob(5))
 				visible_message(span_notice("[src] begins searching around frantically..."))
@@ -873,20 +871,18 @@
 	emote(the_emote, message = possible_taunts[the_emote])
 
 /mob/living/proc/npc_detect_sneak(mob/living/target, extra_prob = 0)
-	if (target.alpha > 100 || !target.rogue_sneaking)
+	if (target.alpha > 0 || !target.rogue_sneaking)
 		return TRUE
-	var/probby = 3 * STAPER //this is 10 by default - npcs get an easier time to detect to slightly thwart cheese
+	var/probby = 4 * STAPER //this is 10 by default - npcs get an easier time to detect to slightly thwart cheese
 	probby += extra_prob
 	var/sneak_bonus = 0
 	if(target.mind)
 		if (world.time < target.mob_timers[MT_INVISIBILITY])
 			// we're invisible as per the spell effect, so use the highest of our arcane magic (or holy) skill instead of our sneaking
-			sneak_bonus = (max(target.mind?.get_skill_level(/datum/skill/magic/arcane), target.mind?.get_skill_level(/datum/skill/magic/holy)) * 10)
+			sneak_bonus = (max(target.get_skill_level(/datum/skill/magic/arcane), target.get_skill_level(/datum/skill/magic/holy)) * 10)
 			probby -= 20 // also just a fat lump of extra difficulty for the npc since spells are hard, you know?
 		else
-			sneak_bonus = (target.mind?.get_skill_level(/datum/skill/misc/sneaking) * 10)
-			if(target.mind?.get_skill_level(/datum/skill/misc/sneaking) > SKILL_EXP_EXPERT)
-				probby -= 20 //if cheesecasters are getting it so will stealth experts.
+			sneak_bonus = (target.get_skill_level(/datum/skill/misc/sneaking) * 5)
 		probby -= sneak_bonus
 	if(!target.check_armor_skill())
 		probby += 85 //armor is loud as fuck
@@ -902,7 +898,6 @@
 		target.mob_timers[MT_FOUNDSNEAK] = world.time
 		to_chat(target, span_danger("[src] sees me! I'm found!"))
 		target.update_sneak_invis(TRUE)
-		target.apply_status_effect(/datum/status_effect/debuff/stealthcd)
 		return TRUE
 	else
 		return FALSE

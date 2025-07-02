@@ -189,7 +189,7 @@
 		revert_cast()
 		return FALSE
 	var/mob/living/carbon/human/H = user
-	H.apply_status_effect(/datum/status_effect/buff/astrata_gaze, user.mind?.get_skill_level(associated_skill))
+	H.apply_status_effect(/datum/status_effect/buff/astrata_gaze, user.get_skill_level(associated_skill))
 	return TRUE
 
 /atom/movable/screen/alert/status_effect/buff/astrata_gaze

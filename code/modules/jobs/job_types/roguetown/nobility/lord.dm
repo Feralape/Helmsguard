@@ -2,15 +2,15 @@ GLOBAL_VAR(lordsurname)
 GLOBAL_LIST_EMPTY(lord_titles)
 
 /datum/job/roguetown/lord
-	title = "Lord Castellan"
-	f_title = "Lady Castellan"
+	title = "Grand Duke"
+	f_title = "Grand Duchess"
 	flag = LORD
 	department_flag = NOBLEMEN
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
 	selection_color = JCOLOR_NOBLE
-	allowed_races = NOBLE_RACES_TYPES
+	allowed_races = RACES_NO_CONSTRUCT
 	allowed_sexes = list(MALE, FEMALE)
 	advclass_cat_rolls = list(CTAG_LORD = 20)
 
@@ -53,10 +53,10 @@ GLOBAL_LIST_EMPTY(lord_titles)
 			GLOB.lordsurname = "of [L.real_name]"
 		SSticker.rulermob = L
 		if(should_wear_femme_clothes(L))
-			SSticker.rulertype = "Lady Castellan"
+			SSticker.rulertype = "Grand Duchess"
 		else
-			SSticker.rulertype = "Lord Castellan"
-		to_chat(world, "<b><span class='notice'><span class='big'>[L.real_name] is [SSticker.rulertype] of Sundmark.</span></span></b>")
+			SSticker.rulertype = "Grand Duke"
+		to_chat(world, "<b><span class='notice'><span class='big'>[L.real_name] is [SSticker.rulertype] of Azure Peak.</span></span></b>")
 		if(istype(SSticker.regentmob, /mob/living/carbon/human))
 			var/mob/living/carbon/human/regentbuddy = SSticker.regentmob
 			to_chat(L, span_notice("Word reached me on the approach that [regentbuddy.real_name], the [regentbuddy.job], served as regent in my absence."))
@@ -70,8 +70,8 @@ GLOBAL_LIST_EMPTY(lord_titles)
 	neck = /obj/item/storage/belt/rogue/pouch/coins/rich
 	cloak = /obj/item/clothing/cloak/lordcloak
 	belt = /obj/item/storage/belt/rogue/leather/plaquegold
-	beltl = /obj/item/storage/keyring/sund/sund_ruler
-	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/scomstone/garrison = 1)
+	beltl = /obj/item/storage/keyring/lord
+	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1)
 	id = /obj/item/scomstone/garrison
 
 /datum/outfit/job/roguetown/lord/pre_equip(mob/living/carbon/human/H)
@@ -88,28 +88,6 @@ GLOBAL_LIST_EMPTY(lord_titles)
 		cloak = /obj/item/clothing/cloak/lordcloak/ladycloak
 		wrists = /obj/item/clothing/wrists/roguetown/royalsleeves
 		shoes = /obj/item/clothing/shoes/roguetown/shortboots
-		if(H.mind)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 2, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 2, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 3, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 3, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 3, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 4, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 4, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 3, TRUE)
-			if(H.age == AGE_OLD)
-				H.mind.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
-			H.change_stat("strength", 1)
-			H.change_stat("intelligence", 3)
-			H.change_stat("endurance", 3)
-			H.change_stat("speed", 1)
-			H.change_stat("perception", 2)
-			H.change_stat("fortune", 5)
-		H.dna.species.soundpack_m = new /datum/voicepack/male/evil()
 	else if(should_wear_masc_clothes(H))
 		pants = /obj/item/clothing/under/roguetown/tights/black
 		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/black
@@ -138,21 +116,20 @@ GLOBAL_LIST_EMPTY(lord_titles)
 	..()
 	l_hand = /obj/item/rogueweapon/lordscepter // If you put something in l hand with a mother outfit
 	// It will dupe
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 3, TRUE)
-		if(H.age == AGE_OLD)
-			H.mind.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 3, TRUE)
+	if(H.age == AGE_OLD)
+		H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
 	H.change_stat("strength", 1)
 	H.change_stat("intelligence", 3)
 	H.change_stat("endurance", 3)
@@ -180,19 +157,19 @@ GLOBAL_LIST_EMPTY(lord_titles)
 	..()
 	l_hand = /obj/item/rogueweapon/lordscepter
 	
+	H.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 4, TRUE) // Weapons suitable for defending yourself as a merchant.
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
 	if(H.mind)
-		H.mind.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/crossbows, 4, TRUE) // Weapons suitable for defending yourself as a merchant.
-		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/swimming, 1, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/climbing, 1, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/reading, 5, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/appraise/secular)
 	H.change_stat("intelligence", 5)
 	H.change_stat("endurance", 1)
@@ -222,18 +199,18 @@ GLOBAL_LIST_EMPTY(lord_titles)
 	l_hand = /obj/item/rogueweapon/lordscepter
 	ADD_TRAIT(H, TRAIT_CRITICAL_WEAKNESS, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_NORUN, TRAIT_GENERIC)
-	H.mind.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/crossbows, pick(0,1), TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE) // Sorry you get +1 :)
-	H.mind.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/climbing, pick(0,0,1), TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/athletics, pick(0,1), TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
-	H.mind.adjust_skillrank(/datum/skill/misc/sewing, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, pick(0,1), TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE) // Sorry you get +1 :)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, pick(0,0,1), TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, pick(0,1), TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sewing, 1, TRUE)
 	H.change_stat("strength", -2)
 	H.change_stat("perception", -2)
 	H.change_stat("intelligence", -2)

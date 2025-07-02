@@ -92,7 +92,7 @@
 		found_thing = new /obj/item/roguecoin/copper
 	to_chat(H, span_info("A coin in my boot? Psydon smiles upon me!"))
 	H.put_in_hands(found_thing, FALSE)
-	if(prob(H.STALUC + H.mind?.get_skill_level(associated_skill)))
+	if(prob(H.STALUC + H.get_skill_level(associated_skill)))
 		var/obj/item/extra_thing = pick(lootpool)
 		new extra_thing(get_turf(user))
 		to_chat(H, span_info("Ah, of course! I almost forgot I had this stashed away for a perfect occasion."))

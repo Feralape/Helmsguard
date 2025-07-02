@@ -31,34 +31,33 @@
 		// Skillset is a combo of Artificer + Blacksmith with Labor Skills. 
 		// And Tailor / Leathercrafting
 		H.verbs += /mob/living/carbon/human/proc/guild_announcement
-		H.mind.adjust_skillrank(/datum/skill/combat/axes, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/labor/lumberjacking, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/labor/mining, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/crafting, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/carpentry, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/masonry, 3, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/blacksmithing, 5, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/armorsmithing, 5, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/weaponsmithing, 5, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/smelting, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/engineering, 3, TRUE) // 2 Engineering, let them make more artificers stuffs
-		H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE) // Worse than the real tailor, so can't steal their job right away 
-		H.mind.adjust_skillrank(/datum/skill/craft/tanning, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 4, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/ceramics, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/craft/traps, 2, TRUE)
-		H.mind.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/axes, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/labor/lumberjacking, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/labor/mining, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/craft/crafting, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/craft/carpentry, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/craft/masonry, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/craft/blacksmithing, 5, TRUE)
+		H.adjust_skillrank(/datum/skill/craft/armorsmithing, 5, TRUE)
+		H.adjust_skillrank(/datum/skill/craft/weaponsmithing, 5, TRUE)
+		H.adjust_skillrank(/datum/skill/craft/smelting, 4, TRUE)
+		H.adjust_skillrank(/datum/skill/craft/engineering, 3, TRUE) // 2 Engineering, let them make more artificers stuffs
+		H.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE) // Worse than the real tailor, so can't steal their job right away 
+		H.adjust_skillrank(/datum/skill/craft/tanning, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/lockpicking, 4, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/ceramics, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/craft/traps, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/reading, 2, TRUE)
 		if(H.age == AGE_OLD)
-			H.mind.adjust_skillrank(/datum/skill/craft/blacksmithing, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/craft/armorsmithing, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/craft/weaponsmithing, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/craft/smelting, 1, TRUE)
-			H.mind.adjust_skillrank(/datum/skill/misc/sewing, 1, TRUE) // Worse than the real tailor, so can't steal their job right away 
-			H.mind.adjust_skillrank(/datum/skill/craft/tanning, 1, TRUE)
-
+			H.adjust_skillrank(/datum/skill/craft/blacksmithing, 1, TRUE)
+			H.adjust_skillrank(/datum/skill/craft/armorsmithing, 1, TRUE)
+			H.adjust_skillrank(/datum/skill/craft/weaponsmithing, 1, TRUE)
+			H.adjust_skillrank(/datum/skill/craft/smelting, 1, TRUE)
+			H.adjust_skillrank(/datum/skill/misc/sewing, 1, TRUE) // Worse than the real tailor, so can't steal their job right away 
+			H.adjust_skillrank(/datum/skill/craft/tanning, 1, TRUE)
 		armor = /obj/item/clothing/suit/roguetown/armor/leather/jacket/artijacket
 		pants = /obj/item/clothing/under/roguetown/trou/artipants
 		shoes = /obj/item/clothing/shoes/roguetown/boots/nobleboot

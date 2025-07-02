@@ -337,7 +337,7 @@
 /datum/status_effect/buff/magearmor/on_apply()
 	. = ..()
 	playsound(owner, 'sound/magic/magearmordown.ogg', 75, FALSE)
-	duration = (7-owner.mind.get_skill_level(/datum/skill/magic/arcane)) MINUTES
+	duration = (7-owner.get_skill_level(/datum/skill/magic/arcane)) MINUTES
 
 /datum/status_effect/buff/magearmor/on_remove()
 	. = ..()
@@ -485,7 +485,7 @@
 	outline_colour = "#bbbbbb"
 
 /datum/status_effect/buff/healing/necras_vow/on_apply()
-	healing_on_tick = max(owner.mind?.get_skill_level(/datum/skill/magic/holy), 3)
+	healing_on_tick = max(owner.get_skill_level(/datum/skill/magic/holy), 3)
 	return TRUE
 
 /datum/status_effect/buff/healing/necras_vow/tick()
@@ -1014,7 +1014,7 @@
 
 /datum/status_effect/buff/bloodrage/on_apply()
 	ADD_TRAIT(owner, TRAIT_STRENGTH_UNCAPPED, TRAIT_MIRACLE)
-	var/holyskill = owner.mind?.get_skill_level(/datum/skill/magic/holy)
+	var/holyskill = owner.get_skill_level(/datum/skill/magic/holy)
 	duration = ((15 SECONDS) * holyskill)
 	var/filter = owner.get_filter(BLOODRAGE_FILTER)
 	if(!filter)

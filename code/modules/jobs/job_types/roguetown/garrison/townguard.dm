@@ -1,5 +1,5 @@
 /datum/job/roguetown/guardsman
-//	title = "Watchman"
+	title = "Watchman"
 	flag = GUARDSMAN
 	department_flag = GARRISON
 	faction = "Station"
@@ -51,7 +51,7 @@
 	belt = /obj/item/storage/belt/rogue/leather/black
 	wrists = /obj/item/clothing/wrists/roguetown/bracers		//Would seperate to leather bracers for archer for dodge but - funnily, armor class doesn't exist on bracers.
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	backpack_contents = list(/obj/item/war_horn = 1)
+	backpack_contents = list(/obj/item/signal_horn = 1)
 
 /*Design philosophy: Men and women from various areas of life, from hunters to street-brawlers and more 'veteran' levy-men. Know less skills overall than Bog, but far more specialized.
 Footsman is basically a regular foots-soldier with gear to combat criminals, specializes in maces, polearms, and decent flail/sword training.
@@ -65,23 +65,23 @@ Archer is basically a 'bounty-catcher' in function, less specialized at close-qu
 
 /datum/outfit/job/roguetown/guardsman/footsman/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 4, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 4, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 1, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 1, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/tracking, 1, TRUE) 
+	H.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axes, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/shields, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/tracking, 1, TRUE) 
 	H.change_stat("strength", 2)
 	H.change_stat("constitution", 1)
 	H.change_stat("endurance", 1)
@@ -94,7 +94,7 @@ Archer is basically a 'bounty-catcher' in function, less specialized at close-qu
 	beltr = /obj/item/rogueweapon/mace/cudgel
 	backr = /obj/item/rogueweapon/shield/wood		//Maybe give a buckler? Gave wood because 40 coverage is better than 10 but dunno.
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	beltl = /obj/item/storage/keyring/sund/sund_watch
+	beltl = /obj/item/storage/keyring/guardcastle
 	belt = /obj/item/storage/belt/rogue/leather/black
 	gloves = /obj/item/clothing/gloves/roguetown/fingerless_leather
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel = 1, /obj/item/rope/chain = 1)
@@ -109,23 +109,23 @@ Archer is basically a 'bounty-catcher' in function, less specialized at close-qu
 
 /datum/outfit/job/roguetown/guardsman/archer/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 4, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 5, TRUE)		//Why master? Because all it does is effect draw time, which is strength x skill / 1.2. (Bow is just skill / 1.0). You get poor bonus strength, so you get skill to offset.
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 4, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 1, TRUE)		//Maybe take away? Leaving for now just as a fall-back for non-lethal ability.
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 1, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 4, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 1, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 1, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/craft/crafting, 1, TRUE)	//For basic crafting; you'll need it due to relegated support role.
-	H.mind.adjust_skillrank_up_to(/datum/skill/craft/tanning, 1, TRUE)	//Likely hunter background; very crappy basic skill.
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/tracking, 1, TRUE) 
+	H.adjust_skillrank(/datum/skill/combat/bows, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 5, TRUE)		//Why master? Because all it does is effect draw time, which is strength x skill / 1.2. (Bow is just skill / 1.0). You get poor bonus strength, so you get skill to offset.
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/shields, 1, TRUE)		//Maybe take away? Leaving for now just as a fall-back for non-lethal ability.
+	H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sneaking, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/crafting, 1, TRUE)	//For basic crafting; you'll need it due to relegated support role.
+	H.adjust_skillrank(/datum/skill/craft/tanning, 1, TRUE)	//Likely hunter background; very crappy basic skill.
+	H.adjust_skillrank(/datum/skill/misc/tracking, 1, TRUE) 
 	H.change_stat("strength", 1)
 	H.change_stat("perception", 2)
 	H.change_stat("intelligence", 1)		//Gets some int for crafting + feinting, makes up for no medium armor training along with the speed.
@@ -139,7 +139,7 @@ Archer is basically a 'bounty-catcher' in function, less specialized at close-qu
 	beltr = /obj/item/quiver/bolts
 	backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
 	backr = /obj/item/storage/backpack/rogue/satchel/black
-	beltl = /obj/item/storage/keyring/sund/sund_watch
+	beltl = /obj/item/storage/keyring/guardcastle
 	belt = /obj/item/storage/belt/rogue/leather/black
 	gloves = /obj/item/clothing/gloves/roguetown/leather
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel = 1, /obj/item/rope/chain = 1)

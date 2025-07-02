@@ -56,39 +56,38 @@
 	pants = /obj/item/clothing/under/roguetown/chainlegs
 	shoes = /obj/item/clothing/shoes/roguetown/boots/armor
 	beltl = /obj/item/rogueweapon/sword/sabre
-	beltr = /obj/item/storage/keyring/sund/sund_gate
+	beltr = /obj/item/storage/keyring/guardcastle
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	cloak = /obj/item/clothing/cloak/half/vet
 	belt = /obj/item/storage/belt/rogue/leather/black
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1)
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 5, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 5, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 3, TRUE)
-		H.change_stat("perception", 1)
-		H.change_stat("intelligence", 2)
+	H.adjust_skillrank(/datum/skill/combat/swords, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axes, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/bows, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 3, TRUE)
+	H.change_stat("perception", 1)
+	H.change_stat("intelligence", 2)
+	H.change_stat("endurance", 1)
+	H.change_stat("constitution", 1)
+	H.change_stat("speed", 1)
+	H.change_stat("strength", 1)
+	if(H.age == AGE_OLD)
+		H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/maces, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
 		H.change_stat("endurance", 1)
-		H.change_stat("constitution", 1)
-		H.change_stat("speed", 1)
-		H.change_stat("strength", 1)
-		if(H.age == AGE_OLD)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 1, TRUE)
-			H.change_stat("endurance", 1)
 
 	H.verbs |= /mob/proc/haltyell
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
@@ -115,42 +114,41 @@
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	shoes = /obj/item/clothing/shoes/roguetown/boots/armor
 	beltl = /obj/item/rogueweapon/sword
-	beltr = /obj/item/storage/keyring/sund/sund_gate
+	beltr = /obj/item/storage/keyring/guardcastle
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	backl = /obj/item/rogueweapon/shield/tower/metal
 	r_hand = /obj/item/rogueweapon/spear/billhook
 	belt = /obj/item/storage/belt/rogue/leather/black
 	cloak = /obj/item/clothing/cloak/half/vet
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/rope/chain = 1)
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 4, TRUE) // this is a kinda scary skill to give them, surely it won't go wrong though.
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 5, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 3, TRUE) // two handed weapons require a LOT of stamina.
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 2, TRUE)
-		H.change_stat("perception", 1)
-		H.change_stat("intelligence", 2)
-		H.change_stat("endurance", 1)
-		H.change_stat("constitution", 2)
-		H.change_stat("strength", 1)
-		if(H.age == AGE_OLD)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 2, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axes, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE) // this is a kinda scary skill to give them, surely it won't go wrong though.
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/bows, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE) // two handed weapons require a LOT of stamina.
+	H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 2, TRUE)
+	H.change_stat("perception", 1)
+	H.change_stat("intelligence", 2)
+	H.change_stat("endurance", 1)
+	H.change_stat("constitution", 2)
+	H.change_stat("strength", 1)
+	if(H.age == AGE_OLD)
+		H.adjust_skillrank(/datum/skill/combat/shields, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/maces, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/axes, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
 	H.verbs |= /mob/proc/haltyell
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
@@ -166,50 +164,49 @@
 
 /datum/outfit/job/roguetown/vet/calvaryman/pre_equip(mob/living/carbon/human/H)
 	neck = /obj/item/clothing/neck/roguetown/chaincoif
-	armor = /obj/item/clothing/suit/roguetown/armor/plate/	////Former knights should have knightly armour.
+	armor = /obj/item/clothing/suit/roguetown/armor/plate/	////Former knights should have knightly armour. 
 	shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
 	head = /obj/item/clothing/head/roguetown/helmet/heavy/knight
 	pants = /obj/item/clothing/under/roguetown/chainlegs
 	gloves = /obj/item/clothing/gloves/roguetown/plate
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	shoes = /obj/item/clothing/shoes/roguetown/boots/armor
-	beltr = /obj/item/storage/keyring/sund/sund_gate
+	beltr = /obj/item/storage/keyring/guardcastle
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	belt = /obj/item/storage/belt/rogue/leather/black
 	cloak = /obj/item/clothing/cloak/half/vet
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1)
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 4, TRUE)
-		H.change_stat("perception", 1)
-		H.change_stat("intelligence", 1)
-		H.change_stat("endurance", 2)
-		H.change_stat("constitution", 2)
-		H.change_stat("speed", -1)
-		H.change_stat("strength", 1)
-		if(H.age == AGE_OLD)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 1, TRUE) // You get a lot of weapon skills, but none are legendary. Jack of all trades, master of none. This is probably worse than just having legendary in one, as people rarely swap weapons mid-combat.
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axes, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/whipsflails, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 4, TRUE)
+	H.change_stat("perception", 1)
+	H.change_stat("intelligence", 1)
+	H.change_stat("endurance", 2)
+	H.change_stat("constitution", 2)
+	H.change_stat("speed", -1)
+	H.change_stat("strength", 1)
+	if(H.age == AGE_OLD)
+		H.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/maces, 1, TRUE) // You get a lot of weapon skills, but none are legendary. Jack of all trades, master of none. This is probably worse than just having legendary in one, as people rarely swap weapons mid-combat.
+		H.adjust_skillrank(/datum/skill/combat/axes, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/crossbows, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/whipsflails, 1, TRUE)
 	H.verbs |= /mob/proc/haltyell
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
@@ -237,7 +234,7 @@
 
 /datum/advclass/veteran/merc
 	name = "Retired Mercenary"
-	tutorial = "You were a sell-sword of a Freitrupp, hard men gambling their lives for pay and glory. You and your comrades threw the dice one time too many; now only you remain, retained by your former employer in gratitude for fighting to the bitter end."
+	tutorial = "You were a sell-sword, a warrior of coin. Your pockets were never light, you always had a warm place to stay and food in your belly, but you knew that every battle could be your last. You're the last of your unit, and you can't help but regret it. You specialize in swords and polearms, or axes and polearms."
 	outfit = /datum/outfit/job/roguetown/vet/merc
 
 	category_tags = list(CTAG_VETERAN)
@@ -247,45 +244,44 @@
 /datum/outfit/job/roguetown/vet/merc/pre_equip(mob/living/carbon/human/H)
 	neck = /obj/item/clothing/neck/roguetown/gorget
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
-	shirt = /obj/item/clothing/suit/roguetown/shirt/freishirt // You do NOT get the BLACKSTEEL CUIRASS because yours BROKE & I hate you. Go on a personal quest to replace it or something.
-	head = /obj/item/clothing/head/roguetown/freihat
+	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/grenzelhoft // You do NOT get the BLACKSTEEL CUIRASS because yours BROKE & I hate you. Go on a personal quest to replace it or something.
+	head = /obj/item/clothing/head/roguetown/grenzelhofthat
 	armor = /obj/item/clothing/suit/roguetown/armor/plate/half
-	pants = /obj/item/clothing/under/roguetown/freipants
-	shoes = /obj/item/clothing/shoes/roguetown/freiboots
-	gloves = /obj/item/clothing/gloves/roguetown/freigloves
+	pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/grenzelpants
+	shoes = /obj/item/clothing/shoes/roguetown/grenzelhoft
+	gloves = /obj/item/clothing/gloves/roguetown/angle/grenzelgloves
 	beltl = /obj/item/rogueweapon/sword/short
-	beltr = /obj/item/storage/keyring/sund/sund_gate
+	beltr = /obj/item/storage/keyring/guardcastle
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	belt = /obj/item/storage/belt/rogue/leather/black
 	cloak = /obj/item/clothing/cloak/half/vet
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1)
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 3, TRUE)
-		H.change_stat("intelligence", 1)
-		H.change_stat("endurance", 3) // two handed weapons require a LOT of stamina.
-		H.change_stat("constitution", 1)
-		H.change_stat("speed", -1)
-		H.change_stat("strength", 2)
-		if(H.age == AGE_OLD)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 1, TRUE) // two handed weapons require a LOT of stamina.
+	H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axes, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/shields, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 3, TRUE)
+	H.change_stat("intelligence", 1)
+	H.change_stat("endurance", 3) // two handed weapons require a LOT of stamina.
+	H.change_stat("constitution", 1)
+	H.change_stat("speed", -1)
+	H.change_stat("strength", 2)
+	if(H.age == AGE_OLD)
+		H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/axes, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/athletics, 1, TRUE) // two handed weapons require a LOT of stamina.
 	H.verbs |= /mob/proc/haltyell
 	H.grant_language(/datum/language/grenzelhoftian)
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
@@ -300,12 +296,12 @@
 	switch(weapon_choice)
 		if("Zweihander")
 			r_hand = /obj/item/rogueweapon/greatsword/grenz
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 1, TRUE)
+			H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+			H.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
 		if("Halberd")
 			r_hand = /obj/item/rogueweapon/halberd
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 1, TRUE) // SO, fun fact. The description of the grenzel halbardier says they specialize in axes, but they get no axe skill. Maybe this guy is where that rumor came from.
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 1, TRUE)
+			H.adjust_skillrank(/datum/skill/combat/axes, 1, TRUE) // SO, fun fact. The description of the grenzel halbardier says they specialize in axes, but they get no axe skill. Maybe this guy is where that rumor came from.
+			H.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
 
 /datum/advclass/veteran/scout
 	name = "Former Scout"
@@ -315,7 +311,7 @@
 	category_tags = list(CTAG_VETERAN)
 
 // Originally was meant to be a horse archer. I decided that was a bad idea.
-// Former Bogmaster maybe? I feel like that'd be cooler than just an archer guy.
+// Former Bogmaster maybe? I feel like that'd be cooler than just an archer guy. 
 
 /datum/outfit/job/roguetown/vet/scout/pre_equip(mob/living/carbon/human/H)
 	neck = /obj/item/clothing/neck/roguetown/gorget
@@ -331,40 +327,39 @@
 	backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow
 	belt = /obj/item/storage/belt/rogue/leather/black
 	cloak = /obj/item/clothing/cloak/half/vet
-	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/storage/keyring/sund/sund_gate = 1)
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 4, TRUE) // I very rarely see ranged weapons outside of PVE. Maybe this'll fix that?
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/tracking, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/stealing, 2, TRUE)
-		H.change_stat("strength", -1)
-		H.change_stat("perception", 3) // you are OLD you have OLD EYES. this is to counter that debuff so you can be OBSERVANT. You sacrifice your strength and armor, so.
-		H.change_stat("intelligence", 2)
-		H.change_stat("endurance", 1)
-		H.change_stat("constitution", 1)
-		H.change_stat("speed", 1) // You get -2 speed from being old.
-		if(H.age == AGE_OLD)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 2, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 2, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 2, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/tracking, 2, TRUE)
-			H.change_stat("perception", 2)
+	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1, /obj/item/storage/keyring/guardcastle = 1)
+	H.adjust_skillrank(/datum/skill/combat/swords, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axes, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/bows, 4, TRUE) // I very rarely see ranged weapons outside of PVE. Maybe this'll fix that?
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sneaking, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/tracking, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/stealing, 2, TRUE)
+	H.change_stat("strength", -1)
+	H.change_stat("perception", 3) // you are OLD you have OLD EYES. this is to counter that debuff so you can be OBSERVANT. You sacrifice your strength and armor, so.
+	H.change_stat("intelligence", 2)
+	H.change_stat("endurance", 1)
+	H.change_stat("constitution", 1)
+	H.change_stat("speed", 1) // You get -2 speed from being old.
+	if(H.age == AGE_OLD)
+		H.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/axes, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/tracking, 2, TRUE)
+		H.change_stat("perception", 2)
 	H.verbs |= /mob/proc/haltyell
 	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC) // You should really be parrying anyways, you have legendary/master skills....
 	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
@@ -393,44 +388,43 @@
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	belt = /obj/item/storage/belt/rogue/leather/knifebelt/iron
 	cloak = /obj/item/clothing/cloak/raincloak/mortus
-	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/silver/elvish = 1, /obj/item/storage/keyring/sund/sund_gate = 1, /obj/item/reagent_containers/glass/bottle/rogue/poison = 1, /obj/item/lockpickring/mundane)
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/tracking, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/stealing, 4, TRUE)
-		H.change_stat("strength", -2)
-		H.change_stat("perception", 1)
-		H.change_stat("intelligence", 3) // you are int-maxxing, especially if you go old.
-		H.change_stat("constitution", 1)
-		H.change_stat("speed", 1)
-		if(H.age == AGE_OLD)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 2, TRUE) ///Having Master Knives is extremely negligible for a singular role that isn't even meant to be combative.
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 2, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 2, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/stealing, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 1, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 2, TRUE)
-			H.change_stat("speed", 1) // You get -2 speed from being old. You are still in the negative stat wise from picking old.
-			H.change_stat("perception", 2) // You get -2 perception from being old. I want you to at least have a positive perception, to represent that you're observant. The highest perception you can get with this is a 13, so I think we'll be okayed.
+	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/silver/elvish = 1, /obj/item/storage/keyring/guardcastle = 1, /obj/item/reagent_containers/glass/bottle/rogue/poison = 1, /obj/item/lockpickring/mundane)
+	H.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/axes, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/polearms, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/bows, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/whipsflails, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sneaking, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/lockpicking, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/tracking, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/stealing, 4, TRUE)
+	H.change_stat("strength", -2)
+	H.change_stat("perception", 1)
+	H.change_stat("intelligence", 3) // you are int-maxxing, especially if you go old.
+	H.change_stat("constitution", 1)
+	H.change_stat("speed", 1)
+	if(H.age == AGE_OLD)
+		H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE) ///Having Master Knives is extremely negligible for a singular role that isn't even meant to be combative.
+		H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/climbing, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/stealing, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/unarmed, 1, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
+		H.change_stat("speed", 1) // You get -2 speed from being old. You are still in the negative stat wise from picking old.
+		H.change_stat("perception", 2) // You get -2 perception from being old. I want you to at least have a positive perception, to represent that you're observant. The highest perception you can get with this is a 13, so I think we'll be okayed.
 	H.verbs |= /mob/proc/haltyell
 	H.grant_language(/datum/language/thievescant)
 	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)

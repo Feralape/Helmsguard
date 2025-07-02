@@ -120,7 +120,7 @@
 	if(ishuman(targets[1]))
 		var/vice_found
 		var/mob/living/carbon/human/H = targets[1]
-		if(HAS_TRAIT(H, TRAIT_DECEIVING_MEEKNESS) && user.mind?.get_skill_level(/datum/skill/magic/holy) > SKILL_LEVEL_NOVICE)
+		if(HAS_TRAIT(H, TRAIT_DECEIVING_MEEKNESS) && user.get_skill_level(/datum/skill/magic/holy) > SKILL_LEVEL_NOVICE)
 			if(!(H in fake_vices))
 				fake_vices[H] = pick(GLOB.character_flaws)
 				vice_found = fake_vices[H]

@@ -42,8 +42,7 @@
 /mob/living/proc/update_energy()
 	var/athletics_skill = 0
 	var/riding_skill = 0
-	if(mind)
-		athletics_skill = mind.get_skill_level(/datum/skill/misc/athletics)
+	athletics_skill = get_skill_level(/datum/skill/misc/athletics)
 <<<<<<< HEAD:code/modules/mob/living/carbon/rogfatstam.dm
 		riding_skill = mind.get_skill_level(/datum/skill/misc/riding)
 	if(buckled && istype(buckled, /mob/living/simple_animal/hostile/retaliate/rogue))
@@ -95,7 +94,7 @@
 /mob/living/proc/stamina_nutrition_mod(amt)
 	// to simulate exertion, we deduct a mob's nutrition whenever it takes an action that would give us fatigue.
 	var/nutrition_amount = amt * 0.15 // nutrition goes up to 1k at max (but constantly ticks down) so we need to work at a slightly bigger scale
-	var/athletics_skill = mind?.get_skill_level(/datum/skill/misc/athletics)
+	var/athletics_skill = get_skill_level(/datum/skill/misc/athletics)
 	var/chip_amt = 2 + ceil(athletics_skill / 2)
 
 	if (amt <= chip_amt)

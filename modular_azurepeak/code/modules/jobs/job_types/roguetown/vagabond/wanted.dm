@@ -23,9 +23,9 @@
 		gloves = /obj/item/clothing/gloves/roguetown/fingerless
 	
 	if (H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/stealing, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 4, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/sneaking, 4, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/stealing, 4, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
 		H.change_stat("perception", 2)
 		H.change_stat("intelligence", -1)
 		H.change_stat("fortune", rand(-2, 2))
@@ -42,7 +42,6 @@
 				bounty_total = rand(101, 150)
 			if ("Massive")
 				bounty_total = rand(150, 200)
-
-		add_bounty(H.real_name, bounty_total, FALSE, my_crime, "The Justiciary of Sundmark")
+	
+		add_bounty(H.real_name, bounty_total, FALSE, my_crime, "The Justiciary of Azuria")
 		to_chat(H, span_notice("I'm on the run from the law, and there's a [lowertext(bounty_amount)] sum of mammons out on my head... better lay low."))
-

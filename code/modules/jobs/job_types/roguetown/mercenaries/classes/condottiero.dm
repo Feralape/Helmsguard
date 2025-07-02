@@ -5,7 +5,7 @@
 	allowed_races = RACES_ALL_KINDS
 	traits_applied = list(TRAIT_OUTLANDER)
 	outfit = /datum/outfit/job/roguetown/mercenary/condottiero
-//	category_tags = list(CTAG_MERCENARY)
+	category_tags = list(CTAG_MERCENARY)
 	cmode_music = 'sound/music/combat_condottiero.ogg'
 
 /datum/outfit/job/roguetown/mercenary/condottiero/pre_equip(mob/living/carbon/human/H)
@@ -23,26 +23,25 @@
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson
 	pants = /obj/item/clothing/under/roguetown/trou/leather
 	neck = /obj/item/clothing/neck/roguetown/chaincoif
-	backpack_contents = list(/obj/item/storage/belt/rogue/pouch/coins/poor, /obj/item/rogueweapon/huntingknife/idagger/navaja, /obj/item/lockpick = 1)
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 4, TRUE) //Possibly too high, no idea.
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/stealing, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/tracking, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/traps, 3, TRUE)
-		H.change_stat("endurance", 2)
-		H.change_stat("perception", 2)
-		H.change_stat("speed", 2)
-		H.change_stat("intelligence", 1)
+	backpack_contents = list(/obj/item/roguekey/mercenary, /obj/item/storage/belt/rogue/pouch/coins/poor, /obj/item/rogueweapon/huntingknife/idagger/navaja, /obj/item/lockpick = 1)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 5, TRUE) //Possibly too high, no idea.
+	H.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sneaking, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/stealing, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/lockpicking, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/tracking, 4, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/traps, 3, TRUE)
+	H.change_stat("endurance", 2)
+	H.change_stat("perception", 2)
+	H.change_stat("speed", 2)
+	H.change_stat("intelligence", 1)
 
 	H.grant_language(/datum/language/etruscan)
 	H.grant_language(/datum/language/thievescant)

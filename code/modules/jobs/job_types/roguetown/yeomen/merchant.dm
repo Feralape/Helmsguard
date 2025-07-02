@@ -1,7 +1,7 @@
 /datum/job/roguetown/merchant
 	title = "Merchant"
 	flag = MERCHANT
-	department_flag = TOWNER
+	department_flag = YEOMEN
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -22,23 +22,21 @@
 
 /datum/outfit/job/roguetown/merchant/pre_equip(mob/living/carbon/human/H)
 	..()
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/bows, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 1, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 5, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/stealing, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/medicine, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/craft/cooking, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, 2, TRUE)
-		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/appraise/secular)
-		backpack_contents = /obj/item/rogueweapon/huntingknife/idagger/navaja
+	H.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/crossbows, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/bows, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/wrestling, 1, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/reading, 5, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/stealing, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/medicine, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/craft/cooking, 2, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/riding, 3, TRUE)
+	H.adjust_skillrank(/datum/skill/misc/lockpicking, 2, TRUE)
+	backpack_contents = /obj/item/rogueweapon/huntingknife/idagger/navaja
 	ADD_TRAIT(H, TRAIT_SEEPRICES, type)
 	ADD_TRAIT(H, TRAIT_CICERONE, TRAIT_GENERIC) //Makes up for loss of alchemy to see reagents.
 	neck = /obj/item/clothing/neck/roguetown/horus
@@ -46,7 +44,7 @@
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/sailor
 	pants = /obj/item/clothing/under/roguetown/tights/sailor
 	belt = /obj/item/storage/belt/rogue/leather/rope
-	beltl = /obj/item/storage/keyring/sund/sund_merchant
+	beltl = /obj/item/storage/keyring/merchant
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/rich
 	id = /obj/item/clothing/ring/gold
 	backr = /obj/item/storage/backpack/rogue/satchel
@@ -58,4 +56,6 @@
 	H.change_stat("intelligence", 2)
 	H.change_stat("perception", 3)
 	H.change_stat("strength", -1)
+	if(H.mind)
+		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/appraise/secular)
 
