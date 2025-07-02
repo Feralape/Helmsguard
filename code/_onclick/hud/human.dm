@@ -388,10 +388,7 @@
 	using.hud = src
 	static_inventory += using
 
-	using = new /atom/movable/screen/advsetup
-	using.screen_loc = rogueui_advsetup
-	using.hud = src
-	static_inventory += using
+	set_advclass()
 
 /*
 	healthdoll = new /atom/movable/screen/healthdoll()
@@ -408,11 +405,11 @@
 
 	zone_select.update_icon()
 
-	fats = new /atom/movable/screen/rogfat()
-	infodisplay += fats
+	stamina = new /atom/movable/screen/stamina()
+	infodisplay += stamina
 
-	stams = new /atom/movable/screen/rogstam()
-	infodisplay += stams
+	energy = new /atom/movable/screen/energy()
+	infodisplay += energy
 
 	for(var/atom/movable/screen/inventory/inv in (static_inventory + toggleable_inventory))
 		if(inv.slot_id)
@@ -782,3 +779,12 @@
 	else
 		client.screen -= hud_used.hotkeybuttons
 		hud_used.hotkey_ui_hidden = TRUE
+
+//Handles advanced class - Simpler this way.
+/datum/hud/proc/set_advclass()
+	var/atom/movable/screen/using
+
+	using = new /atom/movable/screen/advsetup
+	using.screen_loc = rogueui_advsetup
+	using.hud = src
+	static_inventory += using

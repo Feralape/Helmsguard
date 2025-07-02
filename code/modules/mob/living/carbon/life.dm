@@ -63,7 +63,7 @@
 	if(HAS_TRAIT(src, TRAIT_NOPAIN))
 		return
 	if(!stat)
-		var/pain_threshold = STAEND * 10
+		var/pain_threshold = STACON * 10
 		if(has_flaw(/datum/charflaw/masochist)) // Masochists handle pain better by about 1 endurance point
 			pain_threshold += 10
 		var/painpercent = get_complex_pain() / pain_threshold
@@ -71,14 +71,24 @@
 
 		if(world.time > mob_timers["painstun"])
 			mob_timers["painstun"] = world.time + 100
-			var/probby = 40 - (STAEND * 2)
+			var/probby = 40 - (STACON * 2)
 			probby = max(probby, 10)
 			if(lying || IsKnockdown())
 				if(prob(3) && (painpercent >= 80) )
 					emote("painmoan")
 			else
 				if(painpercent >= 100)
-					if(prob(probby) && !HAS_TRAIT(src, TRAIT_NOPAINSTUN))
+					if(HAS_TRAIT(src, TRAIT_PSYDONITE) || STACON >= 15)
+						if(prob(25)) // PSYDONIC WEIGHTED COINFLIP. TWEAK THIS AS THOU WILT. DON'T LET THEM BE BROKEN, PSYDON WILLING. THROW CON-MAXXERS A BONE, TOO.
+							Immobilize(15) // EAT A MICROSTUN. YOU'RE AVOIDING A PAINCRIT.
+							if(HAS_TRAIT(src, TRAIT_PSYDONITE))
+								visible_message(span_info("[src] audibly grits their teeth. ENDURING through their pain."), span_info("Through my faith in HIM, I ENDURE."))
+							else
+								visible_message(span_info("[src] trembled for a moment, but they remain stood."), span_info("My strong constitution keeps me upright."))
+							stuttering += 5
+							emote("painmoan")
+							return
+					if(prob(probby) && !HAS_TRAIT(src, TRAIT_NOPAINSTUN) && !has_status_effect(/datum/status_effect/buff/psyhealing))
 						Immobilize(10)
 						emote("painscream")
 						stuttering += 5
@@ -113,11 +123,11 @@
 			adjustOxyLoss(5)
 	if(isopenturf(loc))
 		var/turf/open/T = loc
-		if(reagents&& T.pollutants)
-			var/obj/effect/pollutant_effect/P = T.pollutants
-			for(var/datum/pollutant/X in P.pollute_list)
-				for(var/A in X.reagents_on_breathe)
-					reagents.add_reagent(A, X.reagents_on_breathe[A])
+		if(reagents && T.pollution)
+			T.pollution.breathe_act(src)
+			if(next_smell <= world.time)
+				next_smell = world.time + 30 SECONDS
+				T.pollution.smell_act(src)
 
 /mob/living/proc/handle_inwater()
 	ExtinguishMob()
@@ -127,7 +137,10 @@
 	if(!(mobility_flags & MOBILITY_STAND))
 		if(HAS_TRAIT(src, TRAIT_NOBREATH) || HAS_TRAIT(src, TRAIT_WATERBREATHING))
 			return TRUE
-		adjustOxyLoss(5)
+		if(stat == DEAD && client)
+			GLOB.azure_round_stats[STATS_PEOPLE_DROWNED]++
+		var/drown_damage = has_world_trait(/datum/world_trait/abyssor_rage) ? 10 : 5
+		adjustOxyLoss(drown_damage)
 		emote("drown")
 
 /mob/living/carbon/human/handle_inwater()
@@ -142,16 +155,21 @@
 		add_stress(/datum/stressevent/sewertouched)
 
 /mob/living/carbon/proc/get_complex_pain()
-	var/amt = 0
+	. = 0
 	for(var/obj/item/bodypart/limb as anything in bodyparts)
 		if(limb.status == BODYPART_ROBOTIC || limb.skeletonized)
 			continue
-		var/bodypart_pain = ((limb.brute_dam + limb.burn_dam) / limb.max_damage) * 100
+		var/bodypart_pain = ((limb.brute_dam + limb.burn_dam) / limb.max_damage) * limb.max_pain_damage
 		for(var/datum/wound/wound as anything in limb.wounds)
 			bodypart_pain += wound.woundpain
-		bodypart_pain = min(bodypart_pain, 100) //tops out at 100 per limb
-		amt += bodypart_pain
-	return amt
+		bodypart_pain = min(bodypart_pain, limb.max_pain_damage)
+		. += bodypart_pain
+	.
+
+/mob/living/carbon/human/get_complex_pain()
+	. = ..()
+	if(physiology)
+		. *= physiology.pain_mod
 
 ///////////////
 // BREATHING //
@@ -449,7 +467,7 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 			head.cremation_progress += 999
 			if(head.cremation_progress >= 20)
 				if(head.status == BODYPART_ORGANIC) //Non-organic limbs don't burn
-					limb.skeletonize()
+					head.skeletonize()
 					should_update_body = TRUE
 //					head.drop_limb()
 //					head.visible_message(span_warning("[src]'s head crumbles into ash!"))
@@ -544,9 +562,9 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 
 /mob/living/carbon/proc/handle_sleep()
 	if(HAS_TRAIT(src, TRAIT_NOSLEEP) && !(mobility_flags & MOBILITY_STAND))
-		rogstam_add(5)
+		energy_add(5)
 		if(mind?.has_antag_datum(/datum/antagonist/vampirelord/lesser))
-			rogstam_add(10)
+			energy_add(10)
 		return
 
 	//Healing while sleeping in a bed
@@ -554,7 +572,7 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 		var/sleepy_mod = 0.5
 		var/yess = HAS_TRAIT(src, TRAIT_NOHUNGER)
 		if(HAS_TRAIT(src, TRAIT_BETTER_SLEEP))
-			rogstam_add(sleepy_mod * 4)
+			energy_add(sleepy_mod * 4)
 		if(buckled?.sleepy)
 			sleepy_mod = buckled.sleepy
 		else if(isturf(loc)) //No illegal tech.
@@ -562,7 +580,7 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 			if(bed)
 				sleepy_mod = bed.sleepy
 		if(nutrition > 0 || yess)
-			rogstam_add(sleepy_mod * 15)
+			energy_add(sleepy_mod * 15)
 		if(hydration > 0 || yess)
 			if(!bleed_rate)
 				blood_volume = min(blood_volume + (4 * sleepy_mod), BLOOD_VOLUME_NORMAL)
@@ -622,7 +640,7 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 					if(fallingas > 15)
 						Sleeping(300)
 			else
-				rogstam_add(sleepy_mod * 10)
+				energy_add(sleepy_mod * 10)
 		// Resting on the ground (not sleeping or with eyes closed and about to fall asleep)
 		else if(!(mobility_flags & MOBILITY_STAND))
 			if(eyesclosed && !HAS_TRAIT(src, TRAIT_NUDE_SLEEPER))
@@ -645,6 +663,10 @@ GLOBAL_LIST_INIT(ballmer_windows_me_msg, list("Yo man, what if, we like, uh, put
 					if(fallingas > 25)
 						Sleeping(300)
 			else
-				rogstam_add(10)
+				energy_add(10)
 		else if(fallingas)
 			fallingas = 0
+
+	// Leaning against a wall: slowly regain stamina
+	if(mobility_flags & MOBILITY_STAND && wallpressed && !IsSleeping() && !buckled && !lying)
+		energy_add(5)

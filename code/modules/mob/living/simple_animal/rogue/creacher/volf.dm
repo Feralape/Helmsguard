@@ -3,6 +3,7 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/wolf
 	icon = 'icons/roguetown/mob/monster/vol.dmi'
 	name = "wolf"
+	desc = "A snarling beast of mangy fur and yellowed teeth. Volves are known to attack hapless travelers in the deep forests when prey is scarce."
 	icon_state = "vv"
 	icon_living = "vv"
 	icon_dead = "vvd"
@@ -14,10 +15,21 @@
 	see_in_dark = 6
 	move_to_delay = 3
 	base_intents = list(/datum/intent/simple/bite/volf)
-	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 2,
+	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak/wolf = 1, /obj/item/alch/viscera = 1, /obj/item/alch/sinew = 1, /obj/item/natural/bone = 2)
+	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak/wolf = 2,
 						/obj/item/natural/hide = 2,
-						/obj/item/natural/fur = 1, /obj/item/natural/bone = 4, /obj/item/alch/sinew = 2, /obj/item/alch/bone = 1, /obj/item/alch/viscera = 1,
-						/obj/item/natural/fur = 1,
+						/obj/item/alch/sinew = 2, 
+						/obj/item/alch/bone = 1, 
+						/obj/item/alch/viscera = 1,
+						/obj/item/natural/fur/wolf = 1, 
+						/obj/item/natural/bone = 3,
+						/obj/item/natural/head/volf = 1)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak/wolf = 2,
+						/obj/item/natural/hide = 2,
+						/obj/item/alch/sinew = 2, 
+						/obj/item/alch/bone = 1, 
+						/obj/item/alch/viscera = 1,
+						/obj/item/natural/fur/wolf = 2,
 						/obj/item/natural/bone = 4,
 						/obj/item/natural/head/wolf = 1)
 	faction = list("wolfs", "zombie")
@@ -41,11 +53,10 @@
 	pooptype = null
 	STACON = 7
 	STASTR = 7
-	STASPD = 13
+	STASPD = 12
 	simple_detect_bonus = 20
 	deaggroprob = 0
 	defprob = 40
-	defdrain = 10
 	del_on_deaggro = 44 SECONDS
 	retreat_health = 0.3
 	food = 0
@@ -55,15 +66,17 @@
 //	stat_attack = UNCONSCIOUS
 	remains_type = /obj/effect/decal/remains/wolf
 	eat_forever = TRUE
-	rot_type = null
+	
 
 //new ai, old ai off
 	AIStatus = AI_OFF
 	can_have_ai = FALSE
 	ai_controller = /datum/ai_controller/volf
+	melee_cooldown = WOLF_ATTACK_SPEED
 
 /obj/effect/decal/remains/wolf
 	name = "remains"
+	desc = "Whether by starvation, disease, inter-pack conflict, or an unlucky kick from a saiga, this volf has died."
 	gender = PLURAL
 	icon_state = "bones"
 	icon = 'icons/roguetown/mob/monster/vol.dmi'
@@ -82,6 +95,8 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/wolf/death(gibbed)
 	..()
 	update_icon()
+	if(!QDELETED(src))
+		src.AddComponent(/datum/component/deadite_animal_reanimation)
 
 /* Eyes that glow in the dark. They float over kybraxor pits at the moment.
 /mob/living/simple_animal/hostile/retaliate/rogue/wolf/update_icon()
@@ -117,7 +132,6 @@
 	if(pulledby)
 		Retaliate()
 		GiveTarget(pulledby)
-
 
 /mob/living/simple_animal/hostile/retaliate/rogue/wolf/simple_limb_hit(zone)
 	if(!zone)
@@ -163,21 +177,3 @@
 
 /datum/intent/simple/bite/volf
 	clickcd = WOLF_ATTACK_SPEED
-
-
-/mob/living/simple_animal/hostile/retaliate/rogue/wolf/poison
-	name = "venomous wolf"
-	color = "#9AA97F" //this is even worse than a codersprite lol
-	retreat_health = 0.1 //go ham - these are meant for dungeons so them running away is just annoying and doesn't rly work.
-	del_on_deaggro = 0 //ditto.
-
-//str will show this is a bit more dangerous than usual and increases dmg
-	STASTR = 14
-
-/mob/living/simple_animal/hostile/retaliate/rogue/wolf/poison/AttackingTarget()
-	. = ..()
-	if(. && isliving(target))
-		var/mob/living/L = target
-		if(L.reagents)
-			L.reagents.add_reagent(/datum/reagent/toxin/venom, 2)
-			L.reagents.add_reagent(/datum/reagent/toxin/itching_powder, 6)

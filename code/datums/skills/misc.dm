@@ -98,3 +98,23 @@
 		"...as the years go by, the mantra becomes increasingly oppressive. Stitch, sew, cut ties, stitch, sew, thread the needle twice...",
 		"...you turn over the fabric, and within the two layers of the gown, you hide a secret stitched into the gown, your initials, hidden within. A forbidden mark in some cultures... you never liked the bride much..."
 	)
+
+/datum/skill/misc/tracking
+	name = "Tracking"
+	desc = "Increases your chance to find tracks. Increases the information you gain from them, alongside your perception stats. \n \
+	At Expert level or above, you can mark the target of a track to find them. \n \
+	At Master level or above, you can find invisible creatures. \n \ You can track by right-clicking on your eye icon."
+	dreams = list(
+		"... your feet sink into the mud, forcing you to stop and re-evaluate. The storm is close, but not close enough, so you retrace your steps. Left, right, left, until you can manage to step on solid ground once more, taking a new route...",
+		"... you kneel, taking a deep look at the floor, studying the slightly sunk shapes in the dirt. Paw-tracks, one after the other, heading up a hill. With a smile, you carry on...",
+		"... the blood may have gotten lost in the rain, but the wounded man's boots are as fresh as jackberries, perfectly marked in the sand. You raise your bow, nock an arrow, and carefully trace them towards a cave..."
+	)
+
+
+/datum/skill/misc/ceramics
+	name = "Pottery"
+	desc = "Handles crafting and making of clay into vases and other fine-craft works."
+	dreams = list(
+		"...the wheel spins, and spins.. yet you watch as a work of art grows from its center...",
+		"...a slab of clay is molded into a beautiful statue. A testiment to Malum's blessings, and Xylix's insperation. A pure work of beauty..."
+	)

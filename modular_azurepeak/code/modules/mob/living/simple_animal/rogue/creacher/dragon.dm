@@ -4,6 +4,8 @@
 	icon_state = "dragon"
 	icon_living = "dragon"
 	icon_dead = "dragon_dead"
+	pixel_x = -32
+	pixel_y = -16
 	footstep_type = FOOTSTEP_MOB_HEAVY
 	gender = MALE
 	emote_hear = null
@@ -17,8 +19,20 @@
 	minbodytemp = 0
 	maxbodytemp = INFINITY
 	damage_coeff = list(BRUTE = 1, BURN = 0.2, TOX = 1, CLONE = 1, STAMINA = 0, OXY = 1)
-	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 20,
-						/obj/item/natural/hide = 10, /obj/item/natural/bundle/bone/full = 4)
+	botched_butcher_results = list(
+		/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 2,
+		/obj/item/natural/hide = 2, 
+		/obj/item/natural/bundle/bone/full = 4)
+	butcher_results = list(
+		/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 4,
+		/obj/item/natural/hide = 4, 
+		/obj/item/natural/bundle/bone/full = 4,
+		/obj/item/natural/head/dragon = 1)
+	perfect_butcher_results = list(
+		/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 7, // More than troll. They are more difficult
+		/obj/item/natural/hide = 7, 
+		/obj/item/natural/bundle/bone/full = 4,
+		/obj/item/natural/head/dragon = 1)
 	mob_biotypes = MOB_ORGANIC|MOB_BEAST
 	health = DRAGON_HEALTH
 	maxHealth = DRAGON_HEALTH
@@ -41,7 +55,6 @@
 	STASPD = 13
 	deaggroprob = 0
 	defprob = 40
-	defdrain = 10
 	del_on_deaggro = 9999 SECONDS
 	retreat_health = 0.3
 	food = 0
@@ -63,7 +76,7 @@
 		gender = FEMALE
 	update_icon()
 	ADD_TRAIT(src, TRAIT_NOMOOD, TRAIT_GENERIC)
-	ADD_TRAIT(src, TRAIT_NOROGSTAM, TRAIT_GENERIC)
+	ADD_TRAIT(src, TRAIT_INFINITE_STAMINA, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_NOHUNGER, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_NOBREATH, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_NOPAIN, TRAIT_GENERIC)
@@ -203,6 +216,16 @@
 	name = "dragon broodmother"
 	ranged_cooldown_time = 20 SECONDS
 	var/datum/action/cooldown/mob_cooldown/fire_breath/cone/fire_breath
+	butcher_results = list(
+		/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 4,
+		/obj/item/natural/hide = 4, 
+		/obj/item/natural/bundle/bone/full = 4,
+		/obj/item/natural/head/dragon/broodmother = 1)
+	perfect_butcher_results = list(
+		/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 7, // More than troll. They are more difficult
+		/obj/item/natural/hide = 7, 
+		/obj/item/natural/bundle/bone/full = 4,
+		/obj/item/natural/head/dragon/broodmother = 1)
 
 
 /mob/living/simple_animal/hostile/retaliate/rogue/dragon/broodmother/Initialize()

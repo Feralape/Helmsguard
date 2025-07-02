@@ -1437,8 +1437,7 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 /proc/get_random_food()
 	var/list/blocked = list(
 		/obj/item/reagent_containers/food/snacks/store,
-		/obj/item/reagent_containers/food/snacks/meat,
-		/obj/item/reagent_containers/food/snacks/meat/slab,
+		/obj/item/reagent_containers/food/snacks/rogue/meat,
 		/obj/item/reagent_containers/food/snacks/grown,
 		)
 

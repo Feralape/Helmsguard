@@ -17,10 +17,10 @@
 // eg: 10*0.5 = 5 deciseconds of delay
 // DOES NOT EFFECT THE BASE 1 DECISECOND DELAY OF NEXT_CLICK
 
-/mob/proc/changeNext_move(num, hand)
+/mob/proc/changeNext_move(num, hand, override = FALSE)
 	next_move = world.time + ((num+next_move_adjust)*next_move_modifier)
 
-/mob/living/changeNext_move(num, hand)
+/mob/living/changeNext_move(num, hand, override = FALSE)
 	var/mod = next_move_modifier
 	var/adj = next_move_adjust
 	for(var/i in status_effects)
@@ -28,13 +28,21 @@
 		mod *= S.nextmove_modifier()
 		adj += S.nextmove_adjust()
 	if(!hand)
-		next_move = world.time + ((num + adj)*mod)
+		var/check_move = world.time + ((num + adj)*mod)
+		if((check_move >= next_move) || override)
+			next_move = check_move
 		hud_used?.cdmid?.mark_dirty()
 		return
 	if(hand == 1)
+		var/check_move = world.time + ((num + adj)*mod)
+		if((check_move >= next_lmove) || override)
+			next_lmove = check_move
 		next_lmove = world.time + ((num + adj)*mod)
 		hud_used?.cdleft?.mark_dirty()
 	else
+		var/check_move = world.time + ((num + adj)*mod)
+		if((check_move >= next_rmove) || override)
+			next_rmove = check_move
 		next_rmove = world.time + ((num + adj)*mod)
 		hud_used?.cdright?.mark_dirty()
 
@@ -115,9 +123,9 @@
 			if(used_intent.no_early_release && client?.chargedprog < 100)
 				var/adf = used_intent.clickcd
 				if(istype(rmb_intent, /datum/rmb_intent/aimed))
-					adf = round(adf * 1.4)
+					adf = round(adf * CLICK_CD_MOD_AIMED)
 				if(istype(rmb_intent, /datum/rmb_intent/swift))
-					adf = round(adf * 0.6)
+					adf = max(round(adf * CLICK_CD_MOD_SWIFT), CLICK_CD_INTENTCAP)
 				changeNext_move(adf,used_hand)
 				return
 	if(modifiers["right"] && oactive && atkswinging == "right")
@@ -225,7 +233,8 @@
 		if(ismob(A))
 			if(CanReach(A,W))
 				if(get_dist(get_turf(src), get_turf(A)) <= used_intent.reach)
-					do_attack_animation(get_turf(A), visual_effect_icon = used_intent.animname)
+					if(!used_intent.noaa)
+						do_attack_animation(get_turf(A), used_intent.animname, W, used_intent = src.used_intent)
 				resolveAdjacentClick(A,W,params)
 				return
 
@@ -285,6 +294,7 @@
 						var/mob/target = pick(mobs_here)
 						if(target)
 							if(target.Adjacent(src))
+								do_attack_animation(T, used_intent.animname, used_intent.masteritem, used_intent = src.used_intent)
 								resolveAdjacentClick(target,W,params,used_hand)
 								atkswinging = null
 								//update_warning()
@@ -292,16 +302,16 @@
 					if(cmode)
 						resolveAdjacentClick(T,W,params,used_hand) //hit the turf
 					if(!used_intent.noaa)
-						changeNext_move(CLICK_CD_MELEE)
+						changeNext_move(CLICK_CD_RAPID)
 						if(get_dist(get_turf(src), T) <= used_intent.reach)
-							do_attack_animation(T, visual_effect_icon = used_intent.animname)
+							do_attack_animation(T, used_intent.animname, used_intent.masteritem, used_intent = src.used_intent)
 						if(W)
 							playsound(get_turf(src), pick(W.swingsound), 100, FALSE)
 							var/adf = used_intent.clickcd
 							if(istype(rmb_intent, /datum/rmb_intent/aimed))
-								adf = round(adf * 1.4)
+								adf = round(adf * CLICK_CD_MOD_AIMED)
 							if(istype(rmb_intent, /datum/rmb_intent/swift))
-								adf = round(adf * 0.6)
+								adf = max(round(adf * CLICK_CD_MOD_SWIFT), CLICK_CD_INTENTCAP)
 							changeNext_move(adf)
 						else
 							playsound(get_turf(src), used_intent.miss_sound, 100, FALSE)
@@ -337,11 +347,14 @@
 		if(ismob(A))
 			var/adf = used_intent.clickcd
 			if(istype(rmb_intent, /datum/rmb_intent/aimed))
-				adf = round(adf * 1.4)
+				adf = round(adf * CLICK_CD_MOD_AIMED)
 			if(istype(rmb_intent, /datum/rmb_intent/swift))
-				adf = round(adf * 0.6)
+				adf = max(round(adf * CLICK_CD_MOD_SWIFT), CLICK_CD_INTENTCAP)
 			changeNext_move(adf)
 		UnarmedAttack(A,1,params)
+	if(mob_timers[MT_INVISIBILITY] > world.time)			
+		mob_timers[MT_INVISIBILITY] = world.time
+		update_sneak_invis(reset = TRUE)
 
 //Branching path for Ranged clicks with or without items
 //DOES NOT ACTUALLY KNOW IF YOU'RE RANGED, DO NoT CALL ON IT'S OWN
@@ -363,7 +376,7 @@
 /mob/proc/aftermiss()
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
-		H.rogfat_add(used_intent.misscost)
+		H.stamina_add(used_intent.misscost)
 
 //Is the atom obscured by a PREVENT_CLICK_UNDER_1 object above it
 /atom/proc/IsObscured()
@@ -801,7 +814,7 @@
 			rmb_on(A, params)
 	else if(used_intent.rmb_ranged)
 		used_intent.rmb_ranged(A, src) //get the message from the intent
-	changeNext_move(CLICK_CD_MELEE)
+	changeNext_move(CLICK_CD_RAPID)
 	if(isturf(A.loc))
 		face_atom(A)
 

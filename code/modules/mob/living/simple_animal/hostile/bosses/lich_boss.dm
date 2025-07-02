@@ -434,7 +434,7 @@
 	desc = ""
 
 	school = "abjuration"
-	charge_max = 20
+	recharge_time = 20
 	clothes_req = FALSE
 	invocation = "none"
 	invocation_type = "none"

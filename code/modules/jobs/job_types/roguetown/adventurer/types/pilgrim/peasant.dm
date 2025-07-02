@@ -6,6 +6,7 @@
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/peasant
 	category_tags = list(CTAG_PILGRIM, CTAG_TOWNER)
+	cmode_music = 'sound/music/combat_soilson.ogg'
 
 /datum/outfit/job/roguetown/adventurer/peasant/pre_equip(mob/living/carbon/human/H)
 	..()
@@ -38,6 +39,7 @@
 						/obj/item/seeds/apple=1,
 						/obj/item/ash=1,
 						/obj/item/flashlight/flare/torch = 1,
+						/obj/item/recipe_book/survival = 1,
 						)
 	beltl = /obj/item/rogueweapon/sickle
 	backr = /obj/item/rogueweapon/hoe

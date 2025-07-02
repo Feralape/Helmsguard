@@ -1,4 +1,5 @@
 /datum/anvil_recipe/valuables
+	abstract_type = /datum/anvil_recipe/valuables
 	appro_skill = /datum/skill/craft/blacksmithing
 	craftdiff = 2
 	i_type = "Valuables"
@@ -17,6 +18,11 @@
 	name = "Statue"
 	req_bar = /obj/item/ingot/iron
 	created_item = /obj/item/roguestatue/iron
+
+/datum/anvil_recipe/valuables/aalloy
+	name = "Decrepit Statue"
+	req_bar = /obj/item/ingot/aalloy
+	created_item = /obj/item/roguestatue/aalloy
 
 /datum/anvil_recipe/valuables/steel
 	name = "Statue"
@@ -46,6 +52,12 @@
 	created_item = /obj/item/clothing/ring/gold
 	createditem_num = 3
 
+/datum/anvil_recipe/valuables/ringa
+	name = "Decrepit Rings 3x"
+	req_bar = /obj/item/ingot/aalloy
+	created_item = /obj/item/clothing/ring/aalloy
+	createditem_num = 3
+
 /datum/anvil_recipe/valuables/rings
 	name = "Rings 3x"
 	req_bar = /obj/item/ingot/silver
@@ -72,7 +84,7 @@
 /datum/anvil_recipe/valuables/rubyg
 	name = "Rontz Ring (+1 Rontz)"
 	req_bar = /obj/item/ingot/gold
-	additional_items = list(/obj/item/roguegem)
+	additional_items = list(/obj/item/roguegem/ruby)
 	created_item = /obj/item/clothing/ring/ruby
 
 /datum/anvil_recipe/valuables/topazg
@@ -116,7 +128,7 @@
 /datum/anvil_recipe/valuables/rubys
 	name = "Rontz Ring (+1 Rontz)"
 	req_bar = /obj/item/ingot/silver
-	additional_items = list(/obj/item/roguegem)
+	additional_items = list(/obj/item/roguegem/ruby)
 	created_item = /obj/item/clothing/ring/rubys
 
 /datum/anvil_recipe/valuables/topazs
@@ -146,7 +158,7 @@
 /datum/anvil_recipe/valuables/terminus
 	name = "Terminus Est (+1 Gold Bar, +1 Steel, +1 Rontz)"
 	req_bar = /obj/item/ingot/gold
-	additional_items = list(/obj/item/ingot/gold, /obj/item/ingot/steel, /obj/item/roguegem)
+	additional_items = list(/obj/item/ingot/gold, /obj/item/ingot/steel, /obj/item/roguegem/ruby)
 	created_item = /obj/item/rogueweapon/sword/long/exe/cloth
 	craftdiff = 3
 	i_type = "Weapons"
@@ -159,9 +171,3 @@
 	created_item = /obj/item/clothing/ring/dragon_ring
 	craftdiff = 6
 */
-
-/datum/anvil_recipe/roguetown/sewing/goldanklet
-	name = "exotic silk anklets"
-	req_bar =  /obj/item/ingot/gold
-	created_item = list (/obj/item/clothing/shoes/roguetown/anklets)
-	craftdiff = 6

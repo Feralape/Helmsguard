@@ -219,6 +219,62 @@ GLOBAL_VAR_INIT(mobids, 1)
 		log_seen(src, null, hearers, (log_seen_msg ? log_seen_msg : message), log_seen)
 
 /**
+ * Show a message to all mobs in a vertical plane around the source atom. 
+ * Only use this for cases where the action being done is important enough to ignore z level / LOS.
+ * vars:
+ * * message is the message output. Keep in mind that its end will be appended with "Far Above / Above / Below / Far Below" & "North / East / West / South" etc
+ * * hearing_distance is the distance from the source that the message will be sent to.
+ * * directional will add an additional direction of the source of sound relative to the listener's position.
+ */
+
+/atom/proc/loud_message(message, hearing_distance = DEFAULT_MESSAGE_RANGE, directional = TRUE)
+	var/list/listening = get_hearers_in_view(hearing_distance, src)
+	for(var/_M in GLOB.player_list)
+		var/mob/M = _M
+		if(!M.client) //client is so that ghosts don't have to listen to mice
+			continue
+		if(!M)
+			continue
+		if(!M.client)
+			continue
+		if(get_dist(M, src) > hearing_distance) //they're out of range of normal hearing
+			if(M.client.prefs)
+				if(!(M.client.prefs.chat_toggles & CHAT_GHOSTEARS)) //they're talking normally and we have hearing at any range off
+					continue
+		if(!is_in_zweb(src.z,M.z))
+			continue
+		listening |= M
+	
+	for(var/mob/living/L in listening)
+		var/strz
+		var/strdir
+		if(L.STAPER <= 8 && !(L in viewers(world.view, src)))
+			to_chat(L, span_warning("You hear something... somewhere!"))
+			continue
+		if(L.z != src.z)
+			var/zdiff = abs(L.z - src.z)
+			if(L.z > src.z)
+				switch(zdiff)
+					if(1)
+						strz = "below"
+					if(2 to 999)
+						strz = "far below"
+			if(L.z < src.z)
+				switch(zdiff)
+					if(1)
+						strz = "above"
+					if(2 to 999)
+						strz = "far above"
+		if(directional)
+			var/dir = get_dir(L, src)
+			strdir = dir2text(dir)
+		//message + "from" + strz if we have it. If we do we add "and" + "strdir", otherwise only "strdir".
+		//If there's a z difference: "A rock can be heard falling" + "from" + "below/above/etc" + "and" + "northeast"
+		//No z difference: "A rock can be heard falling" + "from" + "northeast"
+		//No dir difference:"A rock can be heard falling" + "from" + "above"
+		var/fullmsg = span_warning("[message] from [strz ? "<b>[strz]</b>" : ""][strdir ? "[strz ? " and " : ""]<b>[strdir]</b>" : ""].")
+		to_chat(L, fullmsg)
+/**
  * Show a message to all mobs in earshot of this one
  *
  * This would be for audible actions by the src mob
@@ -428,7 +484,8 @@ GLOBAL_VAR_INIT(mobids, 1)
 					target = "\the [T.name]'s [T.simple_limb_hit(zone_selected)]"
 				if(iscarbon(T) && T != src)
 					target = "[T]'s [parse_zone(zone_selected)]"
-			visible_message(span_emote("[message] [target]."))
+			if(m_intent != MOVE_INTENT_SNEAK)
+				visible_message(span_emote("[message] [target]."))
 
 	var/list/result = A.examine(src)
 	if(result)
@@ -704,10 +761,12 @@ GLOBAL_VAR_INIT(mobids, 1)
  * For mobs this just shows the inventory
  */
 /mob/MouseDrop_T(atom/dropping, atom/user)
-	. = ..()
+	..()
 	if(ismob(dropping) && dropping != user)
+		var/mob/U = user
 		var/mob/M = dropping
-		M.show_inv(user)
+		if (!U.cmode || U.client.prefs.toggles & CMODE_STRIPPING)
+			M.show_inv(user)
 		return TRUE
 
 ///Is the mob muzzled (default false)
@@ -724,7 +783,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 	..()
 	// && check_rights(R_ADMIN,0)
 	var/ticker_time = world.time - SSticker.round_start_time
-	var/time_left = SSticker.mode?.round_ends_at - ticker_time
+	var/time_left = SSgamemode.round_ends_at - ticker_time
 	if(client && client.holder)
 		if(statpanel("Status"))
 			if (client)
@@ -736,7 +795,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 			stat(null, "Round ID: [GLOB.rogue_round_id ? GLOB.rogue_round_id : "NULL"]")
 //			stat(null, "Server Time: [time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss")]")
 			stat(null, "Round Time: [time2text(STATION_TIME_PASSED(), "hh:mm:ss", 0)] [world.time - SSticker.round_start_time]")
-			if(SSticker.mode?.roundvoteend)
+			if(SSgamemode.roundvoteend)
 				stat("Round End: [DisplayTimeText(time_left)]")
 			stat(null, "Round TrueTime: [worldtime2text()] [world.time]")
 			stat(null, "TimeOfDay: [GLOB.tod]")
@@ -749,7 +808,7 @@ GLOBAL_VAR_INIT(mobids, 1)
 		if(statpanel("RoundInfo"))
 			stat("Round ID: [GLOB.rogue_round_id]")
 			stat("Round Time: [time2text(STATION_TIME_PASSED(), "hh:mm:ss", 0)] [world.time - SSticker.round_start_time]")
-			if(SSticker.mode?.roundvoteend)
+			if(SSgamemode.roundvoteend)
 				stat("Round End: [DisplayTimeText(time_left)]")
 			stat("TimeOfDay: [GLOB.tod]")
 
@@ -819,9 +878,9 @@ GLOBAL_VAR_INIT(mobids, 1)
 		if(S.can_be_cast_by(src))
 			switch(S.charge_type)
 				if("recharge")
-					statpanel("[S.panel]","[S.charge_counter/10.0]/[S.charge_max/10]",S)
+					statpanel("[S.panel]","[S.charge_counter/10.0]/[S.recharge_time/10]",S)
 				if("charges")
-					statpanel("[S.panel]","[S.charge_counter]/[S.charge_max]",S)
+					statpanel("[S.panel]","[S.charge_counter]/[S.recharge_time]",S)
 				if("holdervar")
 					statpanel("[S.panel]","[S.holder_var_type] [S.holder_var_amount]",S)
 
@@ -838,7 +897,7 @@ GLOBAL_VAR_INIT(mobids, 1)
  * * no transform not set
  * * we are not restrained
  */
-/mob/proc/canface()
+/mob/proc/canface(atom/A)
 	if(client)
 		if(world.time < client.last_turn)
 			return FALSE
@@ -855,13 +914,41 @@ GLOBAL_VAR_INIT(mobids, 1)
 	return TRUE
 
 ///Checks mobility move as well as parent checks
-/mob/living/canface()
+/mob/living/canface(atom/A)
 	if(!(mobility_flags & MOBILITY_MOVE))
 		return FALSE
 	if(world.time < last_dir_change + 5)
 		return
-	if(pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE) //the reason this isn't a mobility_flags check is because you want them to be able to change dir if you're passively grabbing them
-		return FALSE
+	if(A && pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE) //the reason this isn't a mobility_flags check is because you want them to be able to change dir if you're passively grabbing them
+		// get_cardinal_dir is inconsistent, reuse face_atom code
+		var/dx = A.x - src.x
+		var/dy = A.y - src.y
+		var/dir
+		if(!dx && !dy) // Wall items are graphically shifted but on the floor
+			if(A.pixel_y > 16)
+				dir = NORTH
+			else if(A.pixel_y < -16)
+				dir = SOUTH
+			else if(A.pixel_x > 16)
+				dir = EAST
+			else if(A.pixel_x < -16)
+				dir = WEST
+		else
+			if(abs(dx) < abs(dy))
+				if(dy > 0)
+					dir = NORTH
+				else
+					dir = SOUTH
+			else
+				if(dx > 0)
+					dir = EAST
+				else
+					dir = WEST
+		if(dir == pulledby.dir) // can never face away from the person grabbing you
+			return FALSE
+		for(var/obj/item/grabbing/G in grabbedby) // only chokeholds prevent turning
+			if(G.chokehold)
+				return FALSE
 	if(IsImmobilized())
 		return FALSE
 	return ..()
@@ -904,23 +991,6 @@ GLOBAL_VAR_INIT(mobids, 1)
 	setDir(SOUTH)
 	client.last_turn = world.time + MOB_FACE_DIRECTION_DELAY
 	return TRUE
-
-///Hidden Pixel Shift Verbs, now handled through modularized pixel_shift 
-/mob/verb/eastshift()
-	set hidden = TRUE
-	pixel_shift(EAST)
-
-/mob/verb/westshift()
-	set hidden = TRUE
-	pixel_shift(WEST)
-
-/mob/verb/northshift()
-	set hidden = TRUE
-	pixel_shift(NORTH)
-
-/mob/verb/southshift()
-	set hidden = TRUE
-	pixel_shift(SOUTH)
 
 ///This might need a rename but it should replace the can this mob use things check
 /mob/proc/IsAdvancedToolUser()
@@ -1321,3 +1391,8 @@ GLOBAL_VAR_INIT(mobids, 1)
 	if(customsayverb)
 		input = capitalize(copytext(input, customsayverb+1))
 	return "[message_spans_start(spans)][input]</span>"
+
+/mob/living/proc/can_smell()
+	if(HAS_TRAIT(src, TRAIT_MISSING_NOSE))
+		return FALSE
+	return TRUE

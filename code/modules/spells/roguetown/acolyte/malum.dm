@@ -4,7 +4,6 @@
 	releasedrain = 0
 	chargedrain = 0
 	chargetime = 0
-	range = 1
 	warnie = "sydwarning"
 	movement_interrupt = FALSE
 	no_early_release = TRUE
@@ -14,7 +13,7 @@
 	invocation_type = "shout"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = FALSE
-	charge_max = 3 MINUTES
+	recharge_time = 3 MINUTES
 	chargetime = 2 SECONDS
 	miracle = TRUE
 	charging_slowdown = 3
@@ -37,7 +36,7 @@
 	invocation_type = "shout"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = FALSE
-	charge_max = 2 MINUTES
+	recharge_time = 2 MINUTES
 	chargetime = 2 SECONDS
 	miracle = TRUE
 	charging_slowdown = 3
@@ -60,7 +59,7 @@
 	invocation_type = "shout"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = TRUE
-	charge_max = 5 MINUTES
+	recharge_time = 5 MINUTES
 	chargetime = 2 SECONDS
 	miracle = TRUE
 	charging_slowdown = 3
@@ -83,7 +82,7 @@
 	invocation_type = "shout"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = FALSE
-	charge_max = 25 MINUTES
+	recharge_time = 25 MINUTES
 	chargetime = 10 SECONDS
 	miracle = TRUE
 	charging_slowdown = 3
@@ -244,11 +243,11 @@
 	if (!iscarbon(target)) 
 		return
 	if (target == user)
-		target.rogstam_add(starminatoregen)
+		target.energy_add(starminatoregen)
 		show_visible_message(usr, "As [user] intones the incantation, vibrant flames swirl around them.", "As you intones the incantation, vibrant flames swirl around you, You feel refreshed.")
-	else if (user.rogstam > (starminatoregen * 2))
-		user.rogstam_add(-(starminatoregen * 2))
-		target.rogstam_add(starminatoregen * 2)
+	else if (user.energy > (starminatoregen * 2))
+		user.energy_add(-(starminatoregen * 2))
+		target.energy_add(starminatoregen * 2)
 		show_visible_message(target, "As [user] intones the incantation, vibrant flames swirl around them, a dance of energy flowing towards [target].", "As [user] intones the incantation, vibrant flames swirl around them, a dance of energy flowing towards you. You feel refreshed")
 
 /obj/effect/proc_holder/spell/invoked/craftercovenant/cast(list/targets, mob/user = usr)
@@ -398,7 +397,7 @@ var/global/list/anvil_recipe_prices[][]
 	invocation_type = "whisper"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = TRUE
-	charge_max = 15 SECONDS
+	recharge_time = 15 SECONDS
 	miracle = TRUE
 	devotion_cost = 15
 
@@ -409,7 +408,7 @@ var/global/list/anvil_recipe_prices[][]
 		user.visible_message("<font color='yellow'>[user] points at [L]!</font>")
 		if(L.anti_magic_check(TRUE, TRUE))
 			return FALSE
-		L.adjust_fire_stacks(1)
+		L.adjust_divine_fire_stacks(1)
 		L.IgniteMob()
 		return TRUE
 

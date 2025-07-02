@@ -14,6 +14,7 @@
 	implements = list(
 		TOOL_SUTURE = 80,
 		TOOL_HEMOSTAT = 60,
+		TOOL_IMPROVISED_HEMOSTAT = 50,
 		TOOL_SCREWDRIVER = 50,
 	)
 	target_mobtypes = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
@@ -90,6 +91,7 @@
 	display_results(user, target, span_notice("[umsg]."),
 		"[tmsg].",
 		"[tmsg].")
+	target.update_damage_hud()
 	return TRUE
 
 /datum/surgery_step/heal/failure(mob/user, mob/living/target, target_zone, obj/item/tool, datum/intent/intent, success_prob)
@@ -103,6 +105,7 @@
 		urdamageamt_burn += round((target.getFireLoss()/(missinghpbonus*2)),0.1)
 
 	target.take_bodypart_damage(urdamageamt_brute, urdamageamt_burn)
+	target.update_damage_hud()
 	return TRUE
 
 /********************BRUTE STEPS********************/

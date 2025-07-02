@@ -1,9 +1,9 @@
-
+//Base hammer type. (Wood / Iron / Steel)
 /obj/item/rogueweapon/hammer
 	force = 21
 	possible_item_intents = list(/datum/intent/mace/strike, /datum/intent/mace/smash)
-	name = "hammer"
-	desc = "Each strikes reverberate loudly chanting war!"
+	name = "template hammer"
+	desc = "If you see this - scream, cry, piss, run, shit yourself, then report it to a dev. Shouldn't be here."
 	icon_state = "hammer"
 	icon = 'icons/roguetown/weapons/tools.dmi'
 	sharpness = IS_BLUNT
@@ -12,7 +12,7 @@
 	slot_flags = ITEM_SLOT_HIP
 	w_class = WEIGHT_CLASS_NORMAL
 	associated_skill = /datum/skill/combat/maces
-	smeltresult = /obj/item/ingot/iron
+	smeltresult = /obj/item/ash
 	grid_width = 32
 	grid_height = 64
 
@@ -71,8 +71,12 @@
 			return
 
 		if(blacksmith_mind.get_skill_level(attacked_item.anvilrepair) <= 0)
-			if(HAS_TRAIT(user, TRAIT_SQUIRE_REPAIR) && locate(/obj/machinery/anvil) in attacked_object.loc)
-				repair_percent = 0.035
+			if(HAS_TRAIT(user, TRAIT_SQUIRE_REPAIR))
+				if(locate(/obj/machinery/anvil) in attacked_object.loc)
+					repair_percent = 0.035
+				//Squires can repair on tables, but less efficiently
+				else if(attacked_item.ontable())
+					repair_percent = 0.015
 			else if(prob(30))
 				repair_percent = 0.01
 			else
@@ -160,18 +164,49 @@
 	else //Non-construct.
 		to_chat(user, span_warning("I can't tinker on living flesh!"))
 
-/obj/item/rogueweapon/hammer/stone
-	name = "stone hammer"
-	icon_state = "stonehammer"
+/obj/item/rogueweapon/hammer/wood	// wood hammer (mallet)
+	name = "wooden mallet"
+	desc = "A wooden mallet is an artificers second best friend! But it may also come in handy to a smith..."
+	icon_state = "hammer_w"
 	force = 16
-	smeltresult = null
+
+/obj/item/rogueweapon/hammer/stone	// stone hammer
+	name = "stone hammer"
+	desc = "A makeshift hammer, made with a crudly chisled-down rock."
+	icon_state = "hammer_r"
+	force = 18
 	max_integrity = 15
 
-/obj/item/rogueweapon/hammer/claw
-	icon_state = "clawh"
+/obj/item/rogueweapon/hammer/aalloy
+	name = "decrepit hammer"
+	desc = "A decrepit old hammer."
+	icon_state = "ahammer"
+	force = 12
+	max_integrity = 10
+	smeltresult = /obj/item/ingot/aalloy
+
+
+/obj/item/rogueweapon/hammer/copper
+	name = "copper hammer"
+	desc = "A copper hammer, slightly better than a stone hammer."
+	icon_state = "hammer_c"
+	force = 20
+	max_integrity = 100
+
+/obj/item/rogueweapon/hammer/iron	// iron hammer
+	name = "hammer"
+	desc = "Each strikes reverberate loudly chanting war!"
+	icon_state = "hammer_i"
+	smeltresult = /obj/item/ingot/iron
+
+/obj/item/rogueweapon/hammer/steel	// steel hammer
+	name = "claw hammer"
+	desc = "Steel to drive the iron nail without mercy."
+	icon_state = "hammer_s"
+	smeltresult = /obj/item/ingot/steel
 
 /*
-/obj/item/rogueweapon/hammer/claw/attack_turf(turf/T, mob/living/user)
+/obj/item/rogueweapon/hammer/steel/attack_turf(turf/T, mob/living/user)
 	if(!user.cmode)
 		if(T.hammer_repair && T.max_integrity && !T.obj_broken)
 			var/repair_percent = 0.05
@@ -216,8 +251,6 @@
 "eflip" = 0)
 			if("onbelt")
 				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
-
-
 
 /obj/item/rogueweapon/tongs
 	force = 10
@@ -329,3 +362,20 @@
 			icon_state = "stonetongsi1"
 		else
 			icon_state = "stonetongsi0"
+
+/obj/item/rogueweapon/tongs/aalloy
+	name = "decrepit tongs"
+	icon_state = "atongs"
+	force = 5
+	smeltresult = null
+	max_integrity = 10
+
+/obj/item/rogueweapon/tongs/aalloy/update_icon()
+	. = ..()
+	if(!hingot)
+		icon_state = "atongs"
+	else
+		if(hott)
+			icon_state = "atongsi1"
+		else
+			icon_state = "atongsi0"

@@ -6,9 +6,12 @@
 	desc = ""
 	w_class = WEIGHT_CLASS_TINY
 	var/bundletype = null
+	var/bundling_time = 4 SECONDS		// Base bundling time - make lower for small objects. Higher for large.
 	var/quality = SMELTERY_LEVEL_NORMAL // To not ruin blacksmith recipes
 	grid_width = 32
 	grid_height = 32
+	var/sharpening_factor = 0
+	var/spark_chance = 0
 
 /obj/item/natural/attackby(obj/item/W, mob/living/user)
 	if(istype(W, /obj/item/natural/bundle))
@@ -151,7 +154,10 @@
 
 /obj/item/natural/bundle/examine(mob/user)
 	. = ..()
-	to_chat(user, span_notice("There are [amount] [stackname] in this bundle."))
+	if(amount == maxamount )
+		to_chat(user, span_notice("There are [amount] [stackname] in this bundle. It can not take any more."))
+	else
+		to_chat(user, span_notice("There are [amount] [stackname] in this bundle."))
 
 /obj/item/natural/bundle/proc/update_bundle()
 	if(firefuel != 0)

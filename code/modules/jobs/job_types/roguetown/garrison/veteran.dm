@@ -18,7 +18,10 @@
 	max_pq = null
 	round_contrib_points = 2
 
-	cmode_music = 'sound/music/combat_guard.ogg'
+	cmode_music = 'sound/music/combat_veteran.ogg'
+
+/datum/outfit/job/roguetown/captain
+	job_bitflag = BITFLAG_ROYALTY | BITFLAG_GARRISON	//Not a noble per-say but not really garrison either. So both, you are a courtier of sorts afterall + combat
 
 /datum/job/roguetown/veteran/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
 	. = ..()
@@ -319,7 +322,7 @@
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/hide
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy
 	pants = /obj/item/clothing/under/roguetown/trou/leather
-	gloves = /obj/item/clothing/gloves/roguetown/leather
+	gloves = /obj/item/clothing/gloves/roguetown/fingerless_leather
 	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
 	beltl = /obj/item/quiver/arrows
@@ -429,6 +432,7 @@
 			H.change_stat("speed", 1) // You get -2 speed from being old. You are still in the negative stat wise from picking old.
 			H.change_stat("perception", 2) // You get -2 perception from being old. I want you to at least have a positive perception, to represent that you're observant. The highest perception you can get with this is a 13, so I think we'll be okayed.
 	H.verbs |= /mob/proc/haltyell
+	H.grant_language(/datum/language/thievescant)
 	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_CICERONE, TRAIT_GENERIC)

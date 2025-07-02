@@ -23,6 +23,18 @@
 	max_integrity = 10
 	force = 10
 
+/obj/item/ammo_casing/caseless/rogue/bolt/aalloy
+	name = "decrepit bolt"
+	desc = "a decrepit old bolt, the head is nearly in shambles. Aeon's grasp is upon it."
+	icon_state = "ancientbolt"
+	projectile_type = /obj/projectile/bullet/reusable/bolt/aalloy
+
+/obj/item/ammo_casing/caseless/rogue/bolt/paalloy
+	name = "ancient bolt"
+	desc = "A ancient bolt. Aeon's grasp has been lifted from its form."
+	icon_state = "ancientbolt"
+	projectile_type = /obj/projectile/bullet/reusable/bolt/paalloy
+
 /obj/projectile/bullet/reusable/bolt
 	name = "bolt"
 	damage = 70
@@ -34,15 +46,25 @@
 	range = 15
 	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
 	embedchance = 100
-	woundclass = BCLASS_STAB
+	woundclass = BCLASS_PIERCE
 	flag = "piercing"
 	speed = 0.5
+	npc_damage_mult = 2
+
+/obj/projectile/bullet/reusable/bolt/aalloy
+	damage = 40
+	armor_penetration = 30
+
+/obj/projectile/bullet/reusable/bolt/paalloy
+	damage = 50
+	armor_penetration = 35
 
 /obj/projectile/bullet/reusable/bolt/on_hit(atom/target)
 	. = ..()
 
 	var/mob/living/L = firer
-	if(!L || !L.mind) return
+	if(!L || !L.mind) 
+		return
 
 	var/skill_multiplier = 0
 
@@ -64,39 +86,69 @@
 	projectile_type = /obj/projectile/bullet/reusable/arrow
 	caliber = "arrow"
 	icon = 'icons/roguetown/weapons/ammo.dmi'
-	icon_state = "arrow"
+	icon_state = "stonearrow"
 	force = 10
 	dropshrink = 0.6
 	possible_item_intents = list(/datum/intent/dagger/cut, /datum/intent/dagger/thrust)
-	max_integrity = 20
+	max_integrity = 10
+
+/obj/item/ammo_casing/caseless/rogue/arrow/stone
+	name = "stone arrow"
+	desc = "A simple dowel sports lashed flint knapped and honed to a razor edge. Folk \
+	wisdom holds that these cut finer than iron heads, but they tend to shatter \
+	on impact with armor."
+	max_integrity = 5
+	projectile_type = /obj/projectile/bullet/reusable/arrow/stone
 
 /obj/item/ammo_casing/caseless/rogue/arrow/iron
-	name = "iron arrow"
+	name = "iron broadhead arrow"
+	icon_state = "ironarrow"
 	desc = "Bundles of steam straightened dowels are notched at one end and fastened \
-	to razor heads on another. With flight feathers lashed it will fly true to its \
+	to iron-heads on another. With flight feathers lashed it will fly true to its \
 	shooters will."
 	projectile_type = /obj/projectile/bullet/reusable/arrow/iron
 
+/obj/item/ammo_casing/caseless/rogue/arrow/iron/aalloy 
+	name = "decrepit broadhead arrow"
+	desc = "A decrepit old arrow. Seems unlikely to penetrate anything."
+	icon_state = "ancientarrow"
+	projectile_type = /obj/projectile/bullet/reusable/arrow/iron/aalloy
+
+/obj/item/ammo_casing/caseless/rogue/arrow/steel
+	name = "steel bodkin arrow"
+	icon_state = "steelarrow"
+	desc = "Bundles of steam straightened dowels are notched at one end and fastened \
+	to steel-heads on another. Crafted for more well-prepared targets."
+	projectile_type = /obj/projectile/bullet/reusable/arrow/steel
+
+/obj/item/ammo_casing/caseless/rogue/arrow/steel/paalloy
+	name = "ancient bodkin arrow"
+	desc = "a bodkin formed of ancient metals. Aeon's grasp lifted from its form."
+	icon_state = "ancientarrow"
+	projectile_type = /obj/projectile/bullet/reusable/arrow/steel/paalloy
+
 /obj/projectile/bullet/reusable/arrow
 	name = "arrow"
-	damage = 50
+	damage = 20
 	damage_type = BRUTE
-	armor_penetration = 40
+	npc_damage_mult = 2
+	armor_penetration = 10
 	icon = 'icons/roguetown/weapons/ammo.dmi'
 	icon_state = "arrow_proj"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow
 	range = 15
 	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
-	embedchance = 100
-	woundclass = BCLASS_STAB
+	embedchance = 25
+	woundclass = BCLASS_PIERCE
 	flag = "piercing"
 	speed = 0.4
 
 /obj/projectile/bullet/reusable/arrow/on_hit(atom/target)
-	. = ..()
+	..()
 
 	var/mob/living/L = firer
-	if(!L || !L.mind) return
+	if(!L || !L.mind) 
+		return
 
 	var/skill_multiplier = 0
 
@@ -108,52 +160,84 @@
 	if(skill_multiplier && can_train_combat_skill(L, /datum/skill/combat/bows, SKILL_LEVEL_EXPERT))
 		L.mind.add_sleep_experience(/datum/skill/combat/bows, L.STAINT * skill_multiplier)
 
-/obj/projectile/bullet/reusable/arrow/iron
-	name = "iron arrow"
-	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/iron
-
 /obj/projectile/bullet/reusable/arrow/stone
 	name = "stone arrow"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/stone
+	accuracy = 60
 
-/obj/item/ammo_casing/caseless/rogue/arrow/stone
-	name = "stone arrow"
-	desc = "A simple dowel sports lashed flint knapped and honed to a razor edge. Folk \
-	wisdom holds that these cut finer than iron heads, but they tend to shatter \
-	on impact with armor."
-	icon_state = "stonearrow"
-	max_integrity = 5
-	projectile_type = /obj/projectile/bullet/reusable/arrow/stone
+/obj/projectile/bullet/reusable/arrow/iron
+	name = "broadhead arrow"
+	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/iron
+
+	damage = 40
+	armor_penetration = 20
+	embedchance = 30
+	npc_damage_mult = 2
+
+/obj/projectile/bullet/reusable/arrow/iron/aalloy
+	name = "decrepit broadhead arrow"
+	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/iron/aalloy
+	damage = 20
+	armor_penetration = 0
+
+/obj/projectile/bullet/reusable/arrow/steel
+	name = "bodkin arrow"
+	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/steel
+
+	accuracy = 75
+	damage = 25
+	armor_penetration = 45
+	embedchance = 80
+	speed = 0.6
+	npc_damage_mult = 3
+
+/obj/projectile/bullet/reusable/arrow/steel/paalloy
+	name = "decrepit bodkin arrow"
+	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/steel/paalloy
+	damage = 15
+	armor_penetration = 25
+
+// POISON AMMO
+
 
 /obj/item/ammo_casing/caseless/rogue/arrow/poison
 	name = "poisoned arrow"
 	desc = "Bundles of steam straightened dowels are notched at one end and fastened \
-	to razor heads on another. Furrels cut into "
+	to razor heads on another. Furrels cut into the arrow-head with an intoxicating concoction. \
+	within."
 	projectile_type = /obj/projectile/bullet/reusable/arrow/poison
-	icon_state = "arrow_poison"
-	max_integrity = 20 // same as normal arrow; usually breaks on impact with a mob anyway
+	icon_state = "ironarrow_poison"
+	max_integrity = 10 // same as normal arrow; usually breaks on impact with a mob anyway
 
 /obj/item/ammo_casing/caseless/rogue/arrow/stone/poison
 	name = "poisoned stone arrow"
 	desc = "A simple dowel sports lashed flint honed to a razor edge and knapped \
 	with furrels for carrying poison residue."
 	projectile_type = /obj/projectile/bullet/reusable/arrow/poison/stone
-	icon_state = "stonearrow_poison"
+	icon_state = "arrow_poison"
 
 /obj/projectile/bullet/reusable/arrow/poison
-	name = "poison arrow"
-	damage = 20				//You deal a bunch of posion damage as it is, regardless of armor protection.
+	name = "poison iron arrow"
+	damage = 20	
 	damage_type = BRUTE
 	icon = 'icons/roguetown/weapons/ammo.dmi'
 	icon_state = "arrow_proj"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/iron
 	range = 15
 	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
-	poisontype = /datum/reagent/toxin/berrypoison //Support for future variations of poison for arrow-crafting
-	poisonfeel = "burning" //Ditto
-	poisonamount = 5 //Support and balance for bodkins, which will hold less poison due to how
+	poisontype = /datum/reagent/toxin/stampoison
+	poisonamount = 2
+	slur = 10
+	eyeblur = 10
+	drowsy = 5
 
-//pyro bolts - stonekeep port 
+/obj/projectile/bullet/reusable/arrow/poison/stone
+	name = "poison stone arrow"
+	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/stone
+
+
+// PYRO AMMO
+
 
 /obj/item/ammo_casing/caseless/rogue/bolt/pyro
 	name = "pyroclastic bolt"
@@ -182,6 +266,43 @@
 	flag = "piercing"
 	speed = 0.3
 
+/obj/projectile/bullet/bolt/pyro/on_hit(target)
+	..()
+	if(!ismob(target))
+		return
+	var/mob/living/M = target
+	M.adjust_fire_stacks(6)
+	M.adjustFireLoss(15)
+	M.IgniteMob()
+
+
+/obj/item/ammo_casing/caseless/rogue/bolt/water
+	name = "water bolt"
+	desc = "A bolt with its tip containing a glass ampule filled with water. It will shatter on impact, useful for taking out pesky lights."
+	projectile_type = /obj/projectile/bullet/bolt/water
+	possible_item_intents = list(/datum/intent/mace/strike)
+	caliber = "regbolt"
+	icon = 'icons/roguetown/weapons/ammo.dmi'
+	icon_state = "bolt_water"
+	dropshrink = 0.8
+	max_integrity = 10
+	force = 0
+
+/obj/projectile/bullet/bolt/water
+	name = "water bolt"
+	desc = "A bolt with its tip containing a glass ampule filled with water. It will shatter on impact, useful for taking out pesky lights."
+	damage = 0
+	damage_type = BRUTE
+	icon = 'icons/roguetown/weapons/ammo.dmi'
+	icon_state = "boltwater_proj"
+	ammo_type = /obj/item/ammo_casing/caseless/rogue/bolt/water
+	range = 15
+	hitsound = 'sound/blank.ogg'
+	embedchance = 0
+	woundclass = BCLASS_BLUNT
+	flag = "piercing"
+	speed = 0.3
+
 	var/explode_sound = list('sound/misc/explode/incendiary (1).ogg','sound/misc/explode/incendiary (2).ogg')
 
 	//explosion values
@@ -190,21 +311,16 @@
 	var/exp_flash = 0
 	var/exp_fire = 1
 
-/obj/projectile/bullet/bolt/pyro/on_hit(target)
+/obj/projectile/bullet/bolt/water/on_hit(target)
 	. = ..()
 	if(ismob(target))
 		var/mob/living/M = target
-		M.adjust_fire_stacks(5)
-//		M.take_overall_damage(0,10) //between this 10 burn, the 10 brute, the explosion brute, and the onfire burn, my at about 65 damage if you stop drop and roll immediately
-	var/turf/T
-	if(isturf(target))
-		T = target
-	else
-		T = get_turf(target)
-	explosion(T, -1, exp_heavy, exp_light, exp_flash, 0, flame_range = exp_fire, soundin = explode_sound)
-
+		for(var/obj/O in M.contents) //Checks for light sources in the mob's inventory
+			O.extinguish() //Extinguishes light sources on the mob you hit with the arrow.
+	var/turf/T = get_turf(target)
+	for(var/obj/O in T)
+		O.extinguish()
 //pyro arrows
-
 /obj/item/ammo_casing/caseless/rogue/arrow/pyro
 	name = "pyroclastic arrow"
 	desc = "An arrow with its tip drenched in a flammable tincture."
@@ -232,38 +348,59 @@
 	flag = "piercing"
 	speed = 0.4
 
-	var/explode_sound = list('sound/misc/explode/incendiary (1).ogg','sound/misc/explode/incendiary (2).ogg')
-
-	//explosion values
-	var/exp_heavy = 0
-	var/exp_light = 0
-	var/exp_flash = 0
-	var/exp_fire = 1
-
 /obj/projectile/bullet/arrow/pyro/on_hit(target)
+	..()
+	if(!ismob(target))
+		return
+	var/mob/living/M = target
+	M.adjust_fire_stacks(4)
+	M.adjustFireLoss(10)
+	M.IgniteMob()
+
+/obj/item/ammo_casing/caseless/rogue/arrow/water
+	name = "water arrow"
+	desc = "An arrow with its tip containing a glass ampule filled with water. It will shatter on impact, useful for taking out pesky lights."
+	projectile_type = /obj/projectile/bullet/arrow/water
+	possible_item_intents = list(/datum/intent/mace/strike)
+	caliber = "arrow"
+	icon = 'icons/roguetown/weapons/ammo.dmi'
+	icon_state = "arrow_water"
+	dropshrink = 0.8
+	max_integrity = 10
+	force = 0
+
+/obj/projectile/bullet/arrow/water
+	name = "water arrow"
+	desc = "An arrow with its tip containing a glass ampule filled with water. It will shatter on impact, useful for taking out pesky lights."
+	damage = 0
+	damage_type = BRUTE
+	icon = 'icons/roguetown/weapons/ammo.dmi'
+	icon_state = "arrowwater_proj"
+	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow
+	range = 15
+	hitsound = 'sound/blank.ogg'
+	embedchance = 0
+	woundclass = BCLASS_BLUNT
+	flag = "piercing"
+	speed = 0.4
+
+
+/obj/projectile/bullet/arrow/water/on_hit(target)
 	. = ..()
 	if(ismob(target))
 		var/mob/living/M = target
-		M.adjust_fire_stacks(4)
-//		M.take_overall_damage(0,10) //between this 10 burn, the 10 brute, the explosion brute, and the onfire burn, my at about 65 damage if you stop drop and roll immediately
-	var/turf/T
-	if(isturf(target))
-		T = target
-	else
-		T = get_turf(target)
-	explosion(T, -1, exp_heavy, exp_light, exp_flash, 0, flame_range = exp_fire, soundin = explode_sound)
+		for(var/obj/O in M.contents) //Checks for light sources in the mob's inventory.
+			O.extinguish() //Extinguishes light sources on the mob you hit with the arrow.
+	var/turf/T = get_turf(target)
+	for(var/obj/O in T)
+		O.extinguish()
 
 /obj/projectile/bullet/reusable/arrow/poison/stone
 	name = "stone arrow"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/stone
 
-/obj/projectile/bullet/reusable/arrow/poison/on_hit(atom/target, blocked = FALSE)
-	. = ..()
-	if(istype(target, /mob/living/simple_animal)) //On-hit for carbon mobs has been moved to projectile act in living_defense.dm, to ensure poison is not applied if armor prevents damage.
-		var/mob/living/simple_animal/M = target
-		M.show_message(span_danger("You feel an intense burning sensation spreading swiftly from the puncture!")) //In case a player is in control of the mob.
-		addtimer(CALLBACK(M, TYPE_PROC_REF(/mob/living, adjustToxLoss), 100), 10 SECONDS)
-		addtimer(CALLBACK(M, TYPE_PROC_REF(/atom, visible_message), span_danger("[M] appears greatly weakened by the poison!")), 10 SECONDS)
+// GUNPOWDER AMMO
+
 
 /obj/projectile/bullet/rogue
 	name = "lead ball"
@@ -365,6 +502,51 @@
 	flag = "piercing"
 	speed = 10
 
+//Spider projectiles
+/obj/projectile/bullet/spider
+	name = "web glob"
+	damage = 10
+	damage_type = BRUTE
+	icon = 'modular/Mapping/icons/webbing.dmi'
+	icon_state = "webglob"
+	range = 15
+	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
+	embedchance = 0
+	//Will not cause wounds.
+	woundclass = null
+	flag = "piercing"
+	speed = 1
+
+/obj/projectile/bullet/spider/on_hit(target)
+	. = ..()
+	if(ismob(target))
+		var/mob/living/M = target
+		M.apply_status_effect(/datum/status_effect/debuff/exposed)
+		M.Immobilize(15)
+	var/turf/T
+	if(isturf(target))
+		T = target
+	else
+		T = get_turf(target)
+	var/web = locate(/obj/structure/spider/stickyweb/mirespider) in T.contents
+	if(!(web in T.contents))
+		new /obj/structure/spider/stickyweb/mirespider(T)
+
+//Mirespider webs are thinner and will not stop projectiles or obstruct movement as often.
+/obj/structure/spider/stickyweb/mirespider
+	opacity = 0
+	pass_flags = LETPASSTHROW
+	debris = null
+
+/obj/structure/spider/stickyweb/mirespider/CanPass(atom/movable/mover, turf/target)
+	if(isliving(mover))
+		if(prob(25) && !HAS_TRAIT(mover, TRAIT_WEBWALK))
+			to_chat(mover, "<span class='danger'>I get stuck in \the [src] for a moment.</span>")
+			return FALSE
+	else if(istype(mover, /obj/projectile))
+		return prob(85)
+	return TRUE
+
 //Javelins - Basically spears, but to get them working as proper javelins and able to fit in a bag, they are 'ammo'. (Maybe make an atlatl later?)
 //Only ammo casing, no 'projectiles'. You throw the casing, as weird as it is.
 /obj/item/ammo_casing/caseless/rogue/javelin
@@ -389,6 +571,14 @@
 	heavy_metal = FALSE						//Stops spin animation, maybe.
 	thrown_damage_flag = "piercing"			//Checks peircing protection.
 
+/obj/item/ammo_casing/caseless/rogue/javelin/aalloy
+	name = "decrepit javelin"
+	desc = "A decrepit old javelin, surely used centuries ago. Aeon's grasp is upon its form."
+	icon_state = "ajavelin"
+	smeltresult = /obj/item/ingot/aalloy
+	throwforce = 20
+	force = 9
+
 /obj/item/ammo_casing/caseless/rogue/javelin/steel
 	force = 16
 	armor_penetration = 50
@@ -400,6 +590,12 @@
 	thrown_bclass = BCLASS_PICK				//Bypasses crit protection better than stabbing. Makes it better against heavy-targets.
 	embedding = list("embedded_pain_multiplier" = 4, "embed_chance" = 45, "embedded_fall_chance" = 10) //Better than steel throwing knife by 10%
 	smeltresult = /obj/item/ingot/steel
+
+/obj/item/ammo_casing/caseless/rogue/javelin/steel/paalloy
+	name = "ancient javelin"
+	desc = "A javelin made of ancient alloys. Aeon's grasp lifted from its form."
+	icon_state = "ajavelin"
+	smeltresult = /obj/item/ingot/aaslag
 
 /obj/item/ammo_casing/caseless/rogue/javelin/silver
 	name = "silver javelin"
@@ -473,6 +669,20 @@
 	icon = 'icons/roguetown/weapons/ammo.dmi'
 	icon_state = "stone_sling_bullet"
 
+/obj/item/ammo_casing/caseless/rogue/sling_bullet/aalloy
+	name = "decrepit sling bullet"
+	desc = "A decrepit ball of withered metal."
+	projectile_type = /obj/projectile/bullet/reusable/sling_bullet/aalloy
+	icon = 'icons/roguetown/weapons/ammo.dmi'
+	icon_state = "ancient_sling_bullet"
+
+/obj/item/ammo_casing/caseless/rogue/sling_bullet/paalloy
+	name = "ancient sling bullet"
+	desc = "A ancient ball of re-awakened metal."
+	projectile_type = /obj/projectile/bullet/reusable/sling_bullet/paalloy
+	icon = 'icons/roguetown/weapons/ammo.dmi'
+	icon_state = "ancient_sling_bullet"
+
 /obj/item/ammo_casing/caseless/rogue/sling_bullet/iron
 	name = "iron sling bullet"
 	desc = "Not to be mistakened for a ball bearing."
@@ -486,6 +696,7 @@
 	damage = 25
 	damage_type = BRUTE
 	armor_penetration = 0
+	npc_damage_mult = 2
 	icon = 'icons/roguetown/items/natural.dmi'
 	icon_state = "stone1"
 	range = 15
@@ -551,6 +762,22 @@
 	icon = 'icons/roguetown/weapons/ammo.dmi'
 	icon_state = "musketball_proj"
 	
+/obj/projectile/bullet/reusable/sling_bullet/aalloy
+	name = "decrepit sling bullet"
+	damage = 15 
+	armor_penetration = 0
+	ammo_type = /obj/item/ammo_casing/caseless/rogue/sling_bullet/aalloy
+	icon = 'icons/roguetown/weapons/ammo.dmi'
+	icon_state = "musketball_proj"
+
+/obj/projectile/bullet/reusable/sling_bullet/paalloy
+	name = "ancient sling bullet"
+	damage = 30
+	armor_penetration = 30
+	ammo_type = /obj/item/ammo_casing/caseless/rogue/sling_bullet/paalloy
+	icon = 'icons/roguetown/weapons/ammo.dmi'
+	icon_state = "musketball_proj"
+
 /obj/projectile/bullet/reusable/sling_bullet/iron
 	name = "iron sling bullet"
 	damage = 30

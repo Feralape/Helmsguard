@@ -47,7 +47,15 @@
 		/obj/item/natural/worms/leech = 50,
 		/obj/item/clothing/ring/gold = 1,	
 		/mob/living/simple_animal/hostile/retaliate/rogue/mudcrab = 25,			
-	)	
+	)
+	// This is super trimmed down from the ratwood list to focus entirely on shellfishes
+	cageloot = list(
+		/obj/item/reagent_containers/food/snacks/fish/oyster = 214,
+		/obj/item/reagent_containers/food/snacks/fish/shrimp = 214,
+		/obj/item/reagent_containers/food/snacks/fish/crab = 214,
+		/obj/item/reagent_containers/food/snacks/fish/lobster = 214,
+	)
+
 	embedding = list(
 		"embed_chance" = 100,
 		"embedded_unsafe_removal_time" = 0,
@@ -290,3 +298,26 @@
 
 /obj/item/natural/worms/leech/attack_right(mob/user)
 	return
+
+/obj/item/natural/worms/leech/abyssoid
+	name = "abyssoid leech"
+	desc = "A holy leech sent by Abyssor himself."
+	icon_state = "leech"
+	drainage = 0
+	blood_sucking = 0
+	embedding = list(
+		"embed_chance" = 100,
+		"embedded_unsafe_removal_time" = 0,
+		"embedded_pain_chance" = 0,
+		"embedded_fall_chance" = 0,
+		"embedded_bloodloss"= 0,
+	)
+
+/obj/item/natural/worms/leech/abyssoid/on_embed_life(mob/living/user, obj/item/bodypart/bodypart)
+	. = ..()
+	if(!user)
+		return
+	if(iscarbon(user))
+		var/mob/living/carbon/V = user
+		if(prob(3))
+			V.say(pick("PRAISE ABYSSOR!", "REMEMBER ABYSSOR!", "ABYSSOR LIVES!", "GLORY TO ABYSSOR!", "ABYSSOR IS COMING!"))

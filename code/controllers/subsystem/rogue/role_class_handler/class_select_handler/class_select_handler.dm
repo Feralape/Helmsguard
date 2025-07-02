@@ -116,9 +116,9 @@
 			// Time to do some picking, make sure we got things in the list we dealin with
 			if(local_insert_sortlist.len)
 				// Make sure we aren't going to attempt to pick more than what we even have avail
-				if(class_cat_alloc_attempts[SORT_CAT_KEY] > local_insert_sortlist.len)
-					testing("class cat alloc attempts is greater than sortlist")
-					class_cat_alloc_attempts[SORT_CAT_KEY] = local_insert_sortlist.len
+				if(class_cat_alloc_attempts[SORT_CAT_KEY] != local_insert_sortlist.len)
+					testing("class cat alloc attempts forced to equal of local_insert_sortlist")
+					class_cat_alloc_attempts[SORT_CAT_KEY] = local_insert_sortlist.len //equivalence assures all valid rolled_classes are displayed here
 
 				for(var/i in 1 to class_cat_alloc_attempts[SORT_CAT_KEY])
 					testing("[rolled_classes[local_insert_sortlist[i]]] equals zero")
@@ -156,6 +156,7 @@
 				if(boostclass.type in forced_class_additions)
 					rolled_classes[boostclass] += 1
 
+	testing("assemble_the_CLASSES completed")
 	if(!rolled_classes.len)
 		linked_client.mob.returntolobby()
 		message_admins("CLASS_SELECT_HANDLER HAD PERSON WITH 0 CLASS SELECT OPTIONS. THIS IS REALLY BAD! RETURNED THEM TO LOBBY")

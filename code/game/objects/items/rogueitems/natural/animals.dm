@@ -11,6 +11,20 @@
 	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
 	sellprice = 8
 
+/obj/item/natural/hide/Initialize()
+	. = ..()
+	var/static/list/slapcraft_recipe_list = list(
+		/datum/crafting_recipe/roguetown/survival/woodshield,
+		/datum/crafting_recipe/roguetown/survival/book_crafting_kit,
+		/datum/crafting_recipe/roguetown/survival/tribalrags,
+		/datum/crafting_recipe/roguetown/survival/antlerhood,
+		)
+
+	AddElement(
+		/datum/element/slapcrafting,\
+		slapcraft_recipes = slapcraft_recipe_list,\
+	)
+
 /obj/item/natural/fur
 	name = "fur"
 	icon_state = "wool1"
@@ -23,11 +37,46 @@
 	color = "#5c5243"
 	sellprice = 18
 
-/obj/item/natural/head/wolf
-	name = "wolf head"
-	desc = "the head of a fearsome wolf."
-	icon_state = "wolfhead"
-	layer = 3.1
+/obj/item/natural/fur/goat
+	desc = "from a gote."
+	icon_state = "pelt_gote"
+	color = null
+
+/obj/item/natural/fur/wolf
+	desc = "from a volf."
+	icon_state = "pelt_volf"
+	color = null
+
+/obj/item/natural/fur/fox
+	desc = "from a venard."
+	icon_state = "pelt_fox"
+	color = null
+
+/obj/item/natural/fur/bobcat
+	desc = "from a lynx."
+	icon_state = "pelt_bobcat"
+	color = null
+
+/obj/item/natural/fur/mole
+	desc = "from a mole."
+	icon_state = "pelt_mole"
+	color = null
+
+/obj/item/natural/fur/rat
+	desc = "from a rous."
+	icon_state = "pelt_rous"
+	color = null
+
+/obj/item/natural/fur/direbear
+	desc = "fur from one of Dendor's mightiest creachers."
+	icon_state = "pelt_direbear"
+	color = "#33302b"
+	sellprice = 28
+
+/obj/item/natural/fur/rabbit
+	desc = "from a cabbit."
+	icon_state = "wool2"
+	color = "#cecac4"
 
 //RTD make this a storage item and make clickign on animals with things put it in storage
 /obj/item/natural/saddle
@@ -40,15 +89,11 @@
 	force = 0
 	throwforce = 0
 	sellprice = 10
-	var/storage_type = /datum/component/storage/concrete
+	var/storage_type = /datum/component/storage/concrete/roguetown/saddle
 
-/obj/item/natural/saddle/ComponentInitialize()
+/obj/item/natural/saddle/Initialize()
 	. = ..()
 	AddComponent(storage_type)
-	var/datum/component/storage/STR = GetComponent(/datum/component/storage)
-	STR.max_combined_w_class = 16
-	STR.max_w_class = WEIGHT_CLASS_NORMAL
-	STR.max_items = 12
 
 /obj/item/natural/saddle/attack(mob/living/target, mob/living/carbon/human/user)
 	if(istype(target, /mob/living/simple_animal))
@@ -75,7 +120,7 @@
 /obj/item/natural/bone
 	name = "bone"
 	icon_state = "bone"
-	desc = "The meatless remains of the dead. Whether it came from an animal or a person it all looks the same now."
+	desc = "The meatless remains of the dead. Whether it came from an animal or a person, it all looks the same now."
 	blade_dulling = 0
 	max_integrity = 20
 	static_debris = null
@@ -87,12 +132,32 @@
 	slot_flags = ITEM_SLOT_MOUTH|ITEM_SLOT_HIP
 	bundletype = /obj/item/natural/bundle/bone
 
+/obj/item/natural/bone/Initialize()
+	. = ..()
+	var/static/list/slapcraft_recipe_list = list(
+		/datum/crafting_recipe/roguetown/survival/recurvepartial,
+		/datum/crafting_recipe/roguetown/survival/longbowpartial,
+		)
+
+	AddElement(
+		/datum/element/slapcrafting,\
+		slapcraft_recipes = slapcraft_recipe_list,\
+		)
+
 /obj/item/natural/hide/cured
 	name = "cured leather"
 	icon_state = "leather"
 	desc = "A hide piece that has been cured and may now be worked."
 	sellprice = 7
 	bundletype = /obj/item/natural/bundle/curred_hide
+
+/obj/item/natural/hide/cured/Initialize()
+	. = ..()
+	var/static/list/slapcraft_recipe_list = list(
+		/datum/crafting_recipe/roguetown/survival/heatershield,
+		/datum/crafting_recipe/roguetown/survival/collar,
+		/datum/crafting_recipe/roguetown/survival/bell_collar,
+		)
 
 /obj/item/natural/bundle/curred_hide
 	name = "bundle of cured leather"
@@ -114,3 +179,10 @@
 	resistance_flags = FLAMMABLE
 	w_class = WEIGHT_CLASS_SMALL
 	sellprice = 20
+
+/obj/item/natural/rabbitsfoot
+	name = "rabbit's foot"
+	icon_state = "rabbitfoot"
+	desc = "A rabbit's foot. A lucky charm."
+	w_class = WEIGHT_CLASS_TINY
+	sellprice = 10

@@ -5,13 +5,13 @@
 	slot_flags = ITEM_SLOT_HIP
 	var/base_icon_state = "basic_book"
 	unique = TRUE
-	firefuel = 2 MINUTES
+	firefuel = 5 MINUTES
 	dropshrink = 0.6
 	drop_sound = 'sound/foley/dropsound/book_drop.ogg'
 	force = 5
 	associated_skill = /datum/skill/misc/reading
 	grid_width = 32
-	grid_height = 64
+	grid_height = 32
 
 /obj/item/book/rogue/getonmobprop(tag)
 	. = ..()

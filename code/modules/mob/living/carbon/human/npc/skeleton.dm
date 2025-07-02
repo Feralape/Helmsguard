@@ -13,16 +13,16 @@
 	base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB, /datum/intent/unarmed/claw)
 	a_intent = INTENT_HELP
 	possible_mmb_intents = list(INTENT_STEAL, INTENT_JUMP, INTENT_KICK, INTENT_BITE)
-	possible_rmb_intents = list(/datum/rmb_intent/feint, /datum/rmb_intent/aimed, /datum/rmb_intent/strong, /datum/rmb_intent/weak)
-	possible_rmb_intents = list()
-	stand_attempts = 4
-	cmode_music = FALSE
+	possible_rmb_intents = list(/datum/rmb_intent/feint, /datum/rmb_intent/aimed, /datum/rmb_intent/weak)
+	cmode_music = 'sound/music/combat_weird.ogg'
 
 /mob/living/carbon/human/species/skeleton/npc
 	aggressive = 1
-	mode = AI_IDLE
+	mode = NPC_AI_IDLE
 	wander = FALSE
 	skel_fragile = TRUE
+	npc_jump_chance = 0 // no jumping skeletons
+	rude = TRUE
 
 /mob/living/carbon/human/species/skeleton/npc/ambush
 
@@ -50,8 +50,6 @@
 		qdel(O)
 	src.regenerate_limb(BODY_ZONE_R_ARM)
 	src.regenerate_limb(BODY_ZONE_L_ARM)
-	// src.remove_all_languages()
-	// uncomment this to prohibit skeletons from knowing or speaking any languages. This is commented to allow skeletons to be the main subject of admin events. (eg: skeleton traders, skeletons concealing their bones and blending in with the kingdom society, the underworld bar skeletons, skeletons telling skeleton jokes)
 	if(src.charflaw)
 		QDEL_NULL(src.charflaw)
 	mob_biotypes |= MOB_UNDEAD
@@ -60,15 +58,18 @@
 	real_name = "Skeleton"
 	voice_type = VOICE_TYPE_MASC //So that "Unknown Man" properly substitutes in with face cover
 	ADD_TRAIT(src, TRAIT_NOMOOD, TRAIT_GENERIC)
-	ADD_TRAIT(src, TRAIT_NOROGSTAM, TRAIT_GENERIC)
+	ADD_TRAIT(src, TRAIT_INFINITE_ENERGY, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_NOHUNGER, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_EASYDISMEMBER, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_NOBREATH, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_NOPAIN, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_TOXIMMUNE, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_LIMBATTACHMENT, TRAIT_GENERIC)
+	ADD_TRAIT(src, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 	if(skel_fragile)
 		ADD_TRAIT(src, TRAIT_CRITICAL_WEAKNESS, TRAIT_GENERIC)
+	else
+		ADD_TRAIT(src, TRAIT_INFINITE_STAMINA, TRAIT_GENERIC) // Not touching lich balance in a fix PR - for now
 	var/obj/item/organ/eyes/eyes = src.getorganslot(ORGAN_SLOT_EYES)
 	if(eyes)
 		eyes.Remove(src,1)
@@ -85,82 +86,81 @@
 
 /datum/outfit/job/roguetown/npc/skeleton/pre_equip(mob/living/carbon/human/H)
 	..()
-	if(prob(50))
-		wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
-	if(prob(10))
-		armor = /obj/item/clothing/suit/roguetown/armor/chainmail/iron
-	if(prob(30))
-		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/vagrant
-		if(prob(50))
-			shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/vagrant/l
-	if(prob(30))
-		pants = /obj/item/clothing/under/roguetown/tights/vagrant
-		if(prob(50))
-			pants = /obj/item/clothing/under/roguetown/tights/vagrant/l
-	if(prob(10))
-		head = /obj/item/clothing/head/roguetown/helmet/leather
-	if(prob(10))
-		head = /obj/item/clothing/head/roguetown/roguehood
-	H.STASTR = rand(14,16)
+	H.STASTR = 14
 	H.STASPD = 8
 	H.STACON = 4
 	H.STAEND = 15
 	H.STAINT = 1
-	if(prob(50))
-		r_hand = /obj/item/rogueweapon/sword
-	else
-		r_hand = /obj/item/rogueweapon/stoneaxe/woodcut
 
-/datum/outfit/job/roguetown/greater_skeleton/pre_equip(mob/living/carbon/human/H) //equipped onto Summon Greater Undead player skeletons only after the mind is added
-	..()
-	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
-	armor = /obj/item/clothing/suit/roguetown/armor/chainmail/iron
-	if(prob(50))
-		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/vagrant
-	else
-		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/vagrant/l
-	pants = /obj/item/clothing/under/roguetown/chainlegs/iron
-	head = /obj/item/clothing/head/roguetown/helmet/leather
-	shoes = /obj/item/clothing/shoes/roguetown/boots
-
-	H.STASTR = rand(14,16)
-	H.STASPD = 8
-	H.STACON = 9
-	H.STAEND = 15
-	H.STAINT = 1
-
-	//light labor skills for skeleton manual labor and some warrior-adventurer skills, equipment is still bad probably
-	H.mind.adjust_skillrank_up_to(/datum/skill/craft/carpentry, 1, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/craft/masonry, 1, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/craft/crafting, 1, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/sewing, 1, TRUE)
-
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/axes, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 4, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 2, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 3, TRUE)
-	H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 2, TRUE)
-
-	H.set_patron(/datum/patron/inhuman/zizo)
-	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
-
-	H.possible_rmb_intents = list(/datum/rmb_intent/feint,\
-	/datum/rmb_intent/aimed,\
-	/datum/rmb_intent/strong,\
-	/datum/rmb_intent/swift,\
-	/datum/rmb_intent/riposte,\
-	/datum/rmb_intent/weak)
-	H.swap_rmb_intent(num=1) //dont want to mess with base NPCs too much out of fear of breaking them so I assigned the intents in the outfit
-
-	if(prob(50))
-		r_hand = /obj/item/rogueweapon/sword
-	else
-		r_hand = /obj/item/rogueweapon/stoneaxe/woodcut
+	var/skeletonclass = rand(1,15)
+	if(skeletonclass < 4) // basic ass skele. Kinda sucks.
+		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/aalloy
+		pants = /obj/item/clothing/under/roguetown/chainlegs/kilt/aalloy
+		shoes = /obj/item/clothing/shoes/roguetown/boots/aalloy
+		if(prob(50))
+			r_hand = /obj/item/rogueweapon/stoneaxe/woodcut/aaxe
+		else
+			r_hand = /obj/item/rogueweapon/sword/iron/short/ashort
+		return
+	if(skeletonclass < 6) // Skeletal Pirate. Avast ye.
+		head =  /obj/item/clothing/head/roguetown/helmet/tricorn
+		armor = /obj/item/clothing/suit/roguetown/armor/leather/vest/sailor
+		wrists = /obj/item/clothing/wrists/roguetown/bracers/aalloy
+		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/aalloy
+		pants = /obj/item/clothing/under/roguetown/tights/sailor
+		shoes = /obj/item/clothing/shoes/roguetown/boots/aalloy
+		if(prob(50))
+			r_hand = /obj/item/rogueweapon/huntingknife/idagger/adagger
+		else
+			r_hand = /obj/item/rogueweapon/knuckles/aknuckles
+		return
+	if(skeletonclass < 10) // Skeletal MAA Equal. Getting kinda up there in being dangerous.
+		cloak = /obj/item/clothing/cloak/stabard/surcoat/guard // Ooo Spooky Old Dead MAA
+		head = /obj/item/clothing/head/roguetown/helmet/heavy/aalloy
+		armor = /obj/item/clothing/suit/roguetown/armor/plate/half/aalloy
+		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/aalloy
+		wrists = /obj/item/clothing/wrists/roguetown/bracers/aalloy
+		pants = /obj/item/clothing/under/roguetown/chainlegs/kilt/aalloy
+		shoes = /obj/item/clothing/shoes/roguetown/boots/aalloy
+		neck = /obj/item/clothing/neck/roguetown/chaincoif/iron/aalloy
+		gloves = /obj/item/clothing/gloves/roguetown/chain/aalloy
+		l_hand = /obj/item/rogueweapon/shield/tower/metal/alloy
+		if(prob(33))
+			r_hand = /obj/item/rogueweapon/spear/aalloy
+		else if(prob(33))
+			r_hand = /obj/item/rogueweapon/sword/iron/short/gladius/agladius	// ave
+		else
+			r_hand = /obj/item/rogueweapon/flail/aflail
+		return
+	if(skeletonclass <= 13) // Skeletal Khopesh wielders(kinda spooky cultist sorta vibes idk?)
+		cloak = /obj/item/clothing/cloak/hierophant
+		mask = /obj/item/clothing/mask/rogue/facemask/aalloy
+		armor = /obj/item/clothing/suit/roguetown/armor/plate/half/aalloy
+		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/aalloy
+		wrists = /obj/item/clothing/wrists/roguetown/bracers/aalloy
+		pants = /obj/item/clothing/under/roguetown/platelegs/aalloy
+		shoes = /obj/item/clothing/shoes/roguetown/boots/aalloy
+		neck = /obj/item/clothing/neck/roguetown/zcross/aalloy
+		gloves = /obj/item/clothing/gloves/roguetown/chain/aalloy
+		r_hand = /obj/item/rogueweapon/sword/sabre/alloy
+		l_hand = /obj/item/rogueweapon/sword/sabre/alloy
+		return
+	if(skeletonclass == 15) // Withered Dread Knight
+		cloak = /obj/item/clothing/cloak/tabard/blkknight
+		head = /obj/item/clothing/head/roguetown/helmet/heavy/guard/aalloy
+		armor = /obj/item/clothing/suit/roguetown/armor/plate/aalloy
+		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk/aalloy
+		wrists = /obj/item/clothing/wrists/roguetown/bracers/aalloy
+		pants = /obj/item/clothing/under/roguetown/platelegs/aalloy
+		shoes = /obj/item/clothing/shoes/roguetown/boots/aalloy
+		neck = /obj/item/clothing/neck/roguetown/gorget/aalloy
+		gloves = /obj/item/clothing/gloves/roguetown/plate/aalloy
+		if(prob(50))
+			r_hand = /obj/item/rogueweapon/greatsword/aalloy
+		else
+			r_hand = /obj/item/rogueweapon/mace/goden/aalloy
+		return
+		
 
 /mob/living/carbon/human/species/skeleton/npc/no_equipment
     skel_outfit = null
@@ -238,34 +238,10 @@
 	H.STAINT = 1
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
-	if(H.mind)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 3, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 2, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 4, TRUE)
-		H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 3, TRUE)
-
-
-/mob/living/carbon/human/species/skeleton/dwarf
-	name = "skeleton"
-	race = /datum/species/dwarf/mountain
-	gender = MALE
-	bodyparts = list(/obj/item/bodypart/chest, /obj/item/bodypart/head, /obj/item/bodypart/l_arm,
-					 /obj/item/bodypart/r_arm, /obj/item/bodypart/r_leg, /obj/item/bodypart/l_leg)
-	faction = list("undead")
-	skel_outfit = /datum/outfit/job/roguetown/npc/skeleton
-	ambushable = FALSE
-	rot_type = null
-	possible_rmb_intents = list()
-
-
-/mob/living/carbon/human/species/skeleton/dwarf/npc
-	aggressive = 1
-	mode = AI_IDLE
-	wander = FALSE
-
-/mob/living/carbon/human/species/skeleton/dwarf/npc/ambush
-	wander = TRUE
-
-/mob/living/carbon/human/species/skeleton/dwarf/npc/dungeon
-	skel_outfit = /datum/outfit/job/roguetown/npc/skeleton/dungeon
+	if(!H.mind)
+		return
+	H.mind.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/wrestling, 2, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/unarmed, 2, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
+	H.mind.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)

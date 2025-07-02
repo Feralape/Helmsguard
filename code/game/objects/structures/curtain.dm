@@ -1,12 +1,13 @@
 /obj/structure/curtain
 	name = "curtain"
 	desc = ""
-	icon = 'icons/obj/watercloset.dmi'
-	icon_state = "bathroom-open"
-	var/icon_type = "bathroom"//used in making the icon state
-	color = "#ACD1E9" //Default color, didn't bother hardcoding other colors, mappers can and should easily change it.
-	alpha = 200 //Mappers can also just set this to 255 if they want curtains that can't be seen through
-	layer = SIGN_LAYER
+	icon = 'icons/roguetown/misc/structure.dmi'
+	var/icon_type = "curtain" // used in making the icon state
+	icon_state = "curtain-open"
+	color = "#ffffff" // Default color, mappers can easily change it.
+	alpha = 255 // Mappers can set this to 200 if they want it slightly see-through
+	layer = ABOVE_MOB_LAYER
+	plane = GAME_PLANE_UPPER
 	anchored = TRUE
 	opacity = 0
 	density = FALSE
@@ -19,14 +20,14 @@
 /obj/structure/curtain/update_icon()
 	if(!open)
 		icon_state = "[icon_type]-closed"
-		layer = WALL_OBJ_LAYER
-		density = TRUE
+		layer = ABOVE_MOB_LAYER
+		set_opacity(TRUE)
 		open = FALSE
 
 	else
 		icon_state = "[icon_type]-open"
-		layer = SIGN_LAYER
-		density = FALSE
+		layer = ABOVE_MOB_LAYER
+		set_opacity(FALSE)
 		open = TRUE
 
 /obj/structure/curtain/wrench_act(mob/living/user, obj/item/I)
@@ -52,7 +53,7 @@
 	. = ..()
 	if(.)
 		return
-	playsound(loc, 'sound/blank.ogg', 50, TRUE)
+	playsound(loc, 'sound/foley/doors/curtain.ogg', 50, TRUE)
 	toggle()
 
 /obj/structure/curtain/deconstruct(disassembled = TRUE)
@@ -73,3 +74,24 @@
 	icon_state = "bounty-open"
 	color = null
 	alpha = 255
+
+/obj/structure/curtain/red
+	color = "#a32121"
+
+/obj/structure/curtain/blue
+	color = CLOTHING_BLUE
+
+/obj/structure/curtain/green
+	color = CLOTHING_DARK_GREEN
+
+/obj/structure/curtain/brown
+	color = CLOTHING_BROWN
+
+/obj/structure/curtain/purple
+	color = "#8747b1"
+
+/obj/structure/curtain/magenta
+	color = "#962e5c"
+
+/obj/structure/curtain/black
+	color = "#414143"

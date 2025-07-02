@@ -6,6 +6,7 @@
 #define MUTE_PRAY		(1<<2)
 #define MUTE_ADMINHELP	(1<<3)
 #define MUTE_DEADCHAT	(1<<4)
+#define MUTE_LOOC		(1<<5)
 #define MUTE_ALL		(~0)
 
 //Some constants for DB_Ban
@@ -69,6 +70,7 @@
 #define ADMIN_PUNISHMENT_LIGHTNING "Lightning bolt"
 #define ADMIN_PUNISHMENT_BRAINDAMAGE "Brain damage"
 #define ADMIN_PUNISHMENT_GIB "Gib"
+#define ADMIN_PUNISHMENT_PSYDON "Zesus Psyst"
 #define ADMIN_PUNISHMENT_BSA "Bluespace Artillery Device"
 #define ADMIN_PUNISHMENT_CRIPPLE "Fracture arms and legs"
 #define ADMIN_PUNISHMENT_THROWMOB "Throw Mob"

@@ -19,7 +19,7 @@
 		TRAIT_STRONGBITE,
 		TRAIT_ZJUMP,
 		TRAIT_NOFALLDAMAGE1,
-		TRAIT_NOROGSTAM,
+		TRAIT_INFINITE_STAMINA,
 		TRAIT_BASHDOORS,
 		TRAIT_SHOCKIMMUNE,
 		TRAIT_STEELHEARTED,
@@ -32,7 +32,8 @@
 		TRAIT_IGNOREDAMAGESLOWDOWN,
 		TRAIT_HARDDISMEMBER, //Decapping Volfs causes them to bug out, badly, and need admin intervention to fix. Bandaid fix.
 		TRAIT_PIERCEIMMUNE, //Prevents weapon dusting and caltrop effects due to them transforming when killed/stepping on shards.
-		TRAIT_IGNORESLOWDOWN
+		TRAIT_IGNORESLOWDOWN,
+		TRAIT_LONGSTRIDER
 	)
 	inherent_biotypes = MOB_HUMANOID
 	armor = 30
@@ -49,7 +50,7 @@
 		ORGAN_SLOT_LUNGS = /obj/item/organ/lungs,
 		ORGAN_SLOT_EYES = /obj/item/organ/eyes/night_vision/werewolf,
 		ORGAN_SLOT_EARS = /obj/item/organ/ears,
-		ORGAN_SLOT_TONGUE = /obj/item/organ/tongue,
+		ORGAN_SLOT_TONGUE = /obj/item/organ/tongue/wild_tongue,
 		ORGAN_SLOT_LIVER = /obj/item/organ/liver,
 		ORGAN_SLOT_STOMACH = /obj/item/organ/stomach,
 		ORGAN_SLOT_APPENDIX = /obj/item/organ/appendix,

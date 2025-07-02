@@ -26,7 +26,7 @@
 	animal_species = /mob/living/simple_animal/pet/cat
 	childtype = list(/mob/living/simple_animal/pet/cat/kitten)
 	butcher_results = list(
-					/obj/item/reagent_containers/food/snacks/meat/slab = 1,
+					/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 1,
 					/obj/item/organ/ears/cat = 1,
 					/obj/item/organ/tail/cat = 1,
 					)

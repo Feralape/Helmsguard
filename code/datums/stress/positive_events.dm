@@ -206,3 +206,28 @@
 
 /datum/stressevent/noble_bowed_to/can_apply(mob/living/user)
 	return HAS_TRAIT(user, TRAIT_NOBLE)
+
+/datum/stressevent/perfume
+	stressadd = -1
+	desc = span_green("A soothing fragrance envelops me.")
+	timer = 10 MINUTES
+
+/datum/stressevent/astrata_grandeur
+	timer = 30 MINUTES
+	stressadd = -2
+	desc = span_green("Astrata's light shines brightly through me. I must not let others ever forget that.")
+
+/datum/stressevent/graggar_culling_finished
+	stressadd = -1
+	desc = span_green("I have prevailed over my rival! Graggar favours me now!")
+	timer = INFINITY
+
+/datum/stressevent/eoran_blessing
+	stressadd = -1
+	desc = span_info("An Eoran shone their brightness upon me.")
+	timer = 5 MINUTES
+
+/datum/stressevent/eoran_blessing_greater
+	stressadd = -2
+	desc = span_info("A Devout Eoran shone their brightness upon me.")
+	timer = 10 MINUTES

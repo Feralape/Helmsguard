@@ -34,13 +34,13 @@ GLOBAL_VAR(lordsecondary)
 "MAGENTA"="#962e5c")// AN ALBANIAN
 	var/prim
 	var/sec
-	var/choice = input(src, "Choose a Primary Color", "ROGUETOWN") as anything in lordcolors
+	var/choice = input(src, "Choose a Primary Color", "ROGUETOWN") as anything in colorlist
 	if(choice)
-		prim = lordcolors[choice]
-		lordcolors -= choice
-	choice = input(src, "Choose a Secondary Color", "ROGUETOWN") as anything in lordcolors
+		prim = colorlist[choice]
+		colorlist -= choice
+	choice = input(src, "Choose a Secondary Color", "ROGUETOWN") as anything in colorlist
 	if(choice)
-		sec = lordcolors[choice]
+		sec = colorlist[choice]
 	if(!prim || !sec)
 		GLOB.lordcolor = list()
 		return

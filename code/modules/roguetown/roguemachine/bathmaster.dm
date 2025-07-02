@@ -1,11 +1,10 @@
 #define UPGRADE_NOTAX		(1<<0)
-#define UPGRADE_DRUGS   (1<<1)
 
 /obj/structure/roguemachine/bathvend
 	name = "BRASSFACE"
 	desc = "Sweet, sweet, addiction. Love in the veins, comfort in my heart."
 	icon = 'icons/roguetown/misc/machines.dmi'
-	icon_state = "streetvendor1"
+	icon_state = "brassface"
 	density = TRUE
 	blade_dulling = DULLING_BASH
 	max_integrity = 0
@@ -17,6 +16,14 @@
 	var/upgrade_flags
 	var/current_cat = "1"
 	var/lockid = "nightman"
+	var/list/categories = list(
+		"Alcohols", 
+		"Drugs",
+		"Exotic Apparel",
+		"Instruments",
+		"Perfumes",
+		"Roguery",
+		)
 
 /obj/structure/roguemachine/bathvend/Initialize()
 	. = ..()
@@ -62,6 +69,7 @@
 	. = ..()
 	if(!ishuman(usr))
 		return
+	var/mob/living/carbon/human/human_mob = usr
 	if(!usr.canUseTopic(src, BE_CLOSE) || locked)
 		return
 	if(href_list["buy"])
@@ -80,6 +88,8 @@
 			budget -= cost
 			if(!(upgrade_flags & UPGRADE_NOTAX))
 				SStreasury.give_money_treasury(tax_amt, "brassface import tax")
+				record_featured_stat(FEATURED_STATS_TAX_PAYERS, human_mob, tax_amt)
+				GLOB.azure_round_stats[STATS_TAXES_COLLECTED] += tax_amt
 		else
 			say("Not enough!")
 			return
@@ -100,8 +110,6 @@
 			options += "Enable Paying Taxes"
 		else
 			options += "Stop Paying Taxes"
-		if(!(upgrade_flags & UPGRADE_DRUGS))
-			options += "Access Smuggler Lines (50)"
 		var/select = input(usr, "Please select an option.", "", null) as null|anything in options
 		if(!select)
 			return
@@ -115,16 +123,6 @@
 				upgrade_flags |= UPGRADE_NOTAX
 				playsound(loc, 'sound/misc/gold_misc.ogg', 100, FALSE, -1)
 				playsound(loc, 'sound/misc/gold_license.ogg', 100, FALSE, -1)
-			if("Access Smuggler Lines (50)")
-				if(upgrade_flags & UPGRADE_DRUGS)
-					return
-				if(budget < 50)
-					say("Ask again when you're serious.")
-					playsound(src, 'sound/misc/machinetalk.ogg', 100, FALSE, -1)
-					return
-				budget -= 50
-				upgrade_flags |= UPGRADE_DRUGS
-				playsound(loc, 'sound/misc/gold_license.ogg', 100, FALSE, -1)
 	return attack_hand(usr)
 
 /obj/structure/roguemachine/bathvend/attack_hand(mob/living/user)
@@ -136,12 +134,12 @@
 	if(locked)
 		to_chat(user, span_warning("It's locked. Of course."))
 		return
-	user.changeNext_move(CLICK_CD_MELEE)
+	user.changeNext_move(CLICK_CD_FAST)
 	playsound(loc, 'sound/misc/gold_menu.ogg', 100, FALSE, -1)
 	var/canread = user.can_read(src, TRUE)
 	var/contents
 	contents = "<center>BRASSFACE - Sweet Dreams for Cheap<BR>"
-	contents += "<a href='?src=[REF(src)];change=1'>GROSCHEN LOADED:</a> [budget]<BR>"
+	contents += "<a href='?src=[REF(src)];change=1'>MAMMON LOADED:</a> [budget]<BR>"
 
 	var/mob/living/carbon/human/H = user
 	if(H.job in list("Bathmaster","Bathhouse Attendant"))
@@ -152,13 +150,9 @@
 
 	contents += "</center><BR>"
 
-	var/list/unlocked_cats = list("Alcohols","Bulk")
-	if(upgrade_flags & UPGRADE_DRUGS)
-		unlocked_cats+="Drugs"
-
 	if(current_cat == "1")
 		contents += "<center>"
-		for(var/X in unlocked_cats)
+		for(var/X in categories)
 			contents += "<a href='?src=[REF(src)];changecat=[X]'>[X]</a><BR>"
 		contents += "</center>"
 	else
@@ -169,7 +163,7 @@
 			var/datum/supply_pack/PA = SSmerchant.supply_packs[pack]
 			if(PA.group == current_cat)
 				pax += PA
-		for(var/datum/supply_pack/PA in sortList(pax))
+		for(var/datum/supply_pack/PA in sortNames(pax))
 			var/costy = PA.cost
 			if(!(upgrade_flags & UPGRADE_NOTAX))
 				costy=round(costy+(SStreasury.tax_value * costy))
@@ -206,16 +200,14 @@ SUBSYSTEM_DEF(BMtreasury)
 	wait = 1
 	priority = FIRE_PRIORITY_WATER_LEVEL
 	var/treasury_value = 0
-	var/multiple_item_penalty = 0.66
-	var/interest_rate = 0.10 // Down from 20. What were they thinking.
+	var/multiple_item_penalty = 0.7
+	var/interest_rate = 0.15 // Bit more interest, since it's gonna be much harder for the BMaster to get valuables.
 	var/next_treasury_check = 0
 	var/list/vault_accounting = list()
 
 /datum/controller/subsystem/BMtreasury/proc/add_to_vault(var/obj/item/I)
 	if(I.get_real_price() <= 0 || istype(I, /obj/item/roguecoin))
 		return
-	if(!I.submitted_to_stockpile)
-		I.submitted_to_stockpile = TRUE
 	if(I.type in vault_accounting)
 		vault_accounting[I.type] *= multiple_item_penalty
 	else

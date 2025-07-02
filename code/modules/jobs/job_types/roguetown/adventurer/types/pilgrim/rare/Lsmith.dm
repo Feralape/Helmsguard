@@ -16,7 +16,7 @@
 /datum/outfit/job/roguetown/adventurer/masterblacksmith/pre_equip(mob/living/carbon/human/H)
 	..()
 	belt = /obj/item/storage/belt/rogue/leather
-	beltr = /obj/item/rogueweapon/hammer
+	beltr = /obj/item/rogueweapon/hammer/iron
 	beltl = /obj/item/rogueweapon/tongs
 	neck = /obj/item/storage/belt/rogue/pouch/coins/mid
 	mouth = /obj/item/rogueweapon/huntingknife

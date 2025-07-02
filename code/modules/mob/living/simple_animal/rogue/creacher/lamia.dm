@@ -12,10 +12,16 @@
 	see_in_dark = 9
 	move_to_delay = 2
 	base_intents = list(/datum/intent/simple/bite, /datum/intent/simple/claw)
+	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 1)
 	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 1,
 						/obj/item/reagent_containers/food/snacks/fat = 1,
 						/obj/item/alch/sinew = 2,
 						/obj/item/alch/bone = 1)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 2,
+						/obj/item/reagent_containers/food/snacks/fat = 2,
+						/obj/item/alch/sinew = 2,
+						/obj/item/alch/bone = 1,
+						/obj/item/natural/hide = 1)
 	faction = list("orcs")
 	mob_biotypes = MOB_ORGANIC|MOB_BEAST|MOB_REPTILE
 	health = 200
@@ -27,7 +33,7 @@
 	environment_smash = ENVIRONMENT_SMASH_NONE
 	retreat_distance = 0
 	minimum_distance = 0
-	food_type = list(/obj/item/reagent_containers/food/snacks/meat, /obj/item/bodypart, /obj/item/organ)
+	food_type = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak, /obj/item/bodypart, /obj/item/organ)
 	footstep_type = null
 	pooptype = null
 	STACON = 6
@@ -35,7 +41,6 @@
 	STASPD = 12
 	deaggroprob = 0
 	defprob = 35
-	defdrain = 5
 	del_on_deaggro = 999 SECONDS
 	retreat_health = 0.1
 	food = 0

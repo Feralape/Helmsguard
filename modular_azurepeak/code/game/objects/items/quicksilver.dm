@@ -23,7 +23,7 @@
 	var/inquisitor = FALSE
 	if(!user.mind)
 		return
-	if(user.mind.assigned_role == "Inquisitor")
+	if(HAS_TRAIT(user, TRAIT_PURITAN))
 		inquisitor = TRUE
 
 	if(!M.mind) //Stopping null lookup runtimes
@@ -87,7 +87,9 @@
 		new /obj/item/natural/cloth(user.loc)
 		qdel(src)
 	else
-		to_chat(user, span_notice("My inquisitorial training allows just enough of the poultice left for one more anointment."))
+		icon_state = "[initial(icon_state)]_half"
+		to_chat(user, span_notice("My inquisitorial training leaves just enough of the poultice left for one more anointment."))
+		
 
 	//Werewolf deconversion
 	if(Were && !Wereless) //The roundstart elder/alpha werewolf, it cannot be saved
@@ -146,7 +148,7 @@
 		M.mind.special_role = null
 		M.emote("agony", forced = TRUE)
 		to_chat(M, span_userdanger("THE FOUL SILVER! IT QUICKENS MY HEART!"))
-		REMOVE_TRAIT(M, TRAIT_NOROGSTAM, "/datum/antagonist/vampirelord/lesser")
+		REMOVE_TRAIT(M, TRAIT_INFINITE_STAMINA, "/datum/antagonist/vampirelord/lesser")
 		REMOVE_TRAIT(M, TRAIT_NOSLEEP, "/datum/antagonist/vampirelord/lesser")
 		REMOVE_TRAIT(M, TRAIT_NOBREATH, "/datum/antagonist/vampirelord/lesser")
 		REMOVE_TRAIT(M, TRAIT_NOPAIN, "/datum/antagonist/vampirelord/lesser")
@@ -196,4 +198,4 @@
 /obj/item/paper/inquisition_poultice_info
 	name = "Inquisitorial Missive"
 	desc = "A letter from the Grand Cathedral in Otava. It reeks of zig smoke."
-	info = "<font face=\"Segoe Script\" color=#00000>Greetings to ye, distant missionaries in Sundmark<br><br>This missive serves to inform of a breakthrough of alchemy. Enclosed is a substance, <b>Quicksilver</b>, that may be of keen use in the preservation of lyfe against those unholy creechers that are repelled by divine silver. We speak of the werevolf and the vampyre. Herein lies the method.<br><br>Gather an ingot of silver, a vessel of blessed water- a bottle's worth shall suffice, and a simple strip of cloth to add structure to the poultice. Take the warm bud of a fyritius flower, and immerse it in the bleeding wound of an unholy creecher. The warmth of the bud will congeal this foul ichor- but make haste, as it doth soon burn itself to ash. Induce the bloodied flower to your materials- any expert of the craft of alchemy may intuit the process.<br><br>The ritual anointment is complex, and must be performed by a learned holy cleric in proximity of a cross of the pantheon. Inquisitor, your training doth empower you, as well. When the work is finished, the recipient now is inundated with holy silver- and shall be fortified against the fell turning of these unholy creechers.<br><br>Take heed! This act may also salvage the lyfe of unfortunate souls who have recently been turned to beast. Their body's accursed resistance excites the Quicksilver to fire- but complete the rite, and they too are saved. All, except the eldest of Vampyre and Werevolf- we ascertain even this method cannot save them, and it will be a waste! (Albeit humbling.)<br><br>Share of this missive with any agents or employs that need direction in this rite.<br><br><b>PSYDON ENDURES,</b><br><i>Holy Fellowship of Research, the Grand Cathedral, the Sovereignty of Otava.</i></font>"
+	info = "<font face=\"Segoe Script\" color=#00000>Greetings to ye, distant missionaries in Sundmark<br><br>This missive serves to inform of a breakthrough of alchemy. Enclosed is a substance, <b>Quicksilver</b>, that may be of keen use in the preservation of lyfe against those unholy creechers that are repelled by divine silver. We speak of the werevolf and the vampyre. Herein lies the method.<br><br>Gather an ore of silver, a vessel of blessed water- a bottle's worth shall suffice, and a simple strip of cloth to add structure to the poultice. Take the warm bud of a fyritius flower, and immerse it in the bleeding wound of an unholy creecher. The warmth of the bud will congeal this foul ichor- but make haste, as it doth soon burn itself to ash. Induce the bloodied flower to your materials- grind the silver ore into dust via the mortar and pestle. Any expert of the craft of alchemy may intuit the process.<br><br>The ritual anointment is complex, and must be performed by a learned holy cleric in proximity of a cross of the pantheon. Inquisitor, your training doth empower you, as well. When the work is finished, the recipient now is inundated with holy silver- and shall be fortified against the fell turning of these unholy creechers.<br><br>Take heed! This act may also salvage the lyfe of unfortunate souls who have recently been turned to beast. Their body's accursed resistance excites the Quicksilver to fire- but complete the rite, and they too are saved. All, except the eldest of Vampyre and Werevolf- we ascertain even this method cannot save them, and it will be a waste! (Albeit humbling.)<br><br>Share of this missive with any agents or employs that need direction in this rite.<br><br><b>PSYDON ENDURES,</b><br><i>Holy Fellowship of Research, the Grand Cathedral, the Sovereignty of Otava.</i></font>"

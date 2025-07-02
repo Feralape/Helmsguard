@@ -48,14 +48,14 @@
 
 	if(mapswitch == 0)
 		return
-	if(recipient.mind?.assigned_role == "Adventurer" || recipient.mind?.assigned_role == "Mercenary")
+	if(recipient.mind?.assigned_role == "Adventurer" || recipient.mind?.assigned_role == "Mercenary" || recipient.mind?.assigned_role == "Court Agent")
 		// Find tavern area for spawning
 		var/area/spawn_area
 		for(var/area/A in world)
 			if(istype(A, /area/rogue/indoors/town/tavern))
 				spawn_area = A
 				break
-		
+
 		if(spawn_area)
 			var/target_z = 3 //ground floor of tavern for dun manor / world
 			var/target_y = 70 //dun manor
@@ -63,13 +63,13 @@
 
 			if(mapswitch == 2)
 				target_y = 234 //dun world huge
-			
+
 			for(var/obj/structure/chair/C in spawn_area)
 				//z-level 3, wooden chair, and Y > north of tavern backrooms
 				var/turf/T = get_turf(C)
 				if(T && T.z == target_z && T.y > target_y && istype(C, /obj/structure/chair/wood/rogue) && !T.density && !T.is_blocked_turf(FALSE))
 					possible_chairs += C
-			
+
 			if(length(possible_chairs))
 				var/obj/structure/chair/chosen_chair = pick(possible_chairs)
 				recipient.forceMove(get_turf(chosen_chair))
@@ -80,7 +80,7 @@
 				for(var/turf/T in spawn_area)
 					if(T.z == target_z && T.y > (target_y + 4) && !T.density && !T.is_blocked_turf(FALSE))
 						possible_spawns += T
-				
+
 				if(length(possible_spawns))
 					var/turf/spawn_loc = pick(possible_spawns)
 					recipient.forceMove(spawn_loc)
@@ -88,13 +88,17 @@
 
 /datum/virtue/utility/failed_squire
 	name = "Failed Squire"
-	desc = "I was once a squire in training, but failed to achieve knighthood. Though my dreams of glory were dashed, I retained my knowledge of equipment maintenance and repair."
+	desc = "I was once a squire in training, but failed to achieve knighthood. Though my dreams of glory were dashed, I retained my knowledge of equipment maintenance and repair, including how to polish arms and armor."
 	added_traits = list(TRAIT_SQUIRE_REPAIR)
-	added_stashed_items = list("Worker's Hammer" = /obj/item/rogueweapon/hammer)
-	
+	added_stashed_items = list(
+		"Hammer" = /obj/item/rogueweapon/hammer/iron,
+		"Polishing Cream" = /obj/item/polishing_cream,
+		"Fine Brush" = /obj/item/armor_brush
+	)
+
 /datum/virtue/utility/failed_squire/apply_to_human(mob/living/carbon/human/recipient)
 	to_chat(recipient, span_notice("Though you failed to become a knight, your training in equipment maintenance and repair remains useful."))
-	to_chat(recipient, span_notice("You can retrieve your hammer from a tree, statue, or clock."))
+	to_chat(recipient, span_notice("You can retrieve your hammer and polishing tools from a tree, statue, or clock."))
 
 /datum/virtue/utility/linguist
 	name = "Intellectual"
@@ -123,7 +127,7 @@
 			/datum/language/grenzelhoftian,
 			/datum/language/etruscan,
 	)
-		
+
 	var/list/choices = list()
 	for(var/language_type in selectable_languages)
 		if(recipient.has_language(language_type))
@@ -147,9 +151,6 @@
 	name = "Deathless"
 	desc = "Some fell magick has rendered me inwardly unliving - I do not hunger, and I do not breathe."
 	added_traits = list(TRAIT_NOHUNGER, TRAIT_NOBREATH)
-
-/*/datum/virtue/utility/deathless/apply_to_human(mob/living/carbon/human/recipient)
-	recipient.mob_biotypes |= MOB_UNDEAD*/
 
 /datum/virtue/utility/blacksmith
 	name = "Blacksmith's Apprentice"
@@ -179,7 +180,13 @@
 						list(/datum/skill/craft/carpentry, 2, 2),
 						list(/datum/skill/craft/masonry, 2, 2),
 						list(/datum/skill/craft/engineering, 2, 2),
-						list(/datum/skill/craft/smelting, 2, 2)
+						list(/datum/skill/craft/smelting, 2, 2),
+						list(/datum/skill/misc/ceramics, 2, 2)
+	)
+	added_stashed_items = list(
+		"Hammer" = /obj/item/rogueweapon/hammer/wood,
+		"Chisel" = /obj/item/rogueweapon/chisel,
+		"Hand Saw" = /obj/item/rogueweapon/handsaw
 	)
 
 /datum/virtue/utility/physician
@@ -240,10 +247,22 @@
 	added_skills = list(list(/datum/skill/misc/lockpicking, 3, 6))
 
 /datum/virtue/utility/granary
-	name = "Personal Granary"
-	desc = "You've worked in or around the kitchens enough to steal away a sack of supplies that no one would surely miss, just in case. You've picked up on some cooking tips in your spare time, as well."
+	name = "Cunning Provisioner"
+	desc = "You've worked in or around the docks enough to steal away a sack of supplies that no one would surely miss, just in case. You've picked up on some cooking and fishing tips in your spare time, as well."
 	added_stashed_items = list("Bag of Food" = /obj/item/storage/roguebag/food)
-	added_skills = list(list(/datum/skill/craft/cooking, 3, 6))
+	added_skills = list(list(/datum/skill/craft/cooking, 3, 6),
+						list(/datum/skill/labor/fishing, 2, 6))
+
+/datum/virtue/utility/forester
+	name = "Forester"
+	desc = "The forest is your home, or at least, it used to be. You always long to return and roam free once again, and you have not forgotten your knowledge on how to be self sufficient."
+	added_stashed_items = list("Trusty hoe" = /obj/item/rogueweapon/hoe)
+	added_skills = list(list(/datum/skill/craft/cooking, 2, 2),
+						list(/datum/skill/misc/athletics, 2, 2),
+						list(/datum/skill/labor/farming, 2, 2),
+						list(/datum/skill/labor/fishing, 2, 2),
+						list(/datum/skill/labor/lumberjacking, 2, 2)
+	)
 
 /datum/virtue/utility/mining
 	name = "Miner's Apprentice"
@@ -331,9 +350,7 @@
 	desc = "After years of training in the wilds, I've learned to traverse the woods confidently, without breaking any twigs. I can even step lightly on leaves without falling, and I can gather twice as many things from bushes."
 	added_traits = list(TRAIT_WOODWALKER, TRAIT_OUTDOORSMAN)
 
-//HERETIC VIRTUES
-
-/datum/virtue/heretic/seer
-	name = "(ASCENDANT) Seer"
-	desc = "You've spent your days studying the tales writ and told by the Ecclesiarchy's rejects and priests alike. You've grown to tell the followers by hunch and sight. They give themselves away so easily in this world slowly brewing to a fester."
-	added_traits = list(TRAIT_HERETIC_SEER)
+/datum/virtue/heretic/zchurch_keyholder
+	name = "Heresiarch"
+	desc = "The 'Holy' See has their blood-stained grounds, and so do we. Underneath their noses, we pray to the true gods- and I've stashed away a key to the conclave, for my own use- or to be given to someone else. Secrecy is paramount. If found out, I will surely be killed."
+	added_stashed_items = list("Ancient Key" = /obj/item/roguekey/inhumen)

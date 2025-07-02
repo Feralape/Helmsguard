@@ -1,7 +1,6 @@
 /datum/advclass/hunter
 	name = "Hunter"
-	tutorial = "You are a hunter, with your bow you hunt the fauna in the bog, skinning what you kill to use in skincrafting \
-	cooking any meat left over, your role is one that is not done by many, but important in the circulation of clothing and light armor"
+	tutorial = "You are a hunter. With your bow you hunt the fauna of the glade, skinning what you kill and cooking any meat left over. The job is dangerous but important in the circulation of clothing and light armor."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/hunter
@@ -16,17 +15,20 @@
 	neck = /obj/item/storage/belt/rogue/pouch/coins/poor
 	cloak = /obj/item/clothing/cloak/raincloak/furcloak/brown
 	backr = /obj/item/storage/backpack/rogue/satchel
-	r_hand = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
+	backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
 	belt = /obj/item/storage/belt/rogue/leather
 	beltr = /obj/item/quiver/arrows
-	beltl = /obj/item/flashlight/flare/torch/lantern
+	beltl = /obj/item/rogueweapon/sword/iron/messer
 	backpack_contents = list(
 						/obj/item/flint = 1,
 						/obj/item/bait = 1,
 						/obj/item/rogueweapon/huntingknife = 1,
 						/obj/item/flashlight/flare/torch = 1,
+						/obj/item/flashlight/flare/torch/lantern = 1,
+						/obj/item/recipe_book/survival = 1,
+						/obj/item/recipe_book/leatherworking = 1,
 						)
-	gloves = /obj/item/clothing/gloves/roguetown/leather
+	gloves = /obj/item/clothing/gloves/roguetown/fingerless_leather
 	ADD_TRAIT(H, TRAIT_OUTDOORSMAN, TRAIT_GENERIC)
 
 	if(H.mind)

@@ -90,7 +90,7 @@
 	allowed_race = list(/datum/species/dwarf, /datum/species/dwarf/mountain)
 	icon_state = "dwarfchest"
 	item_state = "dwarfchest"
-	armor = list("blunt" = 200, "slash" = 200, "stab" = 200, "piercing" = 100, "fire" = 0, "acid" = 0)
+	armor = ARMOR_GRUDGEBEARER
 	prevent_crits = list(BCLASS_TWIST)
 	body_parts_covered = CHEST|GROIN|VITALS|ARMS|LEGS
 	equip_delay_self = 5 SECONDS
@@ -98,7 +98,7 @@
 	equip_delay_other = 4 SECONDS
 	strip_delay = 12 SECONDS
 	smelt_bar_num = 4
-	max_integrity = 6000	//They have their own unique integrity
+	max_integrity = 1000	//They have their own unique integrity
 
 /obj/item/clothing/suit/roguetown/armor/plate/full/dwarven/ComponentInitialize()
 	. = ..()
@@ -108,7 +108,7 @@
 	name = "grudgebearer dwarven helm"
 	desc = "A hardy, layered helmet. It lets one's dwarvenly beard to poke out."
 	body_parts_covered = (HEAD | MOUTH | NOSE | EYES | EARS | NECK)	//This specifically omits hair so you could hang your beard out of the helm
-	armor = list("blunt" = 200, "slash" = 200, "stab" = 200, "piercing" = 80, "fire" = 0, "acid" = 0)
+	armor = ARMOR_GRUDGEBEARER
 	prevent_crits = list(BCLASS_TWIST)
 	allowed_race = list(/datum/species/dwarf, /datum/species/dwarf/mountain)
 	icon = 'icons/roguetown/clothing/special/race_armor.dmi'
@@ -118,7 +118,9 @@
 	block2add = FOV_BEHIND
 	bloody_icon = 'icons/effects/blood64.dmi'
 	smeltresult = /obj/item/ingot/steel
-	max_integrity = 3000
+	max_integrity = 1000
+	experimental_inhand = FALSE
+	experimental_onhip = FALSE
 
 /obj/item/clothing/head/roguetown/helmet/heavy/dwarven/ComponentInitialize()
 	. = ..()
@@ -133,8 +135,8 @@
 	prevent_crits = list(BCLASS_TWIST)
 	icon_state = "dwarfhand"
 	item_state = "dwarfhand"
-	armor = list("blunt" = 200, "slash" = 200, "stab" = 200, "piercing" = 90, "fire" = 0, "acid" = 0)
-	max_integrity = 3000
+	armor = ARMOR_GRUDGEBEARER
+	max_integrity = 1000
 
 /obj/item/clothing/gloves/roguetown/plate/dwarven/ComponentInitialize()
 	. = ..()
@@ -149,8 +151,8 @@
 	prevent_crits = list(BCLASS_TWIST)
 	icon_state = "dwarfshoe"
 	item_state = "dwarfshoe"
-	armor = list("blunt" = 200, "slash" = 200, "stab" = 200, "piercing" = 90, "fire" = 0, "acid" = 0)
-	max_integrity = 3000
+	armor = ARMOR_GRUDGEBEARER
+	max_integrity = 1000
 
 /obj/item/clothing/shoes/roguetown/boots/armor/dwarven/ComponentInitialize()
 	. = ..()
@@ -160,7 +162,7 @@
 	layer_repair = 2
 
 	layer_max = list(
-		"blunt" = 200,
+		"blunt" = 40,
 		"slash" = 200,
 		"stab" = 200,
 		"piercing" = 100,
@@ -216,7 +218,7 @@
 	)
 
 	layer_max = list(
-		"blunt" = 200,
+		"blunt" = 40,
 		"slash" = 200,
 		"stab" = 200,
 		"piercing" = 90,

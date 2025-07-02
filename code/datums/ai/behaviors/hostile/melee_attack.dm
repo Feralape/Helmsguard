@@ -18,7 +18,7 @@
 /datum/ai_behavior/basic_melee_attack/perform(delta_time, datum/ai_controller/controller, target_key, targetting_datum_key, hiding_location_key)
 	if (isliving(controller.pawn))
 		var/mob/living/pawn = controller.pawn
-		if (world.time < pawn.next_move)
+		if (world.time < pawn.melee_cooldown)
 			return
 
 	. = ..()
@@ -116,5 +116,6 @@
 	. = ..()
 	if(!succeeded)
 		controller.clear_blackboard_key(target_key)
-		controller.pawn.icon_state = "mimic"
+		var/mob/living/simple_animal/hostile/retaliate/rogue/mimic/mimic_pawn = controller.pawn
+		mimic_pawn.disguise()
 

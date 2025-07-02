@@ -104,6 +104,8 @@
 
 #define AMB_FORESTDAY list('sound/ambience/forestday.ogg')
 
+#define AMB_ABISLAND list('sound/ambience/waves.ogg')
+
 #define AMB_FORESTNIGHT list('sound/ambience/forestnight.ogg')
 
 #define AMB_INGEN list('sound/ambience/indoorgen.ogg')

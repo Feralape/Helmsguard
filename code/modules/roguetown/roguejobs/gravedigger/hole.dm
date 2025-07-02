@@ -33,6 +33,37 @@
 	opened = FALSE
 	locked = TRUE
 
+/obj/structure/closet/dirthole/container_resist(mob/living/user) // like that once scene from Kill Bill, crawl out of a grave.
+	..()
+	if(!src.locked == TRUE) // if we're not locked in, we don't need to crawl out.
+		return
+	if(!src.opened == FALSE) // if it's already open we can just get out.
+		return
+	if(src.stage != 4) // if we're not in a closed grave, we don't need to crawl out.
+		return
+	var/mob/living/carbon/stuck = user // Let's get carbonated.
+	if (!stuck.has_hand_for_held_index(stuck.active_hand_index)) // Do we have a functioning hand?
+		to_chat(user, span_warning("I can't dig out of here, I can't move my hand!"))
+		return
+	if (stuck.handcuffed) // Are we handcuffed?
+		to_chat(user, span_warning("I can't dig out of here, I'm handcuffed!"))
+		return
+	to_chat(user, span_warning("I start clawing at the dirt for a way out!"))
+	playsound(src, 'sound/foley/climb.ogg', 100, TRUE) // dirt shaking noises.
+	playsound(usr, 'sound/foley/climb.ogg', 100, TRUE)
+	if (do_after(user, 15 SECONDS, TRUE, src))
+		user.visible_message(span_alert("A hand bursts from [src]!"),span_alert("I've managed to penetrate the surface of [src] with my hand!"))
+		playsound(src, 'sound/foley/plantcross1.ogg', 100, TRUE)
+		playsound(usr, 'sound/foley/plantcross1.ogg', 100, TRUE)
+		if (do_after(user, 10 SECONDS, TRUE, src))
+			src.stage--
+			src.update_icon()
+			src.climb_offset = 0
+			src.open()
+			playsound(src, 'sound/foley/breaksound.ogg', 100, TRUE)
+			playsound(src, 'sound/foley/bodyfall (3).ogg', 90, TRUE)
+			user.visible_message(span_warning("[user] emerges from [src]!"),span_alert("I emerge from [src]!"))
+
 /obj/structure/closet/dirthole/closed/loot/Initialize()
 	. = ..()
 	lootroll = rand(1,3)
@@ -133,7 +164,7 @@
 			var/mob/living/carbon/C = user
 			if(C.domhand)
 				used_str = C.get_str_arms(C.used_hand)
-			C.rogfat_add(max(60 - (used_str * 5), 1))
+			C.stamina_add(max(60 - (used_str * 5), 1))
 		if(stage < 3)
 			if(faildirt < 2)
 				if(prob(used_str * 5))
@@ -148,6 +179,8 @@
 			locked = FALSE
 			open()
 			for(var/obj/structure/gravemarker/G in loc)
+				record_featured_stat(FEATURED_STATS_CRIMINALS, user)
+				GLOB.azure_round_stats[STATS_GRAVES_ROBBED]++
 				qdel(G)
 				if(isliving(user))
 					var/mob/living/L = user
@@ -289,6 +322,10 @@
 			if(!(locate(/obj/item/natural/stone) in T))
 				if(prob(23))
 					new /obj/item/natural/stone(T)
+			else 
+				if(!(locate(/obj/item/natural/clay) in T))
+					if(prob(40))	
+						new /obj/item/natural/clay(T)
 	return ..()
 
 /obj/structure/closet/dirthole/Destroy()

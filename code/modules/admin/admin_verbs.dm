@@ -8,6 +8,7 @@ GLOBAL_PROTECT(admin_verbs_default)
 	/client/proc/check_pq,
 	/client/proc/adjust_pq,
 	/client/proc/hearallasghost,
+	/client/proc/hearglobalLOOC,
 	/client/proc/toggle_aghost_invis,
 	/client/proc/admin_ghost,
 	/datum/admins/proc/start_vote,
@@ -141,6 +142,7 @@ GLOBAL_LIST_INIT(admin_verbs_fun, list(
 	/client/proc/set_ooc,
 	/client/proc/reset_ooc,
 	/client/proc/forceEvent,
+	/client/proc/forceGamemode,
 //	/client/proc/admin_change_sec_level,
 //	/client/proc/run_weather,
 	/client/proc/run_particle_weather,
@@ -156,7 +158,6 @@ GLOBAL_PROTECT(admin_verbs_server)
 /world/proc/AVerbsServer()
 	return list(
 	/datum/admins/proc/startnow,
-	/datum/admins/proc/forcemode,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/end_round,
 	/datum/admins/proc/delay,
@@ -491,19 +492,7 @@ GLOBAL_PROTECT(admin_verbs_hideable)
 
 	if(!holder)
 		return
-	/*
-		#define SPAN_DWARF "dwarf"
-		#define SPAN_ELF "elf"
-		#define SPAN_SAND "sandspeak"
-		#define SPAN_DELF "delf"
-		#define SPAN_HELL "hellspeak"
-		#define SPAN_LUPIAN "lupian"
-		#define SPAN_BEAST "beast"
-		#define SPAN_ORC "orc"
-		#define SPAN_DRACONIC "reptile"
-		#define SPAN_UNDEAD "undead" //nyi
-		#define SPAN_CAT "cat" //nyi
-	*/
+
 	var/who = usr
 	var/languages = list(
 		"human",

@@ -26,7 +26,7 @@
 		return
 	if((istype(over_object, /atom/movable/screen/movable/action_button) && !istype(over_object, /atom/movable/screen/movable/action_button/hide_toggle)))
 		if(locked)
-//			to_chat(usr, span_warning("Action button \"[name]\" is locked, unlock it first."))
+			to_chat(usr, span_warning("Action button \"[name]\" is locked, unlock it first."))
 			return
 		var/atom/movable/screen/movable/action_button/B = over_object
 		var/list/actions = usr.actions
@@ -42,7 +42,7 @@
 /atom/movable/screen/movable/action_button/Click(location,control,params)
 	if (!can_use(usr))
 		return
-/*
+
 	var/list/modifiers = params2list(params)
 	if(modifiers["shift"])
 		if(locked)
@@ -56,7 +56,7 @@
 		to_chat(usr, span_notice("Action button \"[name]\" [locked ? "" : "un"]locked."))
 		if(id && usr.client) //try to (un)remember position
 			usr.client.prefs.action_buttons_screen_locs["[name]_[id]"] = locked ? moved : null
-		return TRUE*/
+		return TRUE
 	if(usr.next_click > world.time)
 		return
 	usr.next_click = world.time + 1
@@ -241,7 +241,7 @@
 	var/coord_col = "+[col-1]"
 	var/coord_col_offset = 4 + 2 * col
 
-	var/coord_row = "[row ? -row : "+0"]"
+	var/coord_row = "[row ? "+[row]" : "+0"]"
 
 	return "WEST[coord_col]:[coord_col_offset],SOUTH[coord_row]:3"
 

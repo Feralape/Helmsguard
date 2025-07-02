@@ -203,8 +203,8 @@
 /datum/reagent/toxin/plantbgone/reaction_obj(obj/O, reac_volume)
 	if(istype(O, /obj/structure/glowshroom)) //even a small amount is enough to kill it
 		qdel(O)
-	else if(istype(O, /obj/structure/spacevine))
-		var/obj/structure/spacevine/SV = O
+	else if(istype(O, /obj/structure/vine))
+		var/obj/structure/vine/SV = O
 		SV.on_chem_effect(src)
 
 /datum/reagent/toxin/plantbgone/reaction_mob(mob/living/M, method=TOUCH, reac_volume)
@@ -425,18 +425,6 @@
 	testing("toxin OML")
 	M.add_nausea(20)
 	M.adjustToxLoss(3, 0)
-	return ..()
-
-/datum/reagent/toxin/killersice
-	name = "killersice"
-	description = "killersice"
-	reagent_state = LIQUID
-	color = "#FFFFFF"
-	metabolization_rate = 0.01
-	toxpwr = 0
-
-/datum/reagent/toxin/killersice/on_mob_life(mob/living/carbon/M)
-	M.adjustToxLoss(10, 0)
 	return ..()
 
 /datum/reagent/toxin/bad_food

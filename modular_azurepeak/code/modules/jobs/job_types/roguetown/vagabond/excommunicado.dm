@@ -35,7 +35,5 @@
 		H.change_stat("endurance", -1)
 
 		var/datum/devotion/C = new /datum/devotion(H, H.patron)
-		C.grant_spells(H)
-		START_PROCESSING(SSobj, C)
-		H.verbs += list(/mob/living/carbon/human/proc/devotionreport, /mob/living/carbon/human/proc/clericpray)
+		C.grant_miracles(H, cleric_tier = CLERIC_T1, passive_gain = CLERIC_REGEN_MINOR)	//Minor regen, can level up to T4.
 		GLOB.excommunicated_players += H.real_name // john roguetown, you are EXCOMMUNICADO.

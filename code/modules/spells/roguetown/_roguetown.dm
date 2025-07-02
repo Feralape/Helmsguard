@@ -6,7 +6,7 @@
 	range = 7
 	selection_type = "range"
 	no_early_release = TRUE
-	charge_max = 30
+	recharge_time = 30
 	charge_type = "recharge"
 	invocation_type = "shout"
 	var/active_sound
@@ -75,6 +75,7 @@
 	var/projectile_amount = 1	//Projectiles per cast.
 	var/current_amount = 0	//How many projectiles left.
 	var/projectiles_per_fire = 1		//Projectiles per fire. Probably not a good thing to use unless you override ready_projectile().
+	gesture_required = TRUE // All projectiles are offensive and should be locked to not handcuff
 
 /obj/effect/proc_holder/spell/invoked/projectile/proc/ready_projectile(obj/projectile/P, atom/target, mob/user, iteration)
 	return
@@ -99,6 +100,12 @@
 		if(istype(P, /obj/projectile/magic/bloodsteal))
 			var/obj/projectile/magic/bloodsteal/B = P
 			B.sender = user
+		P.def_zone = user.zone_selected
+		// Accuracy modification code, same as bow rebalance PR
+		P.accuracy += (user.STAINT - 9) * 4
+		P.bonus_accuracy += (user.STAINT - 8) * 3
+		if(user.mind)
+			P.bonus_accuracy += (user.mind.get_skill_level(associated_skill) * 5) // +5% per level
 		P.firer = user
 		P.preparePixelProjectile(target, user)
 		for(var/V in projectile_var_overrides)

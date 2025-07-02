@@ -116,6 +116,15 @@
 	if(mob)
 		SEND_SOUND(mob, sound(null))
 
+/client/verb/cmode_strip()
+	set name = "Combat Mode Stripping"
+	set category = "Options"
+	set desc = ""
+	if(prefs)
+		prefs.toggles ^= CMODE_STRIPPING
+		prefs.save_preferences()
+	to_chat(src, "You will [prefs.toggles & CMODE_STRIPPING ? "" : "not"] be able to open the strip menu in combat mode.")
+
 /*
 //toggles
 /datum/verbs/menu/Settings/Ghost/chatterbox

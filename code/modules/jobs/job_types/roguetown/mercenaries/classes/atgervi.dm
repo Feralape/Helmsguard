@@ -7,7 +7,7 @@
 	category_tags = list(CTAG_MERCENARY)
 	traits_applied = list(TRAIT_OUTLANDER)
 	classes = list("Varangian" = "You are a Varangian of the Gronn Highlands. Warrior-Traders whose exploits into the Raneshen Empire will be forever remembered by historians.",
-					"Shaman" = "You are a Shaman of the Northern Empty. Savage combatants who commune with their gods through gut-wrenching violence, rather than idle prayer.")
+					"Shaman" = "You are a Shaman of the Fjall, The Northern Empty. Savage combatants who commune with the Ecclesical Beast gods through ritualistic violence, rather than idle prayer.")
 
 /datum/outfit/job/roguetown/mercenary/atgervi
 	allowed_patrons = ALL_INHUMEN_PATRONS
@@ -58,6 +58,9 @@
 			neck = /obj/item/storage/belt/rogue/pouch/coins/poor
 			beltl = /obj/item/flashlight/flare/torch
 
+			var/datum/devotion/C = new /datum/devotion(H, H.patron)
+			C.grant_miracles(H, cleric_tier = CLERIC_T2, passive_gain = FALSE, devotion_limit = CLERIC_REQ_2)	//Capped to T1 miracles.
+
 			ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 			H.cmode_music = 'sound/music/combat_vagarian.ogg'
 		if("Shaman")
@@ -90,12 +93,15 @@
 			neck = /obj/item/storage/belt/rogue/pouch/coins/poor
 			beltl = /obj/item/flashlight/flare/torch
 
+			var/datum/devotion/C = new /datum/devotion(H, H.patron)
+			C.grant_miracles(H, cleric_tier = CLERIC_T2, passive_gain = FALSE, devotion_limit = CLERIC_REQ_2)	//Capped to T2 miracles.
+
 			ADD_TRAIT(H, TRAIT_STRONGBITE, TRAIT_GENERIC)
 			ADD_TRAIT(H, TRAIT_CIVILIZEDBARBARIAN, TRAIT_GENERIC) //No weapons. Just beating them to death as God intended.
 			ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC) //Their entire purpose is to rip people apart with their hands and teeth. I don't think they'd be too preturbed to see someone lose a limb.
 			ADD_TRAIT(H, TRAIT_CRITICAL_RESISTANCE, TRAIT_GENERIC) //Either no armor, or light armor.
 			ADD_TRAIT(H, TRAIT_NOPAINSTUN, TRAIT_GENERIC)
-			H.cmode_music = 'sound/music/combat_shaman.ogg'
+			H.cmode_music = 'sound/music/combat_shaman2.ogg'
 
 	H.grant_language(/datum/language/gronnic)
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife = 1)

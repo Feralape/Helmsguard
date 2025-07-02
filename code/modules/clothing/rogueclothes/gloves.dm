@@ -15,8 +15,9 @@
 	name = "leather gloves"
 	desc = ""
 	icon_state = "leather_gloves"
-	armor = list("blunt" = 30, "slash" = 10, "stab" = 20, "piercing" = 0, "fire" = 0, "acid" = 0)
+	armor = ARMOR_GLOVES_LEATHER
 	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_BLUNT)
+	max_integrity = 100
 	resistance_flags = FIRE_PROOF
 	blocksound = SOFTHIT
 	blade_dulling = DULLING_BASHCHOP
@@ -51,11 +52,12 @@
 	name = "heavy leather gloves"
 	desc = ""
 	icon_state = "angle"
-	armor = list("blunt" = 50, "slash" = 25, "stab" = 40, "piercing" = 10, "fire" = 0, "acid" = 0)
-	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_BLUNT)
+	armor = ARMOR_GLOVES_LEATHER_GOOD
+	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_BLUNT, BCLASS_TWIST)
 	resistance_flags = FIRE_PROOF
 	blocksound = SOFTHIT
-	max_integrity = 200
+	max_integrity = 300
+	sellprice = 12
 	blade_dulling = DULLING_BASHCHOP
 	break_sound = 'sound/foley/cloth_rip.ogg'
 	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
@@ -68,11 +70,11 @@
 	desc = "A pair of protective gloves favored by lockshimmers, laborers, and smokers for maintaining \
 	manual dexterity over regular gloves."
 	icon_state = "roguegloves"
-	armor = list("blunt" = 50, "slash" = 25, "stab" = 40, "piercing" = 10, "fire" = 0, "acid" = 0)
+	armor = ARMOR_GLOVES_LEATHER_GOOD
 	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_BLUNT)
 	resistance_flags = FIRE_PROOF
 	blocksound = SOFTHIT
-	max_integrity = 200
+	max_integrity = 80
 	blade_dulling = DULLING_BASHCHOP
 	break_sound = 'sound/foley/cloth_rip.ogg'
 	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
@@ -84,7 +86,7 @@
 	name = "chain gauntlets"
 	desc = ""
 	icon_state = "cgloves"
-	armor = list("blunt" = 60, "slash" = 100, "stab" = 80, "piercing" = 20, "fire" = 0, "acid" = 0)
+	armor = ARMOR_GLOVES_CHAIN
 	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_BLUNT)
 	resistance_flags = FIRE_PROOF
 	blocksound = CHAINHIT
@@ -94,6 +96,19 @@
 	drop_sound = 'sound/foley/dropsound/chain_drop.ogg'
 	anvilrepair = /datum/skill/craft/armorsmithing
 	smeltresult = /obj/item/ingot/steel
+
+/obj/item/clothing/gloves/roguetown/chain/aalloy
+	name = "decrepit chain gauntlets"
+	desc = "Decrepit old chain gauntlets. Aeon's grasp is upon them."
+	icon_state = "acgloves"
+	smeltresult = /obj/item/ingot/aalloy
+	max_integrity = 125
+
+/obj/item/clothing/gloves/roguetown/chain/paalloy
+	name = "ancient chain gauntlets"
+	desc = "Chain gauntlets formed out of ancient alloys. Aeon's grasp is lifted from them."
+	icon_state = "acgloves"
+	smeltresult = /obj/item/ingot/aaslag
 
 /obj/item/clothing/gloves/roguetown/chain/psydon
 	name = "psydonian gloves"
@@ -107,12 +122,12 @@
 	smeltresult = /obj/item/ingot/iron
 	max_integrity = 200
 
-/obj/item/clothing/gloves/roguetown/deerskin
-	name = "deerskin leather gloves"
-	desc = "A pair of heavy deerskin gloves, fit against wildlife and wild men."
-	icon_state = "deerskingloves"
-	item_state = "deerskingloves"
-	armor = list("blunt" = 60, "slash" = 50, "stab" = 40, "piercing" = 20, "fire" = 0, "acid" = 0)
+/obj/item/clothing/gloves/roguetown/otavan
+	name = "otavan leather gloves"
+	desc = "A pair of heavy Otavan leather gloves, commonly used by fencers, renowned for their quality."
+	icon_state = "fencergloves"
+	item_state = "fencergloves"
+	armor = ARMOR_GLOVES_CHAIN
 	prevent_crits = list(BCLASS_CHOP, BCLASS_CUT, BCLASS_BLUNT, BCLASS_TWIST)
 	resistance_flags = FIRE_PROOF
 	blocksound = SOFTHIT
@@ -136,7 +151,7 @@
 	name = "plate gauntlets"
 	desc = "The finest work of an armorsmith; dozens of plates curl at your whim to grip power."
 	icon_state = "gauntlets"
-	armor = list("blunt" = 90, "slash" = 100, "stab" = 80, "piercing" = 40, "fire" = 0, "acid" = 0)
+	armor = ARMOR_GLOVES_PLATE
 	prevent_crits = list(BCLASS_CHOP, BCLASS_CUT, BCLASS_BLUNT, BCLASS_TWIST)
 	resistance_flags = FIRE_PROOF
 	blocksound = PLATEHIT
@@ -149,6 +164,33 @@
 
 	grid_width = 64
 	grid_height = 32
+
+/obj/item/clothing/gloves/roguetown/plate/aalloy
+	name = "decrepit plate gauntlets"
+	desc = "Decrepit old plate gauntlets. Aeon's grasp is upon them."
+	icon_state = "agauntlets"
+	smeltresult = /obj/item/ingot/aalloy
+	max_integrity = 150
+
+/obj/item/clothing/gloves/roguetown/plate/paalloy
+	name = "ancient plate gauntlets"
+	desc = "Ancient plate gauntlets. Aeon's grasp lifed from them."
+	icon_state = "agauntlets"
+	smeltresult = /obj/item/ingot/aaslag
+
+/obj/item/clothing/gloves/roguetown/plate/graggar
+	name = "vicious gauntlets"
+	desc = "Plate gauntlets which carry the motive force of this world, violence."
+	max_integrity = 500
+	icon_state = "graggarplategloves"
+
+/obj/item/clothing/gloves/roguetown/plate/graggar/pickup(mob/living/user)
+	if(!HAS_TRAIT(user, TRAIT_HORDE))
+		to_chat(user, "<font color='red'>UNWORTHY HANDS TOUCHING THIS ARMOR, CEASE OR BE RENDED ASUNDER!</font>")
+		user.adjust_fire_stacks(5)
+		user.IgniteMob()
+		user.Stun(40)
+	..()
 
 /obj/item/clothing/gloves/roguetown/plate/matthios
 	name = "gilded gauntlets"
@@ -184,14 +226,15 @@
 	qdel(src)
 
 
-/obj/item/clothing/gloves/roguetown/freigloves
+/obj/item/clothing/gloves/roguetown/angle/freigloves
 	name = "freitrupp gloves"
 	desc = "Supple gloves for a skilled and sure grip on pike and greatsword alike."
 	icon_state = "freigloves"
 	item_state = "freigloves"
 	sleeved = 'icons/roguetown/clothing/onmob/helpers/stonekeep_merc.dmi'
-	armor = list("blunt" = 15, "slash" = 15, "stab" = 15, "piercing" = 0, "fire" = 0, "acid" = 0)
+	armor = ARMOR_GLOVES_LEATHER
 	prevent_crits = list(BCLASS_CUT, BCLASS_BLUNT)
+	max_integrity = 100
 	resistance_flags = FIRE_PROOF
 	blocksound = SOFTHIT
 	blade_dulling = DULLING_BASHCHOP
@@ -199,21 +242,41 @@
 	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
 	anvilrepair = null
 	sewrepair = TRUE
+	salvage_result = null
 
-/obj/item/clothing/gloves/roguetown/freigloves/blacksmith
+/obj/item/clothing/gloves/roguetown/angle/freigloves/blacksmith
 	name = "forge gauntlets"
 	desc = "Long gloves for guarding your wrists against sparks and slag."
 
 //---------------- BLACKSTEEL ---------------------
 
-/obj/item/clothing/gloves/roguetown/blacksteel/plategloves
+/obj/item/clothing/gloves/roguetown/blacksteel/modern/plategloves
 	name = "blacksteel plate gauntlets"
+	desc = "A set of plate gauntlets forged of blacksteel, using a modern design."
+	icon = 'icons/roguetown/clothing/special/blkknight.dmi'
+	mob_overlay_icon = 'icons/roguetown/clothing/special/onmob/blkknight.dmi'
+	sleeved = 'icons/roguetown/clothing/special/onmob/blkknight.dmi'
+	icon_state = "bplategloves"
+	item_state = "bplategloves"
+	armor = ARMOR_PLATE_BSTEEL
+	prevent_crits = list(BCLASS_CHOP, BCLASS_CUT, BCLASS_BLUNT, BCLASS_TWIST)
+	resistance_flags = FIRE_PROOF
+	blocksound = PLATEHIT
+	max_integrity = 400
+	blade_dulling = DULLING_BASH
+	break_sound = 'sound/foley/breaksound.ogg'
+	drop_sound = 'sound/foley/dropsound/armor_drop.ogg'
+	anvilrepair = /datum/skill/craft/armorsmithing
+	smeltresult = /obj/item/ingot/blacksteel
+
+/obj/item/clothing/gloves/roguetown/blacksteel/plategloves
+	name = "ancient blacksteel plate gauntlets"
 	desc = "A set of plate gauntlets forged of blacksteel."
 	icon = 'icons/roguetown/clothing/special/blkknight.dmi'
 	mob_overlay_icon = 'icons/roguetown/clothing/special/onmob/blkknight.dmi'
 	icon_state = "bkgloves"
 	item_state = "bkgloves"
-	armor = list("blunt" = 90, "slash" = 100, "stab" = 80, "piercing" = 50, "fire" = 0, "acid" = 0)
+	armor = ARMOR_PLATE_BSTEEL
 	prevent_crits = list(BCLASS_CHOP, BCLASS_CUT, BCLASS_BLUNT, BCLASS_TWIST)
 	resistance_flags = FIRE_PROOF
 	blocksound = PLATEHIT
@@ -239,12 +302,44 @@
 	mob_overlay_icon = 'icons/roguetown/clothing/special/onmob/race_armor.dmi'
 	icon_state = "welfhand"
 	item_state = "welfhand"
-	armor = list("blunt" = 110, "slash" = 10, "stab" = 110, "piercing" = 20, "fire" = 0, "acid" = 0)
+	armor = list("blunt" = 100, "slash" = 10, "stab" = 110, "piercing" = 20, "fire" = 0, "acid" = 0)//Resistant to blunt and stab, super weak to slash.
 	prevent_crits = list(BCLASS_BLUNT, BCLASS_SMASH, BCLASS_PICK)
 	resistance_flags = FIRE_PROOF
 	blocksound = SOFTHIT
 	max_integrity = 200
 	anvilrepair = /datum/skill/craft/carpentry
+
+//eastern content
+
+/obj/item/clothing/gloves/roguetown/eastgloves1
+	name = "black gloves"
+	desc = "Sleek gloves typically used by swordsmen."
+	icon_state = "eastgloves1"
+	item_state = "eastgloves1"
+	armor = ARMOR_GLOVES_LEATHER
+	prevent_crits = list(BCLASS_CUT, BCLASS_BLUNT)
+	resistance_flags = null
+	blocksound = SOFTHIT
+	blade_dulling = DULLING_BASHCHOP
+	break_sound = 'sound/foley/cloth_rip.ogg'
+	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
+	anvilrepair = null
+	sewrepair = TRUE
+
+/obj/item/clothing/gloves/roguetown/eastgloves2
+	name = "stylish gloves"
+	desc = "Unusual gloves worn by foreign gangs."
+	icon_state = "eastgloves2"
+	item_state = "eastgloves2"
+	armor = ARMOR_GLOVES_LEATHER
+	prevent_crits = list(BCLASS_CUT, BCLASS_BLUNT)
+	resistance_flags = null
+	blocksound = SOFTHIT
+	blade_dulling = DULLING_BASHCHOP
+	break_sound = 'sound/foley/cloth_rip.ogg'
+	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
+	anvilrepair = null
+	sewrepair = TRUE
 
 /// nordman
 

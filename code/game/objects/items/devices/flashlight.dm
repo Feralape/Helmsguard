@@ -124,9 +124,10 @@
 
 /obj/item/flashlight/flare/torch
 	name = "torch"
-	desc = ""
+	desc = "A stick with enough fiber wrapped around the end to burn for a decent amount of time. Mind it \
+	should you choose to ford across water."
 	w_class = WEIGHT_CLASS_NORMAL
-	light_outer_range = 5
+	light_outer_range = 7
 	force = 1
 	icon = 'icons/roguetown/items/lighting.dmi'
 	icon_state = "torch"
@@ -138,13 +139,14 @@
 	flags_1 = null
 	possible_item_intents = list(/datum/intent/use, /datum/intent/hit)
 	slot_flags = ITEM_SLOT_HIP
-	var/datum/looping_sound/torchloop/soundloop = null         //remove the = null to re-add the torch crackle sounds.
-	var/should_self_destruct = TRUE //added for torch burnout
+	//remove the = null to re-add the torch crackle sounds. (???? what the fuck)
+	var/datum/looping_sound/torchloop/soundloop = null
+	//added for torch burnout
+	var/should_self_destruct = TRUE
 	max_integrity = 40
 	fuel = 30 MINUTES
 	light_depth = 0
 	light_height = 0
-
 	grid_width = 32
 	grid_height = 32
 
@@ -273,6 +275,7 @@
 	light_outer_range = 6
 	fuel = 120 MINUTES
 	should_self_destruct = TRUE
+	extinguishable = TRUE
 
 /obj/item/flashlight/flare/torch/metal/afterattack(atom/movable/A, mob/user, proximity)
 	. = ..()
@@ -294,7 +297,7 @@
 	name = "iron lamptern"
 	icon_state = "lamp"
 	desc = "A light to guide the way."
-	light_outer_range = 7
+	light_outer_range = 5
 	on = FALSE
 	flags_1 = CONDUCT_1
 	slot_flags = ITEM_SLOT_HIP
@@ -304,6 +307,8 @@
 	should_self_destruct = FALSE
 	grid_width = 32
 	grid_height = 64
+	extinguishable = FALSE
+	weather_resistant = TRUE
 
 /obj/item/flashlight/flare/torch/lantern/afterattack(atom/movable/A, mob/user, proximity)
 	. = ..()
@@ -321,9 +326,6 @@
 	if(!fuel || !on)
 		turn_off()
 		STOP_PROCESSING(SSobj, src)
-
-/obj/item/flashlight/flare/torch/lantern/extinguish()
-	return
 
 /obj/item/flashlight/flare/torch/lantern/getonmobprop(tag)
 	. = ..()
@@ -343,15 +345,58 @@
 	icon_state = "bronzelamp"
 	item_state = "bronzelamp"
 	desc = "A marvel of engineering that emits a strange green glow."
-	light_outer_range = 8
+	light_outer_range = 6
 	light_color ="#4ac77e"
 	on = FALSE
+
+/obj/item/flashlight/flare/torch/lantern/bronzelamptern/malums_lamptern //unqiue item as a dungeon reward. Functionally a kite shield and a bronze lamptern combined into one
+	name = "ancient lamptern"
+	icon_state = "bronzelamp"
+	item_state = "bronzelamp"
+	desc = "A marvel of enginseering that emits a strange teal glow. This one bears an emblem related to Malum and has an inscription. It reads, 'Wield me against your foe and the power of creation shall shield you from harm.'"
+	light_outer_range = 8
+	light_color = "#2bd0d6"
+	color = "#2bd0d6"
+	on = TRUE
+	slot_flags = ITEM_SLOT_HIP | ITEM_SLOT_BACK
+	force = 20
+	throwforce = 10
+	throw_speed = 1
+	throw_range = 3
+	wlength = WLENGTH_NORMAL
+	wdefense = 11
+	var/coverage = 90
+	possible_item_intents = list(INTENT_GENERIC, /datum/intent/shield/bash, /datum/intent/shield/block)
+	sharpness = IS_BLUNT
+	can_parry = TRUE
+	associated_skill = /datum/skill/combat/shields
+	max_integrity = 300
+	obj_integrity = null
+	integrity_failure = 0.2
+	obj_broken = null
+	obj_flags = CAN_BE_HIT | UNIQUE_RENAME
+	anvilrepair = /datum/skill/craft/engineering
+	required_repair_skill = 6 // Only the most skilled engineers can repair it
+	attacked_sound = list('sound/combat/parry/shield/metalshield (1).ogg','sound/combat/parry/shield/metalshield (2).ogg','sound/combat/parry/shield/metalshield (3).ogg')
+	parrysound = list('sound/combat/parry/shield/magicshield (1).ogg','sound/combat/parry/shield/magicshield (2).ogg','sound/combat/parry/shield/magicshield (3).ogg')
+	break_sound = 'sound/foley/machinebreak.ogg'
+	blade_dulling = DULLING_BASH
+	sellprice = 500 // who sells a holy relic?
+	resistance_flags = FIRE_PROOF
+
+/obj/item/flashlight/flare/torch/lantern/bronzelamptern/malums_lamptern/pickup(mob/living/user)
+	if(HAS_TRAIT(user, TRAIT_CABAL))
+		to_chat(user, "<font color='yellow'> You attempt to take the lamptern. Runic flames of creation lap up the length of your arm in defiance of your Dark Mistress! Curses!</font>")
+		user.adjust_fire_stacks(5)
+		user.IgniteMob()
+		user.Stun(40)
+		playsound(get_turf(user), 'sound/magic/ahh2.ogg', 100)
+	..()
 
 /obj/item/flashlight/flare/torch/lantern/copper
 	name = "copper lamptern"
 	icon_state = "clamp"
 	desc = "A simple and cheap lamptern."
-	light_outer_range = 7
 	on = FALSE
 	flags_1 = CONDUCT_1
 	slot_flags = ITEM_SLOT_HIP

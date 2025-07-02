@@ -38,6 +38,12 @@
 	if(data["blood_DNA"])
 		B.add_blood_DNA(list(data["blood_DNA"] = data["blood_type"]))
 
+/datum/reagent/blood/on_mob_life(mob/living/carbon/H)//I hate you
+	..()
+	if(HAS_TRAIT(H, TRAIT_NASTY_EATER))
+		return
+	H.add_nausea(12) //Over 8 units will cause puking
+
 /datum/reagent/blood/green
 	color = "#05af01"
 
@@ -81,6 +87,7 @@
 /datum/reagent/water/gross
 	taste_description = "something vile"
 	color = "#98934bc6"
+	harmful = TRUE
 
 /datum/reagent/water/gross/reaction_mob(mob/living/L, method=TOUCH, reac_volume)
 	if(method == INGEST) // Make sure you DRANK the toxic water before giving damage
@@ -88,7 +95,7 @@
 
 /datum/reagent/water/gross/on_mob_life(mob/living/carbon/M)
 	..()
-	if(HAS_TRAIT(M, TRAIT_NASTY_EATER )) // lets orcs and goblins drink bogwater
+	if(HAS_TRAIT(M, TRAIT_NASTY_EATER)) // lets orcs and goblins drink bogwater
 		return
 	M.adjustToxLoss(1)
 	M.add_nausea(12) //Over 8 units will cause puking
@@ -176,16 +183,25 @@
 /turf/open/proc/update_water()
 	return TRUE
 
-/datum/reagent/water/reaction_turf(turf/open/T, reac_volume)
-	if(!istype(T))
-		return
-	if(reac_volume >= 5)
-		T.add_water(reac_volume * 3) //nuprocet)
+/datum/reagent/water/reaction_turf(turf/T, reac_volume)
+	if(isopenturf(T))
+		var/turf/open/OT = T
+		if(reac_volume >= 5)
+			OT.add_water(reac_volume * 3) //nuprocet)
 
-	var/obj/effect/hotspot/hotspot = (locate(/obj/effect/hotspot) in T)
-	if(hotspot)
-		new /obj/effect/temp_visual/small_smoke(T)
-		qdel(hotspot)
+		var/obj/effect/hotspot/hotspot = (locate(/obj/effect/hotspot) in T)
+		if(hotspot)
+			new /obj/effect/temp_visual/small_smoke(T)
+			qdel(hotspot)
+	
+	if(iswallturf(T))
+		if(!T.color)
+			return
+		if(volume < 10)
+			T.visible_message(span_warning("[T] needs more water to clean the <font color=[T.color]>paint</font> away!"))
+			return
+		T.visible_message(span_notice("The <font color=[T.color]>paint</font> on [T] washes away!"))
+		T.color = initial(T.color)
 
 /*
  *	Water reaction to an object
@@ -195,6 +211,14 @@
 	O.extinguish()
 	O.acid_level = 0
 
+	if(isstructure(O))
+		if(!O.color)
+			return
+		if(volume < 10)
+			O.visible_message(span_warning("[O] needs more water to clean the <font color=[O.color]>paint</font> away!"))
+			return
+		O.visible_message(span_notice("The <font color=[O.color]>paint</font> on [O] washes away!"))
+		O.color = initial(O.color)
 
 	if(istype(O, /obj/item/roguebin))
 		var/obj/item/roguebin/RB = O

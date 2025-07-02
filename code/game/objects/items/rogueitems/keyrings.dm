@@ -233,7 +233,7 @@
 	keys = list(/obj/item/roguekey/dungeon, /obj/item/roguekey/garrison, /obj/item/roguekey/walls, /obj/item/roguekey/manor, /obj/item/roguekey/armory, /obj/item/roguekey/masteratarms)
 
 /obj/item/storage/keyring/velder
-	keys = list(/obj/item/roguekey/velder, /obj/item/roguekey/blacksmith/town, /obj/item/roguekey/farm, /obj/item/roguekey/butcher)
+	keys = list(/obj/item/roguekey/velder, /obj/item/roguekey/farm, /obj/item/roguekey/butcher)
 
 /obj/item/storage/keyring/vtavern
 	keys = list(/obj/item/roguekey/tavern/village, /obj/item/roguekey/roomvi/village, /obj/item/roguekey/roomv/village, /obj/item/roguekey/roomiv/village, /obj/item/roguekey/roomiii/village, /obj/item/roguekey/roomii/village, /obj/item/roguekey/roomi/village)
@@ -275,7 +275,7 @@
 	keys = list(/obj/item/roguekey/manor, /obj/item/roguekey/graveyard)
 
 /obj/item/storage/keyring/dungeoneer
-	keys = list(/obj/item/roguekey/dungeon, /obj/item/roguekey/manor, /obj/item/roguekey/garrison, /obj/item/roguekey/armory)
+	keys = list(/obj/item/roguekey/dungeon, /obj/item/roguekey/manor, /obj/item/roguekey/garrison)
 
 /obj/item/storage/keyring/servant
 	keys = list(/obj/item/roguekey/manor, /obj/item/roguekey/garrison)
@@ -294,3 +294,15 @@
 
 /obj/item/storage/keyring/heir
 	keys = list(/obj/item/roguekey/manor, /obj/item/roguekey/heir, /obj/item/roguekey/garrison)
+
+/obj/item/storage/keyring/mageapprentice
+	keys = list(/obj/item/roguekey/manor, /obj/item/roguekey/tower)
+
+/obj/item/storage/keyring/soilson
+	keys = list(/obj/item/roguekey/farm, /obj/item/roguekey/apartments/stable1, /obj/item/roguekey/apartments/stable2)
+
+/obj/item/storage/keyring/guildmaster
+	keys = list(/obj/item/roguekey/crafterguild, /obj/item/roguekey/tailor, /obj/item/roguekey/craftermaster)
+
+/obj/item/storage/keyring/tailor
+	keys = list(/obj/item/roguekey/crafterguild, /obj/item/roguekey/tailor)

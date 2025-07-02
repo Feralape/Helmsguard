@@ -51,7 +51,7 @@
 		/obj/item/clothing/mask/cigarette/pipe/westman=10,
 		/obj/item/storage/backpack/rogue/satchel=33,
 		/obj/item/storage/roguebag=33,
-		/obj/item/roguegem=1,
+		/obj/item/roguegem/ruby=1,
 		/obj/item/roguegem/blue=2,
 		/obj/item/roguegem/violet=4,
 		/obj/item/roguegem/green=6,

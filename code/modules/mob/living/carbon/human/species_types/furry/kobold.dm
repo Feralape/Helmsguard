@@ -5,7 +5,7 @@
 	name = "Kobold"
 	id = "kobold"
 	desc = "<b>Kobold</b><br>\
-	Short in stature and typically scrawny, this little lizards make up for it in their natural agility. People typically stereotype them as thieves, though...<br>\
+	Short in stature and typically scrawny, these little lizards make up for it in their natural agility. People typically stereotype them as thieves, though...<br>\
 	(+1 Fortune)"
 	species_traits = list(EYECOLOR,LIPS,STUBBLE,MUTCOLORS)
 	possible_ages = ALL_AGES_LIST
@@ -74,6 +74,21 @@
 		/datum/body_marking_set/kobold_scale,
 	)
 	body_markings = list(
+		/datum/body_marking/small/plain,
+		/datum/body_marking/small/sock,
+		/datum/body_marking/small/socklonger,
+		/datum/body_marking/small/tips,
+		/datum/body_marking/small/belly,
+		/datum/body_marking/small/bellyslim,
+		/datum/body_marking/small/butt,
+		/datum/body_marking/small/tie,
+		/datum/body_marking/small/tiesmall,
+		/datum/body_marking/small/backspots,
+		/datum/body_marking/small/front,
+		/datum/body_marking/small/spotted,
+		/datum/body_marking/small/nose,
+		/datum/body_marking/small/bangs,
+		/datum/body_marking/small/bun,
 	)
 	languages = list(
 		/datum/language/common,

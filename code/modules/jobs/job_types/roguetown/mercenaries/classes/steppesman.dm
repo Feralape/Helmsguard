@@ -7,23 +7,15 @@
 	category_tags = list(CTAG_MERCENARY)
 	traits_applied = list(TRAIT_OUTLANDER)
 	cmode_music = 'sound/music/combat_steppe.ogg'
-
+	horse = /mob/living/simple_animal/hostile/retaliate/rogue/saiga/tame/saddled
 
 /datum/outfit/job/roguetown/mercenary/steppesman/pre_equip(mob/living/carbon/human/H)
 	..()
-	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
-	head = /obj/item/clothing/head/roguetown/papakha
-	gloves = /obj/item/clothing/gloves/roguetown/leather
+
+	//Universal gear
 	belt = /obj/item/storage/belt/rogue/leather/black
-	armor = /obj/item/clothing/suit/roguetown/armor/leather/studded
-	cloak = /obj/item/clothing/cloak/raincloak/furcloak
-	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
-	beltr = /obj/item/rogueweapon/shield/buckler
-	beltl= /obj/item/quiver/arrows
-	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson
-	pants = /obj/item/clothing/under/roguetown/trou/leather
-	neck = /obj/item/storage/belt/rogue/pouch/coins/poor
-	backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
+	pants = /obj/item/clothing/under/roguetown/heavy_leather_pants
+	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/chargah
 	backr = /obj/item/storage/backpack/rogue/satchel
 	backpack_contents = list(/obj/item/rogueweapon/whip = 1)
 	if(H.mind)

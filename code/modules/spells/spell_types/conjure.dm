@@ -57,7 +57,7 @@
 	var/obj/item/item
 	var/item_type = /obj/item/banhammer
 	school = "conjuration"
-	charge_max = 150
+	recharge_time = 150
 	cooldown_min = 10
 	var/delete_old = TRUE //TRUE to delete the last summoned object if it's still there, FALSE for infinite item stream weeeee
 

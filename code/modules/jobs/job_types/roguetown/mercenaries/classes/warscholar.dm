@@ -8,7 +8,7 @@
 	cmode_music = 'sound/music/warscholar.ogg'
 	traits_applied = list(TRAIT_OUTLANDER)
 	classes = list("Hierophant" = "You are a Naledi Hierophant, a magician who studied under cloistered sages, well-versed in all manners of arcyne. You prioritize enhancing your teammates and distracting foes while staying in the backline.",
-					"Pontifex" = "You are a Naledi Pontifex, a scout and spy trained into a hybridized style of movement-controlling shadow magic and hand-to-hand combat. Though your abilities in magical fields are lacking, you are more than equipped to defend yourself should the dark fail to keep you safe.",
+					"Pontifex" = "You are a Naledi Pontifex, a warrior trained into a hybridized style of movement-controlling magic and hand-to-hand combat. Though your abilities in magical fields are lacking, you are far more dangerous than other magi in a straight fight. You manifest your calm, practiced skill into a killing intent that takes the shape of an arcyne blade.",
 					"Vizier" = "You are a Naledi Vizier. Your research into miracles and holy incantations has lead you to esoteric magycks. Though psydonians have long struggled to channel their all-father's divinity, a combination of the saint's power may be similar enough.")
 
 /datum/outfit/job/roguetown/mercenary/warscholar
@@ -79,12 +79,18 @@
 			ADD_TRAIT(H, TRAIT_MAGEARMOR, TRAIT_GENERIC)
 			ADD_TRAIT(H, TRAIT_ARCYNE_T3, TRAIT_GENERIC)
 			H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/giants_strength)
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/longstrider)
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/guidance)
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/haste)
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/fortitude)
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/forcewall/greater)
 			r_hand = /obj/item/rogueweapon/woodstaff/naledi
 
 
 			head = /obj/item/clothing/head/roguetown/roguehood/hierophant
 			cloak = /obj/item/clothing/cloak/hierophant
-			armor = /obj/item/clothing/suit/roguetown/armor/gambeson/hierophant
+			armor = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/hierophant
 			shirt = /obj/item/clothing/suit/roguetown/shirt/robe/hierophant
 			pants = /obj/item/clothing/under/roguetown/trou/leather
 			backpack_contents = list(/obj/item/rogueweapon/huntingknife,/obj/item/spellbook_unfinished/pre_arcyne)
@@ -109,12 +115,15 @@
 			H.change_stat("perception", -1)
 			H.change_stat("speed", 2)
 			H.grant_language(/datum/language/celestial)
+			H.grant_language(/datum/language/thievescant)
 			H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
 			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/fetch) // In an attempt to make them less Possibly Wildly OP, they can't freely pick their spells. Casts at apprentice level, but doesn't get the spellbuy points it'd provide.
-			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/slowdown_spell_aoe)
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/ensnare)
 			H.mind.AddSpell(new/obj/effect/proc_holder/spell/invoked/projectile/repel)
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/summonrogueweapon/bladeofpsydon)
 			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/shadowstep)
 			ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
+			ADD_TRAIT(H, TRAIT_CIVILIZEDBARBARIAN, TRAIT_GENERIC)
 			ADD_TRAIT(H, TRAIT_ARCYNE_T1, TRAIT_GENERIC)
 
 			head = /obj/item/clothing/head/roguetown/roguehood/pontifex
@@ -162,8 +171,7 @@
 			backpack_contents = list(/obj/item/rogueweapon/huntingknife = 1)
 			
 			var/datum/devotion/C = new /datum/devotion(H, H.patron)
-			C.grant_spells_monk(H)
-			H.verbs += list(/mob/living/carbon/human/proc/devotionreport, /mob/living/carbon/human/proc/clericpray)
+			C.grant_miracles(H, cleric_tier = CLERIC_T4, passive_gain = CLERIC_REGEN_MAJOR, start_maxed = TRUE)	//Starts off maxed out.
 			H.mind.RemoveSpell(/obj/effect/proc_holder/spell/invoked/lesser_heal)
 			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/diagnose/secular)
 			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/guidance)

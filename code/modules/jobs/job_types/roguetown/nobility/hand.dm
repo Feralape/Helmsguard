@@ -35,6 +35,8 @@
 /datum/outfit/job/roguetown/hand
 	shoes = /obj/item/clothing/shoes/roguetown/boots
 	belt = /obj/item/storage/belt/rogue/leather/steel
+	beltr = /obj/item/rogueweapon/sword/rapier/dec
+	job_bitflag = BITFLAG_ROYALTY
 
 /datum/job/roguetown/hand/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
 	. = ..()
@@ -70,7 +72,6 @@
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel = 1, /obj/item/storage/keyring/sund/sund_steward = 1)
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/vest/hand
 	pants = /obj/item/clothing/under/roguetown/tights/black
-	beltr = /obj/item/rogueweapon/sword/rapier/dec
 	id = /obj/item/scomstone/garrison
 	if(H.mind)
 		H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 2, TRUE)
@@ -89,6 +90,7 @@
 		H.change_stat("perception", 3)
 		H.change_stat("intelligence", 3)
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 
 /datum/advclass/hand/spymaster
@@ -135,8 +137,9 @@
 		H.mind.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, 5, TRUE) // not like they're gonna break into the vault.
 	H.change_stat("strength", -1)
 	H.change_stat("perception", 2)
-	H.change_stat("speed", 4)
+	H.change_stat("speed", 3)
 	H.change_stat("intelligence", 2)
+	H.grant_language(/datum/language/thievescant)
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
@@ -175,7 +178,7 @@
 		H.mind.adjust_skillrank_up_to(/datum/skill/magic/arcane, 2, TRUE)
 		H.change_stat("intelligence", rand(4,5))
 		H.change_stat("perception", 3)
-		H.mind.adjust_spellpoints(4)
+		H.mind.adjust_spellpoints(15)
 		ADD_TRAIT(H, TRAIT_MAGEARMOR, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_ARCYNE_T2, TRAIT_GENERIC)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
@@ -184,7 +187,7 @@
 		H.change_stat("strength", -1)
 		H.change_stat("intelligence", 1)
 		H.change_stat("perception", 1)
-		H.mind.adjust_spellpoints(1)
+		H.mind.adjust_spellpoints(3)
 
 	ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
 

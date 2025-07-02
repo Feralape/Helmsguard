@@ -35,6 +35,9 @@
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/mid
 	mask = /obj/item/clothing/mask/rogue/spectacles
 	id = /obj/item/scomstone/bad
+	backpack_contents = list(
+		/obj/item/recipe_book/alchemy
+	)
 
 	if(H.mind)
 		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 6, TRUE)
@@ -52,7 +55,6 @@
 		H.grant_language(/datum/language/celestial)
 		H.grant_language(/datum/language/hellspeak)
 		H.grant_language(/datum/language/orcish)
-		H.grant_language(/datum/language/canilunzt)
 		H.grant_language(/datum/language/grenzelhoftian)
 		H.grant_language(/datum/language/otavan)
 		H.grant_language(/datum/language/etruscan)
@@ -80,7 +82,7 @@
 	releasedrain = 50
 	chargedrain = 0
 	chargetime = 0
-	charge_max = 30 SECONDS
+	recharge_time = 30 SECONDS
 	antimagic_allowed = TRUE
 
 /obj/effect/proc_holder/spell/invoked/teach/cast(list/targets, mob/user = usr)

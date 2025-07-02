@@ -235,6 +235,9 @@
 		if(MUTE_OOC)
 			mute_string = "OOC"
 			feedback_string = "OOC"
+		if(MUTE_LOOC)
+			mute_string = "LOOC"
+			feedback_string = "LOOC"
 		if(MUTE_PRAY)
 			mute_string = "pray"
 			feedback_string = "Pray"
@@ -726,6 +729,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		ADMIN_PUNISHMENT_LIAM,
 		ADMIN_PUNISHMENT_THROWMOB,
 		ADMIN_PUNISHMENT_CRIPPLE,
+		ADMIN_PUNISHMENT_PSYDON,
 	)
 
 	var/punishment = input("Choose a punishment", "DIVINE SMITING") as null|anything in sortList(punishment_list)
@@ -741,11 +745,24 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			if(ishuman(target))
 				var/mob/living/carbon/human/H = target
 				H.electrocution_animation(40)
+			GLOB.azure_round_stats[STATS_PEOPLE_SMITTEN]++
 			to_chat(target, span_danger("The gods have punished you for your sins!"))
 		if(ADMIN_PUNISHMENT_BRAINDAMAGE)
 			target.adjustOrganLoss(ORGAN_SLOT_BRAIN, 199, 199)
-		if(ADMIN_PUNISHMENT_GIB)
+		if(ADMIN_PUNISHMENT_PSYDON)
+			sleep(60)
+			target.psydo_nyte()
+			target.playsound_local(target, 'sound/misc/psydong.ogg', 100, FALSE)
+			sleep(20)
+			target.psydo_nyte()
+			target.playsound_local(target, 'sound/misc/psydong.ogg', 100, FALSE)
+			sleep(15)
+			target.psydo_nyte()
+			target.playsound_local(target, 'sound/misc/psydong.ogg', 100, FALSE)
+			sleep(10)
 			target.gib(FALSE)
+		if(ADMIN_PUNISHMENT_GIB)
+			target.gib(FALSE)	
 		if(ADMIN_PUNISHMENT_BSA)
 			bluespace_artillery(target)
 		/*if(ADMIN_PUNISHMENT_SUPPLYPOD_QUICK) These might be useful someday for another kind of payload send

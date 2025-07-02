@@ -20,6 +20,7 @@
 	hitsound = list('sound/combat/hits/bladed/genchop (1).ogg', 'sound/combat/hits/bladed/genchop (2).ogg', 'sound/combat/hits/bladed/genchop (3).ogg')
 	penfactor = 35
 	swingdelay = 10
+	clickcd = 14
 	item_d_type = "slash"
 
 /datum/intent/axe/chop/scythe
@@ -43,9 +44,9 @@
 	blade_class = BCLASS_BLUNT
 	hitsound = list('sound/combat/hits/blunt/metalblunt (1).ogg', 'sound/combat/hits/blunt/metalblunt (2).ogg', 'sound/combat/hits/blunt/metalblunt (3).ogg')
 	chargetime = 0
-	penfactor = 10
+	penfactor = BLUNT_DEFAULT_PENFACTOR
 	swingdelay = 5
-	damfactor = 0.8
+	damfactor = 1.1
 	item_d_type = "blunt"
 
 //axe objs ฅ^•ﻌ•^ฅ
@@ -69,10 +70,12 @@
 	max_blade_int = 100
 	minstr = 8
 	wdefense = 1
+	demolition_mod = 1.25
 	w_class = WEIGHT_CLASS_BULKY
 	wlength = WLENGTH_SHORT
 	gripped_intents = list(/datum/intent/axe/chop/stone)
 	resistance_flags = FLAMMABLE
+	blade_dulling = DULLING_SHAFT_WOOD
 	pickup_sound = 'modular_helmsguard/sound/sheath_sounds/draw_polearm.ogg'
 	sheathe_sound = 'sound/items/wood_sharpen.ogg'
 
@@ -127,6 +130,7 @@
 				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
 	return ..()
 
+// Battle Axe
 /obj/item/rogueweapon/stoneaxe/battle
 	force = 25
 	force_wielded = 30
@@ -211,6 +215,16 @@
 	gripped_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop, /datum/intent/sword/peel)
 	wdefense = 2
 
+/obj/item/rogueweapon/stoneaxe/woodcut/aaxe
+	name = "decrepit axe"
+	desc = "An axe which has fallen to Aeon's grasp. Withered and worn."
+	icon_state = "ahandaxe"
+	smeltresult = /obj/item/ingot/aalloy
+	force = 17
+	force_wielded = 20
+	max_integrity = 180
+	blade_dulling = DULLING_SHAFT_CONJURED
+
 /obj/item/rogueweapon/stoneaxe/woodcut/equipped(mob/user, slot, initial = FALSE)
 	pickup_sound = pick("modular_helmsguard/sound/sheath_sounds/draw_polearm.ogg", "modular_helmsguard/sound/sheath_sounds/draw_spear.ogg")
 	sheathe_sound = 'sound/items/wood_sharpen.ogg'
@@ -239,6 +253,17 @@
 	wlength = WLENGTH_NORMAL
 	toolspeed = 2
 
+
+// Copper Hatchet
+/obj/item/rogueweapon/stoneaxe/handaxe/copper
+	force = 13
+	name = "copper hatchet"
+	desc = "A copper hand axe. It is not very durable."
+	max_integrity = 100 // Half of the norm
+	icon_state = "chatchet"
+	smeltresult = /obj/item/ingot/copper
+
+
 /obj/item/rogueweapon/stoneaxe/handaxe
 	force = 19
 	possible_item_intents = list(/datum/intent/axe/cut,/datum/intent/axe/chop, /datum/intent/sword/peel)
@@ -246,7 +271,6 @@
 	desc = "An iron hand axe."
 	icon_state = "hatchet"
 	minstr = 1
-	dropshrink = 0.75
 	max_blade_int = 400
 	smeltresult = /obj/item/ingot/iron
 	gripped_intents = null
@@ -258,14 +282,20 @@
 	. = ..()
 
 /obj/item/rogueweapon/stoneaxe/woodcut/steel
+	name = "steel axe"
 	icon_state = "saxe"
-	force = 22
-	force_wielded = 28
 	desc = "A steel woodcutting axe. Performs much better than its iron counterpart."
 	force = 26
+	force_wielded = 28
 	max_blade_int = 500
 	smeltresult = /obj/item/ingot/steel
 	wdefense = 3
+
+/obj/item/rogueweapon/stoneaxe/woodcut/steel/paaxe
+	name = "ancient alloy axe"
+	desc = "An ancient axe, Aeon's grasp has been lifted from it."
+	icon_state = "ahandaxe"
+	smeltresult = /obj/item/ingot/aaslag
 
 /obj/item/rogueweapon/stoneaxe/woodcut/getonmobprop(tag)
 	. = ..()
@@ -274,7 +304,7 @@
 			if("gen")
 				return list("shrink" = 0.5,"sx" = -9,"sy" = -8,"nx" = 9,"ny" = -7,"wx" = -7,"wy" = -8,"ex" = 3,"ey" = -8,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = 90,"sturn" = -90,"wturn" = -90,"eturn" = 90,"nflip" = 0,"sflip" = 8,"wflip" = 8,"eflip" = 0)
 			if("wielded")
-				return list("shrink" = 0.6,"sx" = 2,"sy" = -8,"nx" = -6,"ny" = -3,"wx" = 3,"wy" = -4,"ex" = 4,"ey" = -3,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = -44,"sturn" = 45,"wturn" = 47,"eturn" = 33,"nflip" = 8,"sflip" = 0,"wflip" = 0,"eflip" = 0)
+				return list("shrink" = 0.7,"sx" = 4,"sy" = -4,"nx" = -6,"ny" = -3,"wx" = -4,"wy" = -4,"ex" = 4,"ey" = -3,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = -44,"sturn" = 45,"wturn" = -33,"eturn" = 33,"nflip" = 8,"sflip" = 0,"wflip" = 8,"eflip" = 0)
 			if("onbelt")
 				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
 
@@ -312,7 +342,7 @@
 				return list("shrink" = 0.3,"sx" = -2,"sy" = -5,"nx" = 4,"ny" = -5,"wx" = 0,"wy" = -5,"ex" = 2,"ey" = -5,"nturn" = 0,"sturn" = 0,"wturn" = 0,"eturn" = 0,"nflip" = 0,"sflip" = 0,"wflip" = 0,"eflip" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0)
 	return ..()
 
-/obj/item/rogueweapon/stoneaxe/silver
+/obj/item/rogueweapon/stoneaxe/woodcut/silver
 	name = "silver war axe"
 	desc = "A one-handed war axe forged of silver."
 	icon_state = "silveraxe"
@@ -324,12 +354,14 @@
 	gripped_intents = null
 	wdefense = 4
 	is_silver = TRUE
+	blade_dulling = DULLING_SHAFT_METAL
 
 /obj/item/rogueweapon/stoneaxe/battle/psyaxe
 	name = "psydonian war axe"
 	desc = "An ornate battle axe, plated in a ceremonial veneer of silver. The premiere instigator of conflict against elven attachees."
 	icon_state = "psyaxe"
 	smeltresult = /obj/item/ingot/steel
+	blade_dulling = DULLING_SHAFT_METAL
 
 /obj/item/rogueweapon/stoneaxe/battle/psyaxe/ComponentInitialize()
 	. = ..()								//+3 force, +50 blade int, +50 int, +1 def, make silver
@@ -346,7 +378,7 @@
 	force = 15
 	force_wielded = 30
 	possible_item_intents = list(/datum/intent/axe/cut, /datum/intent/axe/chop, SPEAR_BASH) //bash is for nonlethal takedowns, only targets limbs
-	gripped_intents = list(/datum/intent/axe/cut/battle/greataxe, /datum/intent/axe/chop/battle/greataxe, /datum/intent/sword/peel, SPEAR_BASH)
+	gripped_intents = list(/datum/intent/axe/cut/battle/greataxe, /datum/intent/axe/chop/battle/greataxe, /datum/intent/sword/peel/big, SPEAR_BASH)
 	name = "greataxe"
 	desc = "A iron great axe, a long-handled axe with a single blade made for ruining someone's day beyond any measure.."
 	icon_state = "igreataxe"
@@ -364,8 +396,9 @@
 	anvilrepair = /datum/skill/craft/weaponsmithing
 	smeltresult = /obj/item/ingot/iron
 	associated_skill = /datum/skill/combat/axes
-	blade_dulling = DULLING_BASHCHOP
+	blade_dulling = DULLING_SHAFT_WOOD
 	wdefense = 6
+	demolition_mod = 1.5
 	pickup_sound = 'modular_helmsguard/sound/sheath_sounds/draw_greatsword.ogg'
 	sheathe_sound = 'modular_helmsguard/sound/sheath_sounds/put_back_to_leather.ogg'
 
@@ -390,7 +423,7 @@
 	force = 15
 	force_wielded = 30
 	possible_item_intents = list(/datum/intent/axe/cut, /datum/intent/axe/chop, SPEAR_BASH) //bash is for nonlethal takedowns, only targets limbs
-	gripped_intents = list(/datum/intent/axe/cut/battle/greataxe, /datum/intent/axe/chop/battle/greataxe, /datum/intent/sword/peel, SPEAR_BASH)
+	gripped_intents = list(/datum/intent/axe/cut/battle/greataxe, /datum/intent/axe/chop/battle/greataxe, /datum/intent/sword/peel/big, SPEAR_BASH)
 	name = "steel greataxe"
 	desc = "A steel great axe, a long-handled axe with a single blade made for ruining someone's day beyond any measure.."
 	icon_state = "sgreataxe"
@@ -404,12 +437,30 @@
 	force = 15
 	force_wielded = 35
 	possible_item_intents = list(/datum/intent/axe/cut, /datum/intent/axe/chop, SPEAR_BASH) //bash is for nonlethal takedowns, only targets limbs
-	gripped_intents = list(/datum/intent/axe/cut/battle/greataxe, /datum/intent/axe/chop/battle/greataxe, /datum/intent/sword/peel, SPEAR_BASH)
+	gripped_intents = list(/datum/intent/axe/cut/battle/greataxe, /datum/intent/axe/chop/battle/greataxe, /datum/intent/sword/peel/big, SPEAR_BASH)
 	name = "double-headed steel greataxe"
 	desc = "A steel great axe with a wicked double-bladed head. Perfect for cutting either men or trees into stumps.."
 	icon_state = "doublegreataxe"
 	icon = 'icons/roguetown/weapons/64.dmi'
 	minstr = 12
+
+
+/obj/item/rogueweapon/greataxe/steel/doublehead/graggar
+	name = "vicious greataxe"
+	desc = "A greataxe who's edge thrums with the motive force, violence, oh, sweet violence!"
+	icon_state = "graggargaxe"
+	blade_dulling = DULLING_SHAFT_GRAND
+	force = 20
+	force_wielded = 40
+	icon = 'icons/roguetown/weapons/64.dmi'
+
+/obj/item/rogueweapon/greataxe/steel/doublehead/graggar/pickup(mob/living/user)
+	if(!HAS_TRAIT(user, TRAIT_HORDE))
+		to_chat(user, "<font color='red'>UNWORTHY HANDS TOUCHING THIS AXE, CEASE OR BE PUNISHED!</font>")
+		user.adjust_fire_stacks(5)
+		user.IgniteMob()
+		user.Stun(40)
+	..()
 
 // ATGEVERI STUFF
 

@@ -103,21 +103,6 @@
 		desc = ""
 	. = ..()
 
-/obj/effect/decal/cleanable/glass
-	name = "tiny shards"
-	desc = ""
-	icon = 'icons/effects/debris.dmi'
-	icon_state = "tiny"
-	beauty = -100
-
-/obj/effect/decal/cleanable/glass/Initialize(mapload)
-	. = ..()
-	setDir(pick(GLOB.cardinals))
-
-/obj/effect/decal/cleanable/glass/ex_act()
-	qdel(src)
-	return TRUE
-
 /obj/effect/decal/cleanable/glitter
 	name = "generic glitter pile"
 	desc = ""
@@ -158,3 +143,40 @@
 	icon = 'icons/effects/confetti_and_decor.dmi'
 	icon_state = "confetti"
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT //the confetti itself might be annoying enough
+
+//................	Debris decals (result from crafting or destroying items thats just visual)	............... //
+/obj/effect/decal/cleanable/debris
+	name = ""
+	desc = ""
+	icon = 'icons/roguetown/items/crafting.dmi'
+	icon_state = "tiny"
+	beauty = -20
+/obj/effect/decal/cleanable/debris/Initialize()
+	. = ..()
+	setDir(pick(GLOB.cardinals))
+
+/obj/effect/decal/cleanable/debris/glassy
+	name = "glass shards"
+	icon_state = "tiny"
+	beauty = -100
+/obj/effect/decal/cleanable/debris/glassy/Crossed(mob/living/L)
+	. = ..()
+	playsound(loc,'sound/foley/glass_step.ogg', 50, FALSE)
+
+/obj/effect/decal/cleanable/debris/stony
+	name = "stone chippings"
+	icon_state = "pebbly"
+
+/obj/effect/decal/cleanable/debris/woody	// sawdust gets cleared by weather
+	name = "sawdust"
+	icon_state = "woody"
+/obj/effect/decal/cleanable/debris/woody/Initialize()
+	START_PROCESSING(SSprocessing, src)
+	GLOB.weather_act_upon_list += src
+	. = ..()
+/obj/effect/decal/cleanable/debris/woody/Destroy()
+	STOP_PROCESSING(SSprocessing, src)
+	GLOB.weather_act_upon_list -= src
+	. = ..()
+/obj/effect/decal/cleanable/debris/woody/weather_act_on(weather_trait, severity)
+	qdel(src)

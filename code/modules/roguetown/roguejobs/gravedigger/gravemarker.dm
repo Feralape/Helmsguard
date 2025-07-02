@@ -32,6 +32,7 @@
 	static_debris = list(/obj/item/grown/log/tree/stick = 1)
 	anchored = TRUE
 	layer = 2.91
+	obj_flags = UNIQUE_RENAME
 
 /obj/structure/gravemarker/Destroy()
 	var/turf/T = get_turf(src)
@@ -45,9 +46,10 @@
 			if(GLOB.respawntimes[ckey])
 				GLOB.respawntimes[ckey] = GLOB.respawntimes[ckey] + amt
 
-/obj/structure/gravemarker/OnCrafted(dir, user)
+/obj/structure/gravemarker/OnCrafted(dir, mob/user)
 	icon_state = "gravemarker[rand(1,3)]"
 	for(var/obj/structure/closet/dirthole/hole in loc)
 		if(pacify_coffin(hole, user))
 			to_chat(user, span_notice("I feel their soul finding peace..."))
+			SEND_SIGNAL(user, COMSIG_GRAVE_CONSECRATED, hole)
 	return ..()

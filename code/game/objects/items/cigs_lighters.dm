@@ -136,6 +136,10 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon = 'icons/roguetown/items/lighting.dmi'
 	heat = 1000
 	spitoutmouth = FALSE
+	light_outer_range = 1
+	light_system = MOVABLE_LIGHT
+	light_color = "#f5a885"
+	light_on = FALSE
 
 	grid_width = 32
 	grid_height = 32
@@ -203,7 +207,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		return
 
 	lit = TRUE
-//	name = "lit [name]"
+	set_light_on(TRUE)
+	name = "lit [name]"
 	attack_verb = list("burnt", "singed")
 	hitsound = list('sound/blank.ogg')
 	damtype = "fire"
@@ -247,6 +252,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	force = 0
 	icon_state = icon_off
 	item_state = icon_off
+	set_light_on(FALSE)
 	STOP_PROCESSING(SSobj, src)
 	ENABLE_BITFIELD(reagents.flags, NO_REACT)
 	lit = FALSE
@@ -336,7 +342,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/rollie
 	name = "zig"
-	desc = ""
+	desc = "Dried westleach carefully wrapped in fine paper for a soothing flavor."
 	icon_state = "spliffoff"
 	icon_on = "spliffon"
 	icon_off = "spliffoff"
@@ -356,12 +362,31 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 /obj/item/clothing/mask/cigarette/rollie/nicotine
 	list_reagents = list(/datum/reagent/drug/nicotine = 30)
 
+/obj/item/clothing/mask/cigarette/rollie/nicotine/cheroot
+	name = "cheroot"
+	desc = "Rich smokeleaf self-rolled into an open-clipped cigarillo. Envigorating for the enthusiast, \
+	nauseating for the laymen."
+	smoketime = 240
+	list_reagents = list(/datum/reagent/drug/nicotine = 45)
+
 /obj/item/clothing/mask/cigarette/rollie/trippy
 	list_reagents = list(/datum/reagent/drug/nicotine = 15, /datum/reagent/drug/mushroomhallucinogen = 35)
 	starts_lit = TRUE
 
 /obj/item/clothing/mask/cigarette/rollie/cannabis
+	name = "swampleaf zig"
+	desc = "A paper wrapped cartridge of sweet smelling smokeleaf."
 	list_reagents = list(/datum/reagent/drug/space_drugs = 30)
+
+/obj/item/clothing/mask/cigarette/rollie/cannabis/cheroot
+	name = "swampleaf cheroot"
+	desc = "Heady sweatleaf rolled in a broad westleach leaf, combining the desirable and troublesome \
+	aspects of both."
+	smoketime = 240
+	list_reagents = list(
+		/datum/reagent/drug/space_drugs = 30,
+		/datum/reagent/drug/nicotine = 15,
+		)
 
 /obj/item/clothing/mask/cigarette/rollie/mindbreaker
 	list_reagents = list(/datum/reagent/toxin/mindbreaker = 35, /datum/reagent/toxin/lipolicide = 15)
@@ -536,8 +561,10 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 /obj/item/clothing/mask/cigarette/pipe/attack_self(mob/user)
 	var/turf/location = get_turf(user)
 	if(lit)
+		name = copytext(name,5,length(name)+1)
 		user.visible_message(span_notice("[user] puts out [src]."), span_notice("I put out [src]."))
 		lit = 0
+		set_light_on(FALSE)
 		icon_state = icon_off
 		item_state = icon_off
 		STOP_PROCESSING(SSobj, src)

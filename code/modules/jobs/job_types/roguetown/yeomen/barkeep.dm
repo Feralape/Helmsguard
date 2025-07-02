@@ -54,6 +54,10 @@
 	else if(should_wear_masc_clothes(H))
 		shirt = /obj/item/clothing/suit/roguetown/shirt/shortshirt
 		armor = /obj/item/clothing/suit/roguetown/armor/leather/vest/sailor
+	backpack_contents = list(
+		/obj/item/recipe_book/survival,
+		/obj/item/bottle_kit
+	)
 	H.change_stat("strength", 1) ///7 points (weighted)
 	H.change_stat("endurance", 1)
 	H.change_stat("constitution", 1)
@@ -63,3 +67,4 @@
 	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_CICERONE, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_TAVERN_FIGHTER, TRAIT_GENERIC)

@@ -9,11 +9,15 @@
 	cost = 10
 	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/healthpotnew)
 
+/datum/supply_pack/rogue/Things/manapot
+	name = "Mana Potion"
+	cost = 10
+	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/strongmanapot)
 
 /datum/supply_pack/rogue/Things/stampot
-	name = "Stamina potion"
+	name = "Stamina Potion"
 	cost = 10
-	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/manapot)
+	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/strongstampot)
 
 /datum/supply_pack/rogue/Things/chain
 	name = "Chain"
@@ -45,12 +49,10 @@
 	cost = 15
 	contains = list(/obj/item/gwstrap)
 
-
 /datum/supply_pack/rogue/Things/Lamp
 	name = "Lamptern"
 	cost = 5
 	contains = list(/obj/item/flashlight/flare/torch/lantern)
-
 
 /datum/supply_pack/rogue/Things/westleach
 	name = "Westleach Zig"
@@ -77,7 +79,6 @@
 	cost = 15
 	contains = list(/obj/item/reagent_containers/powder/spice)
 
-
 /datum/supply_pack/rogue/Things/rubyband
 	name = "Matthian SCOMSTONE"
 	cost = 20
@@ -87,3 +88,8 @@
 	name = "Dragonscale Necklace"
 	cost = 900
 	contains = list(/obj/item/clothing/neck/roguetown/blkknight)
+
+/datum/supply_pack/rogue/Things/smokebomb
+	name = "Smoke Bomb"
+	cost = 30
+	contains = list(/obj/item/smokebomb)

@@ -13,7 +13,7 @@
 	see_in_dark = 6
 	maxHealth = 5
 	health = 5
-	butcher_results = list(/obj/item/reagent_containers/food/snacks/meat/slab/mouse = 1)
+	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 1)
 	response_help_continuous = "pets"
 	response_help_simple = "pet"
 	response_disarm_continuous = "gently pushes aside"
@@ -111,7 +111,7 @@
 /obj/item/reagent_containers/food/snacks/deadmouse/attackby(obj/item/I, mob/user, params)
 	if(I.get_sharpness() && user.used_intent.type == INTENT_HARM)
 		if(isturf(loc))
-			new /obj/item/reagent_containers/food/snacks/meat/slab/mouse(loc)
+			new /obj/item/reagent_containers/food/snacks/rogue/meat/steak(loc)
 			to_chat(user, span_notice("I butcher [src]."))
 			qdel(src)
 		else

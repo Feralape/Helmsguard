@@ -71,6 +71,7 @@
 		/datum/customizer/bodypart_feature/hair/facial/humanoid,
 		/datum/customizer/bodypart_feature/accessory,
 		/datum/customizer/bodypart_feature/face_detail,
+		/datum/customizer/organ/ears/elf,
 		/datum/customizer/organ/testicles/human,
 		/datum/customizer/organ/penis/human,
 		/datum/customizer/organ/breasts/human,
@@ -90,6 +91,8 @@
 		/datum/body_marking/eyeliner,
 		/datum/body_marking/tonage,
 		/datum/body_marking/nose,
+		/datum/body_marking/bangs,
+		/datum/body_marking/bun,
 	)
 /datum/species/elf/wood/get_span_language(datum/language/message_language)
 	if(!message_language)

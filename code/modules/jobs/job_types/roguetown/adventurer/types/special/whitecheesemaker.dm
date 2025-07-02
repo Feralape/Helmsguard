@@ -36,7 +36,7 @@
 	H.mind.adjust_skillrank_up_to(/datum/skill/craft/crafting, 4, TRUE)
 	H.mind.adjust_skillrank_up_to(/datum/skill/craft/carpentry, rand(4,5), TRUE)
 	H.mind.adjust_skillrank_up_to(/datum/skill/craft/masonry, rand(1,2), TRUE)
-	H.mind.adjust_spellpoints(3)
+	H.mind.adjust_spellpoints(9)
 
 	belt = /obj/item/storage/belt/rogue/leather
 	pants = /obj/item/clothing/under/roguetown/tights/black

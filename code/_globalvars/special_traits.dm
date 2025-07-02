@@ -10,17 +10,6 @@ GLOBAL_LIST_INIT(special_traits, build_special_traits())
 		.[type] = new type()
 	return .
 
-/proc/roll_random_special(client/player)
-	var/list/eligible_weight = list()
-	for(var/trait_type in GLOB.special_traits)
-		var/datum/special_trait/special = SPECIAL_TRAIT(trait_type)
-		eligible_weight[trait_type] = special.weight
-
-	if(!length(eligible_weight))
-		return null
-
-	return pickweight(eligible_weight)
-
 /proc/print_special_text(mob/user, trait_type)
 	var/datum/special_trait/special = SPECIAL_TRAIT(trait_type)
 	to_chat(user, span_notice("<b>[special.name]</b>"))
@@ -49,11 +38,11 @@ GLOBAL_LIST_INIT(special_traits, build_special_traits())
 	apply_prefs_special(character, player)
 	apply_prefs_virtue(character, player)
 	if(player.prefs.loadout)
-		character.mind.special_items[player.prefs.loadout.name] += player.prefs.loadout.path
+		character.mind.special_items[player.prefs.loadout::name] += player.prefs.loadout.path
 	if(player.prefs.loadout2)
-		character.mind.special_items[player.prefs.loadout2.name] += player.prefs.loadout2.path
+		character.mind.special_items[player.prefs.loadout2::name] += player.prefs.loadout2.path
 	if(player.prefs.loadout3)
-		character.mind.special_items[player.prefs.loadout3.name] += player.prefs.loadout3.path
+		character.mind.special_items[player.prefs.loadout3::name] += player.prefs.loadout3.path
 
 /proc/apply_prefs_virtue(mob/living/carbon/human/character, client/player)
 	if (!player)

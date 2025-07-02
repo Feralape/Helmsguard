@@ -39,7 +39,7 @@
 	id = "foodbuff"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/foodbuff
 	effectedstats = list("constitution" = 1,"endurance" = 1)
-	duration = 10 MINUTES
+	duration = 15 MINUTES
 
 /atom/movable/screen/alert/status_effect/buff/foodbuff
 	name = "Great Meal"
@@ -50,7 +50,18 @@
 	id = "druqks"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/druqks
 	effectedstats = list("intelligence" = 5,"speed" = 3,"fortune" = -5)
-	duration = 10 SECONDS
+	duration = 2 MINUTES
+
+/datum/status_effect/buff/druqks/baotha
+
+/datum/status_effect/buff/druqks/baotha/on_apply()
+	. = ..()
+	ADD_TRAIT(owner, TRAIT_CRACKHEAD, TRAIT_MIRACLE)
+
+/datum/status_effect/buff/druqks/baotha/on_remove()
+	. = ..()
+	REMOVE_TRAIT(owner, TRAIT_CRACKHEAD, TRAIT_MIRACLE)
+	owner.visible_message("[owner]'s eyes appear to return to normal.")
 
 /datum/status_effect/buff/druqks/on_apply()
 	. = ..()
@@ -236,11 +247,12 @@
 	id = "druqks"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/vitae
 	effectedstats = list("fortune" = 2)
-	duration = 10 SECONDS
+	duration = 1 MINUTES
 
 /datum/status_effect/buff/vitae/on_apply()
 	. = ..()
 	owner.add_stress(/datum/stressevent/high)
+	SEND_SIGNAL(owner, COMSIG_LUX_TASTED)
 
 /datum/status_effect/buff/vitae/on_remove()
 	owner.remove_stress(/datum/stressevent/high)
@@ -281,7 +293,9 @@
 	alert_type = /atom/movable/screen/alert/status_effect/buff/darkvision
 	duration = 15 MINUTES
 
-/datum/status_effect/buff/darkvision/on_apply()
+/datum/status_effect/buff/darkvision/on_apply(mob/living/new_owner, assocskill)
+	if(assocskill)
+		duration += 5 MINUTES * assocskill
 	. = ..()
 	to_chat(owner, span_warning("The darkness fades somewhat."))
 	ADD_TRAIT(owner, TRAIT_DARKVISION, MAGIC_TRAIT)
@@ -336,6 +350,11 @@
 	desc = "My home. I watch vigilantly and respond swiftly."
 	icon_state = "buff"
 
+/atom/movable/screen/alert/status_effect/buff/barkeepbuff
+	name = "Vigilant Tavernkeep"
+	desc = "My home. I watch vigilantly and respond swiftly."
+	icon_state = "buff"
+
 /atom/movable/screen/alert/status_effect/buff/knightbuff
 	name = "Sworn Defender"
 	desc = "I've sworn an oath to defend this castle. My resolve will not waver."
@@ -346,21 +365,37 @@
 	desc = "I've trekked these woods for some time now. I find traversal easier here."
 	icon_state = "buff"
 
+/atom/movable/screen/alert/status_effect/buff/dungeoneerbuff
+	name = "Ruthless Jailor"
+	desc = "This is my sanctuary. I can overpower any opposition that dares breach it."
+	icon_state = "buff"
+
 /datum/status_effect/buff/wardenbuff
 	id = "wardenbuff"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/wardenbuff
 	effectedstats = list("speed" = 1, "perception" = 3) 
+
+/datum/status_effect/buff/barkeepbuff
+	id = "barkeepbuff"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/barkeepbuff
+	effectedstats = list("constitution" = 1,"endurance" = 1, "speed" = 1, "strength" = 3) 
+
+/datum/status_effect/buff/barkeepbuff/process()
+
+	.=..()
+	var/area/rogue/our_area = get_area(owner)
+	if(!(our_area.tavern_area))
+		owner.remove_status_effect(/datum/status_effect/buff/barkeepbuff)
 
 /datum/status_effect/buff/guardbuffone
 	id = "guardbuffone"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/guardbuffone
 	effectedstats = list("constitution" = 1,"endurance" = 1, "speed" = 1, "perception" = 2) 
 
-/datum/status_effect/buff/knightbuff
-	id = "knightbuff"
-	alert_type = /atom/movable/screen/alert/status_effect/buff/knightbuff
-	effectedstats = list("constitution" = 1,"endurance" = 1, "speed" = 1, "perception" = 2)
-	duration = 50000 //essentially permanent, removes when we're out of the area
+/datum/status_effect/buff/dungeoneerbuff
+	id = "dungeoneerbuff"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/dungeoneerbuff
+	effectedstats = list("constitution" = 1,"endurance" = 1, "strength" = 2)//This only works in 2 small areas on the entire map
 
 /datum/status_effect/buff/guardbuffone/process()
 
@@ -384,12 +419,20 @@
 	. = ..()
 	REMOVE_TRAIT(owner, TRAIT_LONGSTRIDER, TRAIT_GENERIC)
 
-/datum/status_effect/buff/knightbuff/process()
+/datum/status_effect/buff/dungeoneerbuff/process()
 
 	.=..()
 	var/area/rogue/our_area = get_area(owner)
-	if(!(our_area.keep_area))
-		owner.remove_status_effect(/datum/status_effect/buff/knightbuff)
+	if(!(our_area.cell_area))
+		owner.remove_status_effect(/datum/status_effect/buff/dungeoneerbuff)
+
+/datum/status_effect/buff/dungeoneerbuff/on_apply()
+	. = ..()
+	ADD_TRAIT(owner, TRAIT_CIVILIZEDBARBARIAN, TRAIT_GENERIC)
+
+/datum/status_effect/buff/dungeoneerbuff/on_remove()
+	. = ..()
+	REMOVE_TRAIT(owner, TRAIT_CIVILIZEDBARBARIAN, TRAIT_GENERIC)
 
 /atom/movable/screen/alert/status_effect/buff/healing
 	name = "Healing Miracle"
@@ -411,6 +454,7 @@
 	return ..()
 
 /datum/status_effect/buff/healing/on_apply()
+	SEND_SIGNAL(owner, COMSIG_LIVING_MIRACLE_HEAL_APPLY, healing_on_tick, src)
 	var/filter = owner.get_filter(MIRACLE_HEALING_FILTER)
 	if (!filter)
 		owner.add_filter(MIRACLE_HEALING_FILTER, 2, list("type" = "outline", "color" = outline_colour, "alpha" = 60, "size" = 1))
@@ -432,6 +476,73 @@
 		owner.adjustToxLoss(-healing_on_tick, 0)
 		owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, -healing_on_tick)
 		owner.adjustCloneLoss(-healing_on_tick, 0)
+
+/datum/status_effect/buff/healing/necras_vow
+	id = "healing"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/healing
+	duration = -1
+	healing_on_tick = 3
+	outline_colour = "#bbbbbb"
+
+/datum/status_effect/buff/healing/necras_vow/on_apply()
+	healing_on_tick = max(owner.mind?.get_skill_level(/datum/skill/magic/holy), 3)
+	return TRUE
+
+/datum/status_effect/buff/healing/necras_vow/tick()
+	var/obj/effect/temp_visual/heal/H = new /obj/effect/temp_visual/heal_rogue(get_turf(owner))
+	H.color = "#a5a5a5"
+	var/list/wCount = owner.get_wounds()
+	if(!owner.construct)
+		if(owner.blood_volume < BLOOD_VOLUME_NORMAL)
+			owner.blood_volume = min(owner.blood_volume + (healing_on_tick + 10), BLOOD_VOLUME_NORMAL)
+		if(wCount.len > 0)
+			owner.heal_wounds(healing_on_tick, list(/datum/wound/slash, /datum/wound/puncture, /datum/wound/bite, /datum/wound/bruise))
+			owner.update_damage_overlays()
+		owner.adjustBruteLoss(-healing_on_tick, 0)
+		owner.adjustFireLoss(-healing_on_tick, 0)
+		owner.adjustOxyLoss(-healing_on_tick, 0)
+		owner.adjustToxLoss(-healing_on_tick, 0)
+		owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, -healing_on_tick)
+		owner.adjustCloneLoss(-healing_on_tick, 0)
+
+/atom/movable/screen/alert/status_effect/buff/psyhealing
+	name = "Enduring"
+	desc = "I am awash with sentimentality."
+	icon_state = "buff"
+
+#define PSYDON_HEALING_FILTER "psydon_heal_glow"
+
+/datum/status_effect/buff/psyhealing
+	id = "psyhealing"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/psyhealing
+	duration = 15 SECONDS
+	examine_text = "SUBJECTPRONOUN stirs with a sense of ENDURING!"
+	var/healing_on_tick = 1
+	var/outline_colour = "#d3d3d3"
+
+/datum/status_effect/buff/psyhealing/on_creation(mob/living/new_owner, new_healing_on_tick)
+	healing_on_tick = new_healing_on_tick
+	return ..()
+
+/datum/status_effect/buff/psyhealing/on_apply()
+	SEND_SIGNAL(owner, COMSIG_LIVING_MIRACLE_HEAL_APPLY, healing_on_tick, src)
+	var/filter = owner.get_filter(PSYDON_HEALING_FILTER)
+	if (!filter)
+		owner.add_filter(PSYDON_HEALING_FILTER, 2, list("type" = "outline", "color" = outline_colour, "alpha" = 60, "size" = 1))
+	return TRUE
+
+/datum/status_effect/buff/psyhealing/tick()
+	var/obj/effect/temp_visual/heal/H = new /obj/effect/temp_visual/psyheal_rogue(get_turf(owner))
+	H.color = "#d3d3d3"
+	var/list/wCount = owner.get_wounds()
+	if(!owner.construct)
+		if(wCount.len > 0)
+			owner.heal_wounds(healing_on_tick * 1.75)
+			owner.update_damage_overlays()
+		owner.adjustOxyLoss(-healing_on_tick, 0)
+		owner.adjustToxLoss(-healing_on_tick, 0)
+		owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, -healing_on_tick)
+		owner.adjustCloneLoss(-healing_on_tick, 0)		
 
 /datum/status_effect/buff/rockmuncher
 	id = "rockmuncher"
@@ -459,7 +570,12 @@
 
 /datum/status_effect/buff/healing/on_remove()
 	owner.remove_filter(MIRACLE_HEALING_FILTER)
-	
+	owner.update_damage_hud()
+
+/datum/status_effect/buff/psyhealing/on_remove()
+	owner.remove_filter(PSYDON_HEALING_FILTER)
+	owner.update_damage_hud()
+
 /atom/movable/screen/alert/status_effect/buff/fortify
 	name = "Fortifying Miracle"
 	desc = "Divine intervention bolsters me and aids my recovery."
@@ -594,7 +710,7 @@
 	id = "Moonsight"
 	alert_type = /atom/movable/screen/alert/status_effect/buff/moonlightdance
 	effectedstats = list("intelligence" = 2)
-	duration = 15 MINUTES
+	duration = 25 MINUTES
 
 /atom/movable/screen/alert/status_effect/buff/moonlightdance
 	name = "Moonlight Dance"
@@ -821,3 +937,107 @@
 /datum/status_effect/buff/xylix_joy/on_remove()
 	. = ..()
 	to_chat(owner, span_info("My fortune returns to normal."))
+
+/datum/status_effect/buff/vigorized
+	id = "vigorized"
+	alert_type = /atom/movable/screen/alert/status_effect/vigorized
+	duration = 10 MINUTES
+	effectedstats = list("speed" = 1, "intelligence" = 1)
+
+/atom/movable/screen/alert/status_effect/vigorized
+	name = "Vigorized"
+	desc = "I feel a surge of energy inside, quickening my speed and sharpening my focus."
+	icon_state = "drunk"
+
+/datum/status_effect/buff/vigorized/on_apply()
+	. = ..()
+	to_chat(owner, span_warning("I feel a surge of energy inside me!"))
+
+/datum/status_effect/buff/vigorized/on_remove()
+	. = ..()
+	to_chat(owner, span_warning("The surge of energy inside me fades..."))
+
+/datum/status_effect/buff/seelie_drugs
+	id = "seelie drugs"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/druqks
+	effectedstats = list("intelligence" = 2, "endurance" = 4, "speed" = -3)
+	duration = 20 SECONDS
+
+
+/datum/status_effect/buff/clash
+	id = "clash"
+	duration = 6 SECONDS
+	var/dur
+	alert_type = /atom/movable/screen/alert/status_effect/buff/clash
+
+/datum/status_effect/buff/clash/on_apply()
+	. = ..()
+	if(!ishuman(owner))
+		return
+	dur = world.time
+	var/mob/living/carbon/human/H = owner
+	H.play_overhead_indicator('icons/mob/overhead_effects.dmi', prob(50) ? "clash" : "clashr", duration, OBJ_LAYER, soundin = 'sound/combat/clash_initiate.ogg', y_offset = 28)
+
+/datum/status_effect/buff/clash/tick()
+	if(!owner.get_active_held_item() || !(owner.mobility_flags & MOBILITY_STAND))
+		var/mob/living/carbon/human/H = owner
+		H.bad_guard()
+
+/datum/status_effect/buff/clash/on_remove()
+	. = ..()
+	owner.apply_status_effect(/datum/status_effect/debuff/clashcd)
+	var/newdur = world.time - dur
+	var/mob/living/carbon/human/H = owner
+	if(newdur > (duration - 0.3 SECONDS))	//Not checking exact duration to account for lag and any other tick / timing inconsistencies.
+		H.bad_guard(span_warning("I held my focus for too long. It's left me drained."))
+	var/mutable_appearance/appearance = H.overlays_standing[OBJ_LAYER]
+	H.clear_overhead_indicator(appearance)
+
+
+/atom/movable/screen/alert/status_effect/buff/clash
+	name = "Ready to Clash"
+	desc = span_notice("I am on guard, and ready to clash. If I am hit, I will successfully defend. Attacking will make me lose my focus.")
+	icon_state = "clash"
+
+#define BLOODRAGE_FILTER "bloodrage"
+
+/atom/movable/screen/alert/status_effect/buff/graggar_bloodrage
+	name = "BLOODRAGE"
+	desc = "GRAGGAR! GRAGGAR! GRAGGAR!"
+	icon_state = "bloodrage"
+
+/datum/status_effect/buff/bloodrage
+	id = "bloodrage"
+	alert_type = /atom/movable/screen/alert/status_effect/buff/graggar_bloodrage
+	var/outline_color = "#ad0202"
+	duration = 15 SECONDS
+
+/datum/status_effect/buff/bloodrage/on_apply()
+	ADD_TRAIT(owner, TRAIT_STRENGTH_UNCAPPED, TRAIT_MIRACLE)
+	var/holyskill = owner.mind?.get_skill_level(/datum/skill/magic/holy)
+	duration = ((15 SECONDS) * holyskill)
+	var/filter = owner.get_filter(BLOODRAGE_FILTER)
+	if(!filter)
+		owner.add_filter(BLOODRAGE_FILTER, 2, list("type" = "outline", "color" = outline_color, "alpha" = 60, "size" = 2))
+	if(!HAS_TRAIT(owner, TRAIT_DODGEEXPERT))
+		if(owner.STASTR < STRENGTH_SOFTCAP)
+			effectedstats = list("strength" = (STRENGTH_SOFTCAP - owner.STASTR))
+			. = ..()
+			return TRUE
+	if(holyskill >= SKILL_LEVEL_APPRENTICE)
+		effectedstats = list("strength" = 2)
+	else
+		effectedstats = list("strength" = 1)
+	. = ..()
+	return TRUE
+
+/datum/status_effect/buff/bloodrage/on_remove()
+	. = ..()
+	REMOVE_TRAIT(owner, TRAIT_STRENGTH_UNCAPPED, TRAIT_MIRACLE)
+	owner.visible_message(span_warning("[owner] wavers, their rage simmering down."))
+	owner.OffBalance(3 SECONDS)
+	owner.remove_filter(BLOODRAGE_FILTER)
+	owner.emote("breathgasp", forced = TRUE)
+	owner.Slowdown(3)
+
+#undef BLOODRAGE_FILTER

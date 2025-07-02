@@ -33,12 +33,23 @@
 	var/charging_slowdown = 0
 	var/obj/inhand_requirement = null
 	var/overlay_state = null
+	var/overlay_alpha = 255
 	var/ignore_los = TRUE
+	var/glow_intensity = 0 // How much does the user glow when using the ability
+	var/glow_color = null // The color of the glow
+	var/hide_charge_effect = FALSE // If true, will not show the spell's icon when charging 
+	var/obj/effect/mob_charge_effect = null
 
 /obj/effect/proc_holder/Initialize()
 	. = ..()
 	if(has_action)
 		action = new base_action(src)
+	if(overlay_state && !hide_charge_effect)
+		var/obj/effect/R = new /obj/effect/spell_rune
+		R.icon = action_icon
+		R.icon_state = overlay_state // Weird af but that's how spells work???
+		action.overlay_alpha = overlay_alpha
+		mob_charge_effect = R
 	update_icon()
 
 /obj/effect/proc_holder/proc/deactivate(mob/living/user)
@@ -134,12 +145,11 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 
 	var/school = "evocation" //not relevant at now, but may be important later if there are changes to how spells work. the ones I used for now will probably be changed... maybe spell presets? lacking flexibility but with some other benefit?
 
-	var/charge_type = "recharge" //can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that
+	var/charge_type = "recharge" //can be recharge or charges, see recharge_time and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that
 
-	var/charge_max = 50 //recharge time in deciseconds if charge_type = "recharge" or starting charges if charge_type = "charges"
+	var/recharge_time = 50 //recharge time in deciseconds if charge_type = "recharge" or starting charges if charge_type = "charges"
 	var/charge_counter = 0 //can only cast spells if it equals recharge, ++ each decisecond if charge_type = "recharge" or -- each cast if charge_type = "charges"
 	var/still_recharging_msg = span_notice("The spell is still recharging.")
-	var/recharging = TRUE
 
 	var/cast_without_targets = FALSE
 
@@ -198,6 +208,10 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 		var/obj/item/book/spellbook/sbook = ranged_ability_user.is_holding_item_of_type(/obj/item/book/spellbook)
 		if(sbook && sbook?.open)
 			newtime = newtime - (chargetime * (sbook.get_cdr()))
+		//staff cast time reduction
+		var/obj/item/rogueweapon/woodstaff/staff = ranged_ability_user.is_holding_item_of_type(/obj/item/rogueweapon/woodstaff/)
+		if(staff)
+			newtime = newtime - (chargetime * (staff.cast_time_reduction))
 		if(newtime > 0)
 			return newtime
 		else
@@ -268,16 +282,25 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if((invocation_type == "whisper" || invocation_type == "shout") && !H.can_speak_vocal())
+		if((invocation_type == "whisper" || invocation_type == "shout") && (!H.can_speak_vocal() || !H.getorganslot(ORGAN_SLOT_TONGUE)))
 			to_chat(user, span_warning("I can't get the words out!"))
+			return FALSE
+
+		if(HAS_TRAIT(H, TRAIT_PARALYSIS))
+			to_chat(user, span_warning("My body is paralyzed!"))
 			return FALSE
 
 		if(miracle && !H.devotion?.check_devotion(src))
 			to_chat(H, span_warning("I don't have enough devotion!"))
 			return FALSE
-		if(H.handcuffed && gesture_required)
-			to_chat(user, span_warning("[name] cannot be cast with my hands tied up!"))
-			return FALSE
+		if(gesture_required)
+			if(H.handcuffed)
+				to_chat(user, span_warning("[name] cannot be cast with my hands tied up!"))
+				return FALSE
+			if(!H.has_active_hand())
+				to_chat(user, span_warning("I can't cast this without functional hands!"))
+				return FALSE
+
 	else
 		if(clothes_req || human_req)
 			to_chat(user, span_warning("This spell can only be cast by humans!"))
@@ -314,12 +337,13 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 				adjust_var(user, holder_var_type, holder_var_amount)
 	if(action)
 		action.UpdateButtonIcon()
+	record_featured_stat(FEATURED_STATS_MAGES, user)
 	return TRUE
 
 /obj/effect/proc_holder/spell/proc/charge_check(mob/user, silent = FALSE)
 	switch(charge_type)
 		if("recharge")
-			if(charge_counter < charge_max)
+			if(charge_counter < recharge_time)
 				if(!silent)
 					to_chat(user, still_recharging_msg)
 				return FALSE
@@ -330,7 +354,7 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 				return FALSE
 	return TRUE
 
-/obj/effect/proc_holder/spell/proc/invocation(mob/user = usr) //spelling the spell out and setting it on recharge/reducing charges amount
+/obj/effect/proc_holder/spell/proc/invocation(mob/user = usr)
 	if(!invocation)
 		return
 	switch(invocation_type)
@@ -358,7 +382,7 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 	START_PROCESSING(SSfastprocess, src)
 
 	still_recharging_msg = span_warning("[name] is still recharging!")
-	charge_counter = charge_max
+	charge_counter = recharge_time
 
 /obj/effect/proc_holder/spell/Destroy()
 	STOP_PROCESSING(SSfastprocess, src)
@@ -377,22 +401,20 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 	return TRUE
 
 /obj/effect/proc_holder/spell/proc/start_recharge()
-	recharging = TRUE
-
-/obj/effect/proc_holder/spell/process()
 	if(ranged_ability_user)
 		if(ranged_ability_user.STAINT > SPELL_SCALING_THRESHOLD)
 			var/diff = min(ranged_ability_user.STAINT, SPELL_POSITIVE_SCALING_THRESHOLD) - SPELL_SCALING_THRESHOLD
-			charge_max = initial(charge_max) - (initial(charge_max) * diff * COOLDOWN_REDUCTION_PER_INT)
+			recharge_time = initial(recharge_time) - (initial(recharge_time) * diff * COOLDOWN_REDUCTION_PER_INT)
 		else if(ranged_ability_user.STAINT < SPELL_SCALING_THRESHOLD)
 			var/diff2 = SPELL_SCALING_THRESHOLD - ranged_ability_user.STAINT
-			charge_max = initial(charge_max) + (initial(charge_max) * (diff2 * COOLDOWN_REDUCTION_PER_INT))
-	if(recharging && charge_type == "recharge" && (charge_counter < charge_max))
+			recharge_time = initial(recharge_time) + (initial(recharge_time) * (diff2 * COOLDOWN_REDUCTION_PER_INT))
+
+/obj/effect/proc_holder/spell/process()
+	if(charge_counter <= recharge_time) // Edge case when charge counter is set
 		charge_counter += 2	//processes 5 times per second instead of 10.
-		if(charge_counter >= charge_max)
+		if(charge_counter >= recharge_time)
 			action.UpdateButtonIcon()
-			charge_counter = charge_max
-			recharging = FALSE
+			charge_counter = recharge_time
 
 /obj/effect/proc_holder/spell/proc/perform(list/targets, recharge = TRUE, mob/user = usr) //if recharge is started is important for the trigger spells
 	if(!ignore_los)
@@ -425,14 +447,20 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 	before_cast(targets, user = user)
 	if(user && user.ckey)
 		user.log_message(span_danger("cast the spell [name]."), LOG_ATTACK)
-	if(recharge)
-		recharging = TRUE
+	if(user.mob_timers[MT_INVISIBILITY] > world.time)			
+		user.mob_timers[MT_INVISIBILITY] = world.time
+		user.update_sneak_invis(reset = TRUE)
 	if(cast(targets, user = user))
 		invocation(user)
 		start_recharge()
 		if(sound)
 			playMagSound()
 		after_cast(targets, user = user)
+		if(isliving(user))
+			var/mob/living/L = user
+			if(L.has_status_effect(/datum/status_effect/buff/clash))
+				var/mob/living/carbon/human/H = user
+				H.bad_guard(span_warning("I can't focus while casting spells!"), cheesy = TRUE)
 		if(action)
 			action.UpdateButtonIcon()
 		return TRUE
@@ -499,7 +527,7 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 /obj/effect/proc_holder/spell/proc/revert_cast(mob/user = usr) //resets recharge or readds a charge
 	switch(charge_type)
 		if("recharge")
-			charge_counter = charge_max
+			charge_counter = recharge_time
 		if("charges")
 			charge_counter++
 		if("holdervar")
@@ -666,10 +694,24 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 			return FALSE
 		if(nonabstract_req && (isbrain(user)))
 			return FALSE
+
+	if(ishuman(user)) // Make the button red out and unselectable
+		var/mob/living/carbon/human/H = user
+		if(gesture_required)
+			if(H.handcuffed)
+				return FALSE
+			if(!H.has_active_hand())
+				return FALSE
+	
 	if((invocation_type == "whisper" || invocation_type == "shout") && isliving(user))
 		var/mob/living/living_user = user
 		if(!living_user.can_speak_vocal())
 			return FALSE
+		if(ishuman(user) && !living_user.getorganslot(ORGAN_SLOT_TONGUE)) // Shapeshifter has no tongue yeah
+			return FALSE
+
+	if(HAS_TRAIT(user, TRAIT_PARALYSIS))
+		return FALSE
 
 	return TRUE
 
@@ -686,7 +728,7 @@ GLOBAL_LIST_INIT(spells, typesof(/obj/effect/proc_holder/spell)) //needed for th
 	desc = ""
 	human_req = TRUE
 	clothes_req = FALSE
-	charge_max = 100
+	recharge_time = 100
 	invocation = "Victus sano!"
 	invocation_type = "whisper"
 	school = "restoration"

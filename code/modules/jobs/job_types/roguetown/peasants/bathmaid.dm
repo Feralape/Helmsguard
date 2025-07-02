@@ -45,6 +45,7 @@
 
 /datum/outfit/job/roguetown/nightmaiden/attendant/pre_equip(mob/living/carbon/human/H)
 	..()
+	head = /obj/item/clothing/head/roguetown/armingcap
 	shoes = /obj/item/clothing/shoes/roguetown/sandals
 	neck = /obj/item/storage/belt/rogue/pouch/coins/poor
 	r_hand = /obj/item/soap/bath
@@ -52,11 +53,13 @@
 	beltl = /obj/item/storage/keyring/sund/sund_bawdyroom
 	if(should_wear_femme_clothes(H))
 		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt
-		armor = /obj/item/clothing/suit/roguetown/shirt/dress/gen/sexy
-		pants = /obj/item/clothing/under/roguetown/tights/stockings/fishnet/random //Added fishnet stockings to the wenches
+		armor = /obj/item/clothing/suit/roguetown/shirt/dress/gen/sexy/random
+		pants = /obj/item/clothing/under/roguetown/skirt/brown
 	else if(should_wear_masc_clothes(H))
-		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt
-		pants =	/obj/item/clothing/under/roguetown/loincloth
+		shirt = /obj/item/clothing/suit/roguetown/shirt/tunic/random
+	backpack_contents = list(
+		/obj/item/soap/bath = 1
+	)
 	if(H.mind)
 		H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 3, TRUE)
 		H.mind.adjust_skillrank_up_to(/datum/skill/misc/stealing, 3, TRUE)
@@ -73,11 +76,13 @@
 		H.mind.adjust_skillrank_up_to(/datum/skill/craft/cooking, 1, TRUE)
 		H.mind.adjust_skillrank_up_to(/datum/skill/misc/lockpicking, 1, TRUE)
 
-		H.change_stat("constitution", 1)
+		H.change_stat("constitution", 3)
+		H.change_stat("strength", 1)
 		H.change_stat("endurance", 2)
-	ADD_TRAIT(H, TRAIT_GOODLOVER, TRAIT_GENERIC)
-	ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_NUTCRACKER, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_CICERONE, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_GOODLOVER, TRAIT_GENERIC)
 
 /datum/advclass/nightmaiden/concubine
 	name = "Concubine"
@@ -93,15 +98,14 @@
 	mask = /obj/item/clothing/mask/rogue/exoticsilkmask
 	neck = /obj/item/clothing/neck/roguetown/collar
 	belt = /obj/item/storage/belt/rogue/leather/exoticsilkbelt
+	beltl = /obj/item/roguekey/nightmaiden
 	shoes = /obj/item/clothing/shoes/roguetown/anklets
 	backl = /obj/item/storage/backpack/rogue/satchel
 	shirt = /obj/item/clothing/suit/roguetown/shirt/exoticsilkbra
 	pants = /obj/item/clothing/under/roguetown/tights/stockings/silk
-	
-	// Add items to the satchel
 	backpack_contents = list(
 		/obj/item/rope = 1,
-		/obj/item/candle = 1,
+		/obj/item/candle/eora = 1,
 		/obj/item/rogueweapon/whip = 1,
 		/obj/item/clothing/mask/rogue/blindfold = 1,
 		/obj/item/storage/keyring/sund/sund_bawdyroom = 1
@@ -124,11 +128,12 @@
 		H.change_stat("endurance", 1)
 		H.change_stat("speed", 1)
 		H.change_stat("strength", 1)
+		H.change_stat("endurance", 2)
+	ADD_TRAIT(H, TRAIT_LIGHT_STEP, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_GOODLOVER, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_BEAUTIFUL, TRAIT_GENERIC)
-	
-	// Let the concubine choose an instrument
+
 	var/weapons = list("Harp","Lute","Accordion","Guitar","Hurdy-Gurdy","Viola","Vocal Talisman","Flute")
 	var/weapon_choice = input("Choose your instrument.", "TAKE UP ARMS") as anything in weapons
 	H.set_blindness(0)
@@ -150,7 +155,80 @@
 		if("Flute")
 			backr = /obj/item/rogue/instrument/flute
 
-// Washing Implements
+/datum/advclass/nightmaiden/courtesan
+	name = "Courtesan"
+	tutorial = "Overcoming mind games, deceit and competition, you came into your own as one of the bathhouse's most prized moneymakers and socialites. Dressed in lavish gifts left behind by your patrons, not just anyone can have you. Under the matron, you do most of the social heavylifting and provide entertainment of all forms - behind a heavy price tag. "
+	outfit = /datum/outfit/job/roguetown/nightmaiden/courtesan
+	category_tags = list(CTAG_NIGHTMAIDEN)
+
+/datum/outfit/job/roguetown/nightmaiden/courtesan/pre_equip(mob/living/carbon/human/H)
+	..()
+	head = /obj/item/lockpick/goldpin
+	if(prob(5))
+		head = /obj/item/lockpick/goldpin/silver
+	armor = /obj/item/clothing/suit/roguetown/shirt/dress/silkydress/random
+	shirt = /obj/item/clothing/suit/roguetown/armor/corset
+	belt = /obj/item/storage/belt/rogue/leather/cloth/lady
+	beltl = /obj/item/roguekey/nightmaiden
+	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
+	id = /obj/item/clothing/ring/gold
+	if(prob(50))
+		id = /obj/item/clothing/ring/emerald
+	if(prob(30))
+		id = /obj/item/clothing/ring/topaz
+	if(prob(15))
+		id = /obj/item/clothing/ring/silver
+	if(prob(5))
+		id = /obj/item/clothing/ring/diamond
+	shoes = /obj/item/clothing/shoes/roguetown/anklets
+	backl = /obj/item/storage/backpack/rogue/satchel
+	backpack_contents = list(
+		/obj/item/reagent_containers/powder/moondust = 2,
+		/obj/item/reagent_containers/glass/bottle/rogue/wine = 1,
+		/obj/item/toy/cards/deck = 1,
+	)
+
+	if(H.mind)
+		H.mind.adjust_skillrank(/datum/skill/combat/knives, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/sneaking, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/lockpicking, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/athletics, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/music, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/reading, 4, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/craft/crafting, 2, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/riding, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/craft/cooking, 1, TRUE)
+		H.change_stat("speed", 3)
+		H.change_stat("endurance", 2)
+		H.change_stat("perception", 1)
+	ADD_TRAIT(H, TRAIT_KEENEARS, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_GOODLOVER, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
+	ADD_TRAIT(H, TRAIT_BEAUTIFUL, TRAIT_GENERIC)
+
+	var/weapons = list("Harp","Lute","Accordion","Guitar","Hurdy-Gurdy","Viola","Vocal Talisman","Flute")
+	var/weapon_choice = input("Choose your instrument.", "TAKE UP ARMS") as anything in weapons
+	H.set_blindness(0)
+	switch(weapon_choice)
+		if("Harp")
+			backr = /obj/item/rogue/instrument/harp
+		if("Lute")
+			backr = /obj/item/rogue/instrument/lute
+		if("Accordion")
+			backr = /obj/item/rogue/instrument/accord
+		if("Guitar")
+			backr = /obj/item/rogue/instrument/guitar
+		if("Hurdy-Gurdy")
+			backr = /obj/item/rogue/instrument/hurdygurdy
+		if("Viola")
+			backr = /obj/item/rogue/instrument/viola
+		if("Vocal Talisman")
+			backr = /obj/item/rogue/instrument/vocals
+		if("Flute")
+			backr = /obj/item/rogue/instrument/flute
 
 /obj/item/soap/bath
 	name = "herbal soap"

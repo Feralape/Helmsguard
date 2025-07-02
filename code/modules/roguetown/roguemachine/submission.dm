@@ -20,7 +20,7 @@ var/global/feeding_hole_reset_timer
 	. = ..()
 	if(.)
 		return
-	user.changeNext_move(CLICK_CD_MELEE)
+	user.changeNext_move(CLICK_CD_INTENTCAP)
 	playsound(loc, 'sound/misc/beep.ogg', 100, FALSE, -1)
 	var/contents = "<center>FEEDING HOLE<BR>"
 
@@ -56,17 +56,16 @@ var/global/feeding_hole_reset_timer
 		else if(istype(I,R.item_type))
 			if(!R.check_item(I))
 				continue
-			if(!R.transport_item)
+			if(!R.mint_item)
 				R.held_items[1] += 1 //stacked logs need to check for multiple
 				qdel(I)
 				if(sound == TRUE)
 					playsound(loc, 'sound/misc/hiss.ogg', 100, FALSE, -1)
 			else
-				var/area/A = GLOB.areas_by_type[R.transport_item]
+				var/area/A = GLOB.areas_by_type[R.mint_item]
 				if(!A)
 					say("Couldn't find where to send the submission.")
 					return
-				I.submitted_to_stockpile = TRUE
 				var/list/turfs = list()
 				for(var/turf/T in A)
 					turfs += T

@@ -15,7 +15,7 @@
 
 /obj/structure/Initialize()
 	if (!armor)
-		armor = list("blunt" = 0, "slash" = 0, "stab" = 0, "piercing" = 0, "fire" = 50, "acid" = 50)
+		armor = ARMOR_STRUCTURE
 	. = ..()
 	if(smooth)
 		queue_smooth(src)
@@ -125,6 +125,7 @@
 		step(O, get_dir(O, src))
 
 /obj/structure/proc/do_climb(atom/movable/A)
+	// this is done so that climbing onto something doesn't ignore other dense objects on the same turf
 	if(climbable)
 		density = FALSE
 		. = step(A,get_dir(A,src.loc))
@@ -160,6 +161,10 @@
 			else
 				to_chat(user, span_warning("I fail to climb onto [src]."))
 	structureclimber = null
+
+// You can path over a dense structure if it's climbable.
+/obj/structure/CanAStarPass(ID, to_dir, caller)
+	. = climbable || ..()
 
 /obj/structure/examine(mob/user)
 	. = ..()

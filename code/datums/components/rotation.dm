@@ -94,8 +94,9 @@
 	//Signals + verbs removed via UnRegister
 	. = ..()
 
-/datum/component/simple_rotation/RemoveComponent()
+/datum/component/simple_rotation/ClearFromParent()
 	remove_verbs()
+	remove_signals()
 	. = ..()
 
 /datum/component/simple_rotation/proc/ExamineMessage(datum/source, mob/user, list/examine_list)

@@ -69,24 +69,7 @@
 	probby = 50
 	spawned = list(/obj/item/restraints/legcuffs/beartrap/armed/camouflage)
 
-/obj/effect/spawner/lootdrop/Initialize(mapload)
-	..()
-	do_spawn()
-	return INITIALIZE_HINT_QDEL
-
 // Potions n shit
-/obj/effect/spawner/lootdrop/proc/do_spawn()
-	if(prob(probby))
-		if(!spawned)
-			return
-		var/obj/new_type = pick(spawned)
-		new new_type(get_turf(src))
-
-/obj/effect/spawner/lootdrop
-	fan_out_items = TRUE
-	icon = 'icons/obj/lootdrop.dmi'
-	var/probby = 100
-	var/list/spawned
 
 /obj/effect/spawner/lootdrop/potion_vitals
 	icon_state = "lootpotion"
@@ -144,11 +127,11 @@
 /obj/effect/spawner/lootdrop/potion_stats
 	icon_state = "lootstatpot"
 	spawned = list(
-		/obj/item/reagent_containers/glass/alchemical/strpot = 10,
-		/obj/item/reagent_containers/glass/alchemical/perpot = 10,
-		/obj/item/reagent_containers/glass/alchemical/endpot = 10,
-		/obj/item/reagent_containers/glass/alchemical/conpot = 10,
-		/obj/item/reagent_containers/glass/alchemical/intpot = 10,
-		/obj/item/reagent_containers/glass/alchemical/spdpot = 10,
-		/obj/item/reagent_containers/glass/alchemical/lucpot = 10
+		/obj/item/reagent_containers/glass/bottle/alchemical/strpot = 10,
+		/obj/item/reagent_containers/glass/bottle/alchemical/perpot = 10,
+		/obj/item/reagent_containers/glass/bottle/alchemical/endpot = 10,
+		/obj/item/reagent_containers/glass/bottle/alchemical/conpot = 10,
+		/obj/item/reagent_containers/glass/bottle/alchemical/intpot = 10,
+		/obj/item/reagent_containers/glass/bottle/alchemical/spdpot = 10,
+		/obj/item/reagent_containers/glass/bottle/alchemical/lucpot = 10
 	)

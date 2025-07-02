@@ -11,6 +11,7 @@
 	bolt_type = BOLT_TYPE_NO_BOLT
 	istrainable = TRUE // For the moment I'll allow these to be traineable until a proper way to level up bows and crossbows is coded. - Foxtrot
 	var/damfactor = 1 // Multiplier for projectile damage. Used by bows and crossbows.
+	var/accfactor = 1 // Multiplier for projectile accuracy. Used by bows and crossbows.
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/attackby(obj/item/A, mob/user, params)
 	. = ..()

@@ -84,7 +84,7 @@
 		return 0
 
 /mob/living/simple_animal/hostile/handle_automated_action()
-	if(AIStatus == AI_OFF)
+	if(AIStatus == NPC_AI_OFF)
 		return 0
 	if(del_on_deaggro && last_aggro_loss && (world.time >= last_aggro_loss + del_on_deaggro))
 		if(deaggrodel())
@@ -154,12 +154,12 @@
 		face_atom(target) //Looks better if they keep looking at you when dodging
 
 /mob/living/simple_animal/hostile/attacked_by(obj/item/I, mob/living/user)
-	if(stat == CONSCIOUS && !target && AIStatus != AI_OFF && !client && user)
+	if(stat == CONSCIOUS && !target && AIStatus != NPC_AI_OFF && !client && user)
 		FindTarget(list(user), 1)
 	return ..()
 
 /mob/living/simple_animal/hostile/bullet_act(obj/projectile/P)
-	if(stat == CONSCIOUS && !target && AIStatus != AI_OFF && !client)
+	if(stat == CONSCIOUS && !target && AIStatus != NPC_AI_OFF && !client)
 		if(P.firer && get_dist(src, P.firer) <= aggro_vision_range)
 			FindTarget(list(P.firer), 1)
 		Goto(P.starting, move_to_delay, 3)
@@ -364,7 +364,7 @@
 		if(search_objects)//Turn off item searching and ignore whatever item we were looking at, we're more concerned with fight or flight
 			target = null
 			LoseSearchObjects()
-		if(AIStatus != AI_ON && AIStatus != AI_OFF)
+		if(AIStatus != AI_ON && AIStatus != NPC_AI_OFF)
 			toggle_ai(AI_ON)
 			FindTarget()
 		else if(target != null && prob(40))//No more pulling a mob forever and having a second player attack it, it can switch targets now if it finds a more suitable one
@@ -372,10 +372,13 @@
 
 
 /mob/living/simple_animal/hostile/proc/AttackingTarget()
+	if(SEND_SIGNAL(src, COMSIG_HOSTILE_PRE_ATTACKINGTARGET, target) & COMPONENT_HOSTILE_NO_PREATTACK)
+		return FALSE //but more importantly return before attack_animal called
 	SEND_SIGNAL(src, COMSIG_HOSTILE_ATTACKINGTARGET, target)
 	in_melee = TRUE
 
-	return target.attack_animal(src)
+	if(!QDELETED(target))
+		return target.attack_animal(src)
 
 /mob/living/simple_animal/hostile/proc/Aggro()
 	vision_range = aggro_vision_range
@@ -409,7 +412,7 @@
 	playsound(loc, 'sound/blank.ogg', 50, TRUE, -1)
 	for(var/mob/living/simple_animal/hostile/M in oview(distance, targets_from))
 		if(faction_check_mob(M, TRUE))
-			if(M.AIStatus == AI_OFF)
+			if(M.AIStatus == NPC_AI_OFF)
 				return
 			else
 				M.Goto(src,M.move_to_delay,M.minimum_distance)

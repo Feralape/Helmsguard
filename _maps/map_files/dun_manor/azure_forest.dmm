@@ -1,6 +1,6 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "aa" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /obj/structure/mineral_door/wood/deadbolt{
 	dir = 1;
 	locked = 1
@@ -55,8 +55,8 @@
 /turf/open/floor/rogue/wood,
 /area/rogue/indoors/shelter/woods)
 "ay" = (
-/obj/structure/spacevine,
-/obj/structure/spacevine,
+/obj/structure/vine,
+/obj/structure/vine,
 /turf/open/water/sewer,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "az" = (
@@ -78,7 +78,7 @@
 /turf/open/floor/rogue/hexstone,
 /area/rogue/under/town/basement)
 "aE" = (
-/obj/structure/fermenting_barrel/random/beer,
+/obj/structure/fermentation_keg/random/beer,
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/town/basement)
 "aF" = (
@@ -95,7 +95,7 @@
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "aI" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/water/swamp,
 /area/rogue/under/cavewet/bogcaves)
 "aJ" = (
@@ -106,7 +106,7 @@
 /turf/open/floor/rogue/herringbone,
 /area/rogue/outdoors/woods)
 "aM" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/water/swamp/deep,
 /area/rogue/under/cavewet/bogcaves)
 "aN" = (
@@ -211,12 +211,12 @@
 	icon_state = "tablewood1"
 	},
 /obj/item/rope/chain,
-/obj/item/kitchen/fork/ironfork,
+/obj/item/kitchen/fork/iron,
 /turf/open/floor/rogue/twig,
 /area/rogue/indoors/shelter/woods)
 "bD" = (
 /obj/structure/roguerock,
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/under/cave)
 "bF" = (
@@ -317,7 +317,7 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/town/basement)
 "cw" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /obj/structure/bars/pipe{
 	dir = 1;
 	pixel_x = 25
@@ -506,7 +506,7 @@
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/town/basement)
 "ef" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/under/town/basement)
 "eg" = (
@@ -577,7 +577,7 @@
 /turf/open/floor/rogue/metal,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "er" = (
-/obj/structure/fermenting_barrel/random/water,
+/obj/structure/fermentation_keg/random/water,
 /obj/machinery/light/rogue/wallfire/candle/blue,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/under/town/basement)
@@ -750,7 +750,7 @@
 	dir = 4;
 	icon_state = "fence"
 	},
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/water/swamp,
 /area/rogue/under/town/basement)
 "fY" = (
@@ -1050,7 +1050,7 @@
 /obj/structure/fluff/railing/fence{
 	dir = 1
 	},
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/town/basement)
 "iy" = (
@@ -1232,7 +1232,7 @@
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/indoors/shelter/woods)
 "kg" = (
-/obj/structure/spacevine{
+/obj/structure/vine{
 	opacity = 1
 	},
 /turf/open/floor/rogue/dirt,
@@ -1461,7 +1461,7 @@
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors)
 "lP" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "lS" = (
@@ -1572,7 +1572,7 @@
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/under/town/basement)
 "mE" = (
-/obj/structure/fermenting_barrel/random,
+/obj/structure/fermentation_keg/random,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/under/town/basement)
 "mG" = (
@@ -1595,7 +1595,7 @@
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "mW" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /obj/structure/flora/roguegrass/maneater/real,
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
@@ -1604,7 +1604,7 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/cavewet/bogcaves)
 "nb" = (
-/obj/structure/fermenting_barrel/random/beer,
+/obj/structure/fermentation_keg/random/beer,
 /turf/open/floor/rogue/ruinedwood{
 	icon_state = "wooden_floort"
 	},
@@ -1893,7 +1893,7 @@
 	},
 /area/rogue/indoors/shelter/woods)
 "pB" = (
-/obj/structure/spacevine{
+/obj/structure/vine{
 	opacity = 1
 	},
 /turf/open/water/swamp,
@@ -1922,7 +1922,7 @@
 /turf/open/floor/rogue/grass,
 /area/rogue/outdoors/woods)
 "pG" = (
-/obj/structure/fermenting_barrel/random/beer,
+/obj/structure/fermentation_keg/random/beer,
 /turf/open/floor/rogue/blocks,
 /area/rogue/under/town/basement)
 "pL" = (
@@ -2124,7 +2124,7 @@
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/town/basement)
 "rt" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /obj/machinery/light/small{
 	mouse_opacity = 0;
 	dir = 4;
@@ -2164,8 +2164,8 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/woods)
 "rI" = (
-/obj/structure/spacevine,
-/obj/structure/spacevine,
+/obj/structure/vine,
+/obj/structure/vine,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/under/cave)
 "rJ" = (
@@ -2277,7 +2277,7 @@
 /obj/structure/table/wood{
 	icon_state = "tablewood1"
 	},
-/obj/structure/fluff/millstone{
+/obj/item/millstone{
 	pixel_y = 7
 	},
 /turf/open/floor/rogue/ruinedwood{
@@ -2344,7 +2344,7 @@
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "ti" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/under/town/basement)
 "tj" = (
@@ -2434,7 +2434,7 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/town/basement)
 "tU" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/water/swamp/deep,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "tW" = (
@@ -2556,7 +2556,7 @@
 /turf/open/water/swamp,
 /area/rogue/under/town/basement)
 "uX" = (
-/obj/structure/fermenting_barrel/random/water,
+/obj/structure/fermentation_keg/random/water,
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/outdoors/beach/forest)
 "uZ" = (
@@ -2583,7 +2583,7 @@
 /turf/open/floor/rogue/cobblerock,
 /area/rogue/outdoors/mountains)
 "vg" = (
-/obj/structure/fermenting_barrel/water,
+/obj/structure/fermentation_keg/water,
 /turf/open/floor/rogue/ruinedwood{
 	icon_state = "weird1"
 	},
@@ -2686,7 +2686,7 @@
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/outdoors/mountains)
 "vX" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "vY" = (
@@ -3120,7 +3120,7 @@
 /area/rogue/outdoors/woods)
 "zV" = (
 /obj/machinery/light/rogue/torchholder/c,
-/obj/structure/fermenting_barrel/random/water,
+/obj/structure/fermentation_keg/random/water,
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/outdoors/beach/forest)
 "zX" = (
@@ -3458,7 +3458,7 @@
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors)
 "Cf" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /obj/structure/bars/pipe,
 /turf/open/water/sewer,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
@@ -3592,7 +3592,7 @@
 /turf/closed/mineral/random/rogue/high,
 /area/rogue/under/town/basement)
 "Dj" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /obj/effect/decal/cleanable/greenglow{
 	alpha = 150;
 	color = "#755f48"
@@ -3678,7 +3678,7 @@
 /turf/open/water/sewer,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "DR" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/closed/wall/mineral/rogue/stone/moss,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "DU" = (
@@ -3686,7 +3686,7 @@
 	icon_state = "tablewood1";
 	dir = 1
 	},
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "DX" = (
@@ -3725,7 +3725,7 @@
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors/shelter/woods)
 "Eq" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/closed/wall/mineral/rogue/stone/moss,
 /area/rogue/under/town/basement)
 "Er" = (
@@ -3826,7 +3826,7 @@
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/under/town/basement)
 "Fi" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/water/swamp/deep,
 /area/rogue/under/town/basement)
 "Fj" = (
@@ -3861,7 +3861,7 @@
 	},
 /area/rogue/under/cavewet/bogcaves)
 "Ft" = (
-/obj/structure/spacevine{
+/obj/structure/vine{
 	opacity = 1
 	},
 /turf/open/floor/rogue/naturalstone,
@@ -3944,7 +3944,7 @@
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/under/town/basement)
 "FZ" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/water/sewer,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "Ge" = (
@@ -4022,7 +4022,7 @@
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/town/basement)
 "GF" = (
-/obj/item/rogueweapon/hammer,
+/obj/item/rogueweapon/hammer/iron,
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "GH" = (
@@ -4176,11 +4176,11 @@
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors/shelter/woods)
 "HG" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/water/swamp,
 /area/rogue/under/town/basement)
 "HI" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/closed/mineral/random/rogue,
 /area/rogue/under/town/basement)
 "HJ" = (
@@ -4211,7 +4211,7 @@
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/outdoors/mountains)
 "HP" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/town/basement)
 "HR" = (
@@ -4440,7 +4440,7 @@
 /turf/open/floor/rogue/hexstone,
 /area/rogue/under/town/basement)
 "JF" = (
-/obj/structure/fermenting_barrel,
+/obj/structure/fermentation_keg,
 /turf/open/floor/rogue/blocks,
 /area/rogue/under/town/basement)
 "JH" = (
@@ -4483,7 +4483,7 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/town/basement)
 "Kg" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /obj/effect/decal/cleanable/greenglow{
 	alpha = 150;
 	color = "#755f48"
@@ -4631,7 +4631,7 @@
 /turf/open/floor/rogue/blocks,
 /area/rogue/under/town/basement)
 "Lp" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/under/cave)
 "Lr" = (
@@ -4639,7 +4639,7 @@
 /turf/open/water/swamp,
 /area/rogue/outdoors/woods)
 "Ls" = (
-/obj/item/reagent_containers/glass/bucket/wooden,
+/obj/item/reagent_containers/glass/bucket,
 /turf/open/floor/rogue/dirt,
 /area/rogue/indoors/shelter/woods)
 "Lt" = (
@@ -4713,7 +4713,7 @@
 /turf/open/floor/rogue/cobblerock,
 /area/rogue/outdoors/mountains)
 "Md" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/closed/wall/mineral/rogue/stone/moss,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "Mf" = (
@@ -5080,7 +5080,7 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/indoors/shelter/woods)
 "PD" = (
-/obj/structure/fermenting_barrel/random/water,
+/obj/structure/fermentation_keg/random/water,
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors)
 "PE" = (
@@ -5165,7 +5165,7 @@
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/town/basement)
 "Qs" = (
-/obj/structure/fermenting_barrel/water,
+/obj/structure/fermentation_keg/water,
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/town/basement)
 "Qt" = (
@@ -5255,7 +5255,7 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "QY" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /obj/structure/bars/pipe{
 	dir = 4
 	},
@@ -5466,7 +5466,7 @@
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/outdoors/woods)
 "SF" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/closed/wall/mineral/rogue/pipe,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "SG" = (
@@ -5485,7 +5485,7 @@
 /turf/open/floor/rogue/dirt,
 /area/rogue/under/town/basement)
 "SL" = (
-/obj/structure/fermenting_barrel/water,
+/obj/structure/fermentation_keg/water,
 /obj/structure/fluff/wallclock{
 	dir = 3
 	},
@@ -5551,7 +5551,7 @@
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors)
 "Ti" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/floor/rogue/dirt,
 /area/rogue/outdoors/woods)
 "Tm" = (
@@ -5588,7 +5588,7 @@
 /obj/structure/bars/pipe{
 	dir = 4
 	},
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/floor/rogue/greenstone,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "Tt" = (
@@ -5680,7 +5680,7 @@
 /turf/open/floor/rogue/hexstone,
 /area/rogue/under/town/basement)
 "Um" = (
-/obj/structure/fermenting_barrel/random/beer,
+/obj/structure/fermentation_keg/random/beer,
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors)
 "Up" = (
@@ -5715,7 +5715,7 @@
 /turf/open/floor/rogue/metal/barograte,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "UF" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/water/sewer,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "UG" = (
@@ -5753,7 +5753,7 @@
 	},
 /area/rogue/indoors/shelter/woods)
 "UR" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/water/swamp,
 /area/rogue/under/cave/dungeon1/gethsmane)
 "UT" = (
@@ -5837,7 +5837,7 @@
 /turf/open/floor/rogue/blocks,
 /area/rogue/under/town/basement)
 "Vw" = (
-/obj/item/reagent_containers/glass/bucket/wooden{
+/obj/item/reagent_containers/glass/bucket{
 	pixel_y = 15
 	},
 /obj/item/bath/soap,
@@ -5975,7 +5975,7 @@
 /turf/open/floor/rogue/ruinedwood,
 /area/rogue/indoors/shelter/woods)
 "WJ" = (
-/obj/structure/spacevine,
+/obj/structure/vine,
 /turf/open/water/swamp/deep,
 /area/rogue/under/cave/dungeon1/gethsmane/inner)
 "WK" = (
@@ -6400,7 +6400,7 @@
 /turf/open/floor/rogue/grass,
 /area/rogue/under/cavewet/bogcaves)
 "ZQ" = (
-/obj/structure/fluff/millstone{
+/obj/item/millstone{
 	pixel_y = 12
 	},
 /obj/structure/table/wood,

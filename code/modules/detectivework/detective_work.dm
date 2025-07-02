@@ -26,15 +26,21 @@
 		. = D.fibers
 
 /atom/proc/add_fingerprint_list(list/fingerprints)		//ASSOC LIST FINGERPRINT = FINGERPRINT
+	if(QDELETED(src))
+		return
 	if(length(fingerprints))
 		. = AddComponent(/datum/component/forensics, fingerprints)
 
 //Set ignoregloves to add prints irrespective of the mob having gloves on.
 /atom/proc/add_fingerprint(mob/M, ignoregloves = FALSE)
+	if(QDELETED(src))
+		return
 	var/datum/component/forensics/D = AddComponent(/datum/component/forensics)
 	. = D.add_fingerprint(M, ignoregloves)
 
 /atom/proc/add_fiber_list(list/fibertext)				//ASSOC LIST FIBERTEXT = FIBERTEXT
+	if(QDELETED(src))
+		return
 	if(length(fibertext))
 		. = AddComponent(/datum/component/forensics, null, null, null, fibertext)
 
@@ -58,6 +64,8 @@
 		. = AddComponent(/datum/component/forensics, null, hiddenprints)
 
 /atom/proc/add_hiddenprint(mob/M)
+	if(QDELETED(src))
+		return
 	var/datum/component/forensics/D = AddComponent(/datum/component/forensics)
 	. = D.add_hiddenprint(M)
 
@@ -66,6 +74,8 @@
 
 /obj/add_blood_DNA(list/dna)
 	. = ..()
+	if(QDELETED(src))
+		return
 	if(length(dna))
 		. = AddComponent(/datum/component/forensics, null, null, dna)
 

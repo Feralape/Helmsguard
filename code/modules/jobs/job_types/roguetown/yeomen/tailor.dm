@@ -15,7 +15,7 @@
 	give_bank_account = 16
 	min_pq = 0
 	max_pq = null
-	round_contrib_points = 2
+	round_contrib_points = 3
 
 /datum/outfit/job/roguetown/tailor/pre_equip(mob/living/carbon/human/H)
 	..()
@@ -35,7 +35,13 @@
 	beltl = /obj/item/rogueweapon/huntingknife/scissors/steel
 	shoes = /obj/item/clothing/shoes/roguetown/shortboots
 	backr = /obj/item/storage/backpack/rogue/satchel
-	backpack_contents = list(/obj/item/needle, /obj/item/storage/keyring/sund/sund_tailor)
+	backpack_contents = list(
+		/obj/item/needle, 
+		/obj/item/storage/keyring/tailor,
+		/obj/item/dye_brush, 
+		/obj/item/recipe_book/sewing, 
+		/obj/item/recipe_book/leatherworking
+		)
 	if(should_wear_femme_clothes(H))
 		armor = /obj/item/clothing/suit/roguetown/shirt/dress/silkdress
 		head = /obj/item/clothing/head/roguetown/shawl

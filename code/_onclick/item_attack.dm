@@ -65,9 +65,9 @@
 		return TRUE
 	var/adf = user.used_intent.clickcd
 	if(istype(user.rmb_intent, /datum/rmb_intent/aimed))
-		adf = round(adf * 1.4)
+		adf = round(adf * CLICK_CD_MOD_AIMED)
 	if(istype(user.rmb_intent, /datum/rmb_intent/swift))
-		adf = round(adf * 0.6)
+		adf = max(round(adf * CLICK_CD_MOD_SWIFT), CLICK_CD_INTENTCAP)
 	user.changeNext_move(adf)
 	return I.attack(src, user)
 
@@ -104,9 +104,9 @@
 //		user.emote("attackgrunt")
 	var/datum/intent/cached_intent = user.used_intent
 	if(user.used_intent.swingdelay)
-		if(!user.used_intent.noaa)
+		if(!user.used_intent.noaa && isnull(user.mind))
 			if(get_dist(get_turf(user), get_turf(M)) <= user.used_intent.reach)
-				user.do_attack_animation(M, visual_effect_icon = user.used_intent.animname)
+				user.do_attack_animation(M, user.used_intent.animname, user.used_intent.masteritem, used_intent = user.used_intent, simplified = TRUE)
 		sleep(user.used_intent.swingdelay)
 	if(user.a_intent != cached_intent)
 		return
@@ -122,18 +122,48 @@
 		if(M.checkmiss(user))
 			if(!user.used_intent.swingdelay)
 				if(get_dist(get_turf(user), get_turf(M)) <= user.used_intent.reach)
-					user.do_attack_animation(M, visual_effect_icon = user.used_intent.animname)
+					user.do_attack_animation(M, user.used_intent.animname, used_item = src, used_intent = user.used_intent, simplified = TRUE)
 			return
+	var/rmb_stam_penalty = 0
 	if(istype(user.rmb_intent, /datum/rmb_intent/strong))
-		user.rogfat_add(10)
+		rmb_stam_penalty = EXTRA_STAMDRAIN_SWIFSTRONG
 	if(istype(user.rmb_intent, /datum/rmb_intent/swift))
-		user.rogfat_add(10)
-	if(M.checkdefense(user.used_intent, user))
-		if(M.d_intent == INTENT_DODGE)
-			if(!user.used_intent.swingdelay)
-				if(get_dist(get_turf(user), get_turf(M)) <= user.used_intent.reach)
-					user.do_attack_animation(M, visual_effect_icon = user.used_intent.animname)
+		if(user.used_intent.clickcd > CLICK_CD_INTENTCAP)	//If we're on Swift and our intent is not already at the cap by default, we consume extra stamina.
+			rmb_stam_penalty = EXTRA_STAMDRAIN_SWIFSTRONG
+	// Release drain on attacks besides unarmed attacks/grabs is 1, so it'll just be whatever the penalty is + 1.
+	// Unarmed attacks are the only ones right now that have differing releasedrain, see unarmed attacks for their calc.
+	user.stamina_add(user.used_intent.releasedrain + rmb_stam_penalty)
+	var/bad_guard = FALSE
+	//We have Guard / Clash active, and are hitting someone who doesn't. Cheesing a 'free' hit with a defensive buff is a no-no. You get punished.
+	if(user.has_status_effect(/datum/status_effect/buff/clash) && !M.has_status_effect(/datum/status_effect/buff/clash))
+		bad_guard = TRUE
+	if(M.has_status_effect(/datum/status_effect/buff/clash) && M.get_active_held_item() && ishuman(M) && !bad_guard)
+		var/mob/living/carbon/human/HM = M
+		var/obj/item/IM = M.get_active_held_item()
+		var/obj/item/IU 
+		if(user.used_intent.masteritem)
+			IU = user.used_intent.masteritem
+		HM.process_clash(user, IM, IU)
 		return
+	if(bad_guard)
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			H.bad_guard(span_suicide("I switched stances too quickly! It drains me!"), cheesy = TRUE)
+	if(user.mob_biotypes & MOB_UNDEAD)
+		if(M.has_status_effect(/datum/status_effect/buff/necras_vow))
+			if(isnull(user.mind))
+				user.adjust_fire_stacks(5)
+				user.IgniteMob()
+			else
+				if(prob(30))
+					to_chat(M, span_warning("The foul blessing of the Undermaiden hurts us!"))
+			user.adjust_blurriness(3)
+			user.adjustBruteLoss(5)
+			user.apply_status_effect(/datum/status_effect/churned, M)
+	if(M.checkdefense(user.used_intent, user))
+		return
+
+
 
 	if(user.zone_selected == BODY_ZONE_PRECISE_R_INHAND)
 		var/offh = 0
@@ -178,13 +208,13 @@
 	if(item_flags & NOBLUDGEON)
 		return
 	if(O.attacked_by(src, user))
-		user.do_attack_animation(O)
+		user.do_attack_animation(O, simplified = TRUE)
 		return TRUE
 
 /obj/item/proc/attack_turf(turf/T, mob/living/user, multiplier)
 	if(T.max_integrity)
 		if(T.attacked_by(src, user, multiplier))
-			user.do_attack_animation(T)
+			user.do_attack_animation(T, simplified = TRUE)
 			return TRUE
 
 /atom/movable/proc/attacked_by()
@@ -195,7 +225,7 @@
 	var/dullfactor = 1
 	if(!I?.force)
 		return 0
-	var/newforce = I.force
+	var/newforce = I.force_dynamic
 	testing("startforce [newforce]")
 	if(!istype(user))
 		return newforce
@@ -209,9 +239,15 @@
 		used_str++
 	if(istype(user.rmb_intent, /datum/rmb_intent/weak))
 		used_str--
-	used_str = CLAMP(used_str, 1, 20)
 	if(used_str >= 11)
-		newforce = newforce + (newforce * ((used_str - 10) * 0.1))
+		var/strmod
+		if(used_str > STRENGTH_SOFTCAP && !HAS_TRAIT(user, TRAIT_STRENGTH_UNCAPPED))
+			strmod = ((STRENGTH_SOFTCAP - 10) * STRENGTH_MULT)
+			var/strcappedmod = ((used_str - STRENGTH_SOFTCAP) * STRENGTH_CAPPEDMULT)
+			strmod += strcappedmod
+		else
+			strmod = ((used_str - 10) * STRENGTH_MULT)
+		newforce = newforce + (newforce * strmod)
 	else if(used_str <= 9)
 		newforce = newforce - (newforce * ((10 - used_str) * 0.1))
 
@@ -221,6 +257,11 @@
 			effective = max(I.minstr / 2, 1)
 		if(effective > user.STASTR)
 			newforce = max(newforce*0.3, 1)
+			if(prob(33))
+				if(I.wielded)
+					to_chat(user, span_info("I am too weak to wield this weapon properly with both hands."))
+				else
+					to_chat(user, span_info("I am too weak to wield this weapon properly with one hand."))
 
 	switch(blade_dulling)
 		if(DULLING_CUT) //wooden that can't be attacked by clubs (trees, bushes, grass)
@@ -292,8 +333,90 @@
 			newforce = newforce * (8+(mineskill*1.5))
 			shake_camera(user, 1, 1)
 			miner.mind.add_sleep_experience(/datum/skill/labor/mining, (miner.STAINT*0.2))
-
-	newforce = (newforce * user.used_intent.damfactor) * dullfactor
+		if(DULLING_SHAFT_CONJURED)
+			dullfactor = 1.2
+		if(DULLING_SHAFT_WOOD)	//Weak to cut / chop. No changes vs stab, resistant to blunt
+			switch(user.used_intent.blade_class)
+				if(BCLASS_CUT)
+					if(!I.remove_bintegrity(1))
+						dullfactor = 0.5
+					else
+						dullfactor = 1.3
+				if(BCLASS_CHOP)
+					if(!I.remove_bintegrity(1))
+						dullfactor = 0.5
+					else
+						dullfactor = 1.5
+				if(BCLASS_STAB)
+					dullfactor = 1
+				if(BCLASS_BLUNT)
+					dullfactor = 0.7
+				if(BCLASS_SMASH)
+					dullfactor = 0.5
+				if(BCLASS_PICK)
+					dullfactor = 0.5
+		if(DULLING_SHAFT_REINFORCED)	//Weak to stab. No changes vs blunt, resistant to cut / chop
+			switch(user.used_intent.blade_class)
+				if(BCLASS_CUT)
+					if(!I.remove_bintegrity(1))
+						dullfactor = 0
+					else
+						dullfactor = 0.5
+				if(BCLASS_CHOP)
+					if(!I.remove_bintegrity(1))
+						dullfactor = 0
+					else
+						dullfactor = 0.7
+				if(BCLASS_STAB)
+					dullfactor = 1.5
+				if(BCLASS_BLUNT)
+					dullfactor = 1
+				if(BCLASS_SMASH)
+					dullfactor = 1
+				if(BCLASS_PICK)
+					dullfactor = 0.7
+		if(DULLING_SHAFT_METAL)	//Very weak to blunt. No changes vs stab, highly resistant to cut / chop. Pick can actually damage it.
+			switch(user.used_intent.blade_class)
+				if(BCLASS_CUT)
+					if(!I.remove_bintegrity(1))
+						dullfactor = 0
+					else
+						dullfactor = 0.25
+				if(BCLASS_CHOP)
+					if(!I.remove_bintegrity(1))
+						dullfactor = 0
+					else
+						dullfactor = 0.4
+				if(BCLASS_STAB)
+					dullfactor = 0.75
+				if(BCLASS_BLUNT)
+					dullfactor = 1.3
+				if(BCLASS_SMASH)
+					dullfactor = 1.5
+				if(BCLASS_PICK)
+					dullfactor = 1
+		if(DULLING_SHAFT_GRAND)	//Resistant to all
+			switch(user.used_intent.blade_class)
+				if(BCLASS_CUT)
+					if(!I.remove_bintegrity(1))
+						dullfactor = 0
+					else
+						dullfactor = 0.5
+				if(BCLASS_CHOP)
+					if(!I.remove_bintegrity(1))
+						dullfactor = 0
+					else
+						dullfactor = 0.5
+				if(BCLASS_STAB)
+					dullfactor = 0.5
+				if(BCLASS_BLUNT)
+					dullfactor = 0.5
+				if(BCLASS_SMASH)
+					dullfactor = 1
+				if(BCLASS_PICK)
+					dullfactor = 0.5
+	var/newdam = (I.force_dynamic * user.used_intent.damfactor) - I.force_dynamic
+	newforce = (newforce + newdam) * dullfactor
 	if(user.used_intent.get_chargetime() && user.client?.chargedprog < 100)
 		newforce = newforce * 0.5
 	if(!(user.mobility_flags & MOBILITY_STAND))
@@ -304,8 +427,8 @@
 	return newforce
 
 /obj/attacked_by(obj/item/I, mob/living/user)
-	user.changeNext_move(CLICK_CD_MELEE)
-	var/newforce = get_complex_damage(I, user, blade_dulling)
+	user.changeNext_move(CLICK_CD_INTENTCAP)
+	var/newforce = (get_complex_damage(I, user, blade_dulling) * I.demolition_mod)
 	if(!newforce)
 		testing("dam33")
 		return 0
@@ -318,7 +441,7 @@
 	var/verbu = "hits"
 	verbu = pick(user.used_intent.attack_verb)
 	if(newforce > 1)
-		if(user.rogfat_add(5))
+		if(user.stamina_add(5))
 			user.visible_message(span_danger("[user] [verbu] [src] with [I]!"))
 		else
 			user.visible_message(span_warning("[user] [verbu] [src] with [I]!"))
@@ -340,12 +463,12 @@
 		return 0
 	if(user.used_intent.no_attack)
 		return 0
-	user.changeNext_move(CLICK_CD_MELEE)
+	user.changeNext_move(CLICK_CD_INTENTCAP)
 	log_combat(user, src, "attacked", I)
 	var/verbu = "hits"
 	verbu = pick(user.used_intent.attack_verb)
 	if(newforce > 1)
-		if(user.rogfat_add(5))
+		if(user.stamina_add(5))
 			user.visible_message(span_danger("[user] [verbu] [src] with [I]!"))
 		else
 			user.visible_message(span_warning("[user] [verbu] [src] with [I]!"))
@@ -493,7 +616,7 @@
 	var/hitlim = simple_limb_hit(user.zone_selected)
 	testing("[src] attacked_by")
 	I.funny_attack_effects(src, user)
-	if(I.force)
+	if(I.force_dynamic)
 		var/newforce = get_complex_damage(I, user)
 		apply_damage(newforce, I.damtype, def_zone = hitlim)
 		if(I.damtype == BRUTE)
@@ -523,11 +646,11 @@
 					if(get_dist(user, src) <= 1)	//people with TK won't get smeared with blood
 						user.add_mob_blood(src)
 	send_item_attack_message(I, user, hitlim)
-	if(I.force)
+	if(I.force_dynamic)
 		return TRUE
 
 /mob/living/simple_animal/attacked_by(obj/item/I, mob/living/user)
-	if(I.force < force_threshold || I.damtype == STAMINA)
+	if(I.force_dynamic < force_threshold || I.damtype == STAMINA)
 		playsound(loc, 'sound/blank.ogg', I.get_clamped_volume(), TRUE, -1)
 	else
 		return ..()
@@ -537,27 +660,23 @@
 /obj/item/proc/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	SEND_SIGNAL(src, COMSIG_ITEM_AFTERATTACK, target, user, proximity_flag, click_parameters)
 	SEND_SIGNAL(user, COMSIG_MOB_ITEM_AFTERATTACK, target, user, proximity_flag, click_parameters)
-	if(force && !user.used_intent.tranged && !user.used_intent.tshield)
+	if(force_dynamic && !user.used_intent.tranged && !user.used_intent.tshield)
 		if(proximity_flag && isopenturf(target) && !user.used_intent?.noaa)
 			var/adf = user.used_intent.clickcd
 			if(istype(user.rmb_intent, /datum/rmb_intent/aimed))
-				adf = round(adf * 1.4)
+				adf = round(adf * CLICK_CD_MOD_AIMED)
 			if(istype(user.rmb_intent, /datum/rmb_intent/swift))
-				adf = round(adf * 0.6)
+				adf = max(round(adf * CLICK_CD_MOD_SWIFT), CLICK_CD_INTENTCAP)
 			user.changeNext_move(adf)
-			if(get_dist(get_turf(user), get_turf(target)) <= user.used_intent.reach)
-				user.do_attack_animation(target, visual_effect_icon = user.used_intent.animname)
 			playsound(get_turf(src), pick(swingsound), 100, FALSE, -1)
 			user.aftermiss()
 		if(!proximity_flag && ismob(target) && !user.used_intent?.noaa) //this block invokes miss cost clicking on seomone who isn't adjacent to you
 			var/adf = user.used_intent.clickcd
 			if(istype(user.rmb_intent, /datum/rmb_intent/aimed))
-				adf = round(adf * 1.4)
+				adf = round(adf * CLICK_CD_MOD_AIMED)
 			if(istype(user.rmb_intent, /datum/rmb_intent/swift))
-				adf = round(adf * 0.6)
+				adf = max(round(adf * CLICK_CD_MOD_SWIFT), CLICK_CD_INTENTCAP)
 			user.changeNext_move(adf)
-			if(get_dist(get_turf(user), get_turf(target)) <= user.used_intent.reach)
-				user.do_attack_animation(target, visual_effect_icon = user.used_intent.animname)
 			playsound(get_turf(src), pick(swingsound), 100, FALSE, -1)
 			user.aftermiss()
 
@@ -568,8 +687,8 @@
 
 /obj/item/proc/get_clamped_volume()
 	if(w_class)
-		if(force)
-			return CLAMP((force + w_class) * 4, 30, 100)// Add the item's force to its weight class and multiply by 4, then clamp the value between 30 and 100
+		if(force_dynamic)
+			return CLAMP((force_dynamic + w_class) * 4, 30, 100)// Add the item's force to its weight class and multiply by 4, then clamp the value between 30 and 100
 		else
 			return CLAMP(w_class * 6, 10, 100) // Multiply the item's weight class by 6, then clamp the value between 10 and 100
 
@@ -577,7 +696,7 @@
 	var/message_verb = "attacked"
 	if(user.used_intent)
 		message_verb = "[pick(user.used_intent.attack_verb)]"
-	else if(!I.force)
+	else if(!I.force_dynamic)
 		return
 	var/message_hit_area = ""
 	if(hit_area)

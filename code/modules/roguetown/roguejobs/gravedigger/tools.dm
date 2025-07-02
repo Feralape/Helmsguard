@@ -171,9 +171,16 @@
 	smeltresult = null
 	grid_height = 64
 
+/obj/item/rogueweapon/shovel/aalloy
+	force = 8
+	name = "decrepit shovel"
+	desc = "A decrepit old shovel. Aeon's grasp is upon it."
+	icon_state = "ashovel"
+	smeltresult = /obj/item/ingot/aalloy
+
 /obj/item/burial_shroud
 	name = "winding sheet"
-	desc = "A burial veil for the deceased."
+	desc = "A burial veil for the deceased. It makes transporting bodies slightly more tolerable."
 	icon = 'icons/obj/bodybag.dmi'
 	icon_state = "shroud_folded"
 	w_class = WEIGHT_CLASS_SMALL

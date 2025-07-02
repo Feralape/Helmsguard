@@ -40,7 +40,6 @@
 	faction = list("undead")
 	footstep_type = null
 	defprob = 50 //decently skilled
-	defdrain = 20
 	canparry = TRUE
 	retreat_health = null
 	var/obj/structure/bonepile/slavepile

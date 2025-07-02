@@ -3,7 +3,7 @@
 	desc = ""
 	clothes_req = FALSE
 	human_req = FALSE
-	charge_max = 200
+	recharge_time = 200
 	cooldown_min = 50
 	range = -1
 	include_user = TRUE
@@ -55,11 +55,13 @@
 		var/obj/shapeshift_holder/S = locate() in M
 		if(S)
 			Restore(M)
-		else
+		else if(shapeshift_type)
 			if(shapeshift_type == /mob/living/simple_animal/hostile/retaliate/gaseousform)
 				spawn(100)
 					Restore(M)
 			Shapeshift(M)
+			return TRUE
+	return 
 
 /obj/effect/proc_holder/spell/targeted/shapeshift/proc/Shapeshift(mob/living/caster)
 	var/obj/shapeshift_holder/H = locate() in caster

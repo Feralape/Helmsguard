@@ -61,6 +61,7 @@
 			if(living_pawn.attack_sound)
 				playsound(living_pawn, pick(living_pawn.attack_sound), 100, TRUE, -1)
 			target.gib()
+		finish_action(controller, TRUE)
 	finish_action(controller, TRUE)
 
 
@@ -79,5 +80,6 @@
 /datum/ai_behavior/eat_dead_body/mimic/finish_action(datum/ai_controller/controller, succeeded, target_key, targetting_datum_key, hiding_location_key)
 	. = ..()
 	if(!succeeded)
-		controller.clear_blackboard_key(target_key)
-		controller.pawn.icon_state = "mimic"
+		var/mob/living/simple_animal/hostile/basic_mob = controller.pawn
+		if(!basic_mob.stat) // if the mimic's not dead
+			basic_mob.Aggro() // someone interrupted us! go get 'em!

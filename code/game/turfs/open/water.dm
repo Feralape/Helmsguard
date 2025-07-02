@@ -60,38 +60,66 @@
 
 /turf/open/water/Exited(atom/movable/AM, atom/newloc)
 	. = ..()
-	for(var/obj/structure/S in src)
-		if(S.obj_flags & BLOCK_Z_OUT_DOWN)
-			return
 	if(isliving(AM) && !AM.throwing)
 		var/mob/living/user = AM
-		if(water_overlay)
-			if((get_dir(src, newloc) == SOUTH))
-				water_overlay.layer = BELOW_MOB_LAYER
-				water_overlay.plane = GAME_PLANE
-			else
-				spawn(6)
-					if(!locate(/mob/living) in src)
-						water_overlay.layer = BELOW_MOB_LAYER
-						water_overlay.plane = GAME_PLANE
-		for(var/D in GLOB.cardinals) //adjacent to a floor to hold onto
-			if(istype(get_step(newloc, D), /turf/open/floor))
-				return
-		if(swim_skill)
-			if(swimdir && newloc) //we're being pushed by water or swimming with the current, easy
-				if(get_dir(src, newloc) == dir)
+		if(isliving(user) && !user.is_floor_hazard_immune())
+			for(var/obj/structure/S in src)
+				if(S.obj_flags & BLOCK_Z_OUT_DOWN)
 					return
-			if(user.mind && !user.buckled)
-				var/drained = max(15 - (user.mind.get_skill_level(/datum/skill/misc/swimming) * 5), 1)
-				user.mind.add_sleep_experience(/datum/skill/misc/swimming, user.STAINT * 0.5)
-//				drained += (user.checkwornweight()*2)
-				if(!user.check_armor_skill())
-					drained += 40
-				if(HAS_TRAIT(user, TRAIT_ABYSSOR_SWIM))
-					drained -=5
-				if(!user.rogfat_add(drained))
-					user.Immobilize(30)
-					addtimer(CALLBACK(user, TYPE_PROC_REF(/mob/living, Knockdown), 30), 10)
+			if(water_overlay)
+				if((get_dir(src, newloc) == SOUTH))
+					water_overlay.layer = BELOW_MOB_LAYER
+					water_overlay.plane = GAME_PLANE
+				else
+					spawn(6)
+						if(!locate(/mob/living) in src)
+							water_overlay.layer = BELOW_MOB_LAYER
+							water_overlay.plane = GAME_PLANE
+			var/drained = get_stamina_drain(user, get_dir(src, newloc))
+			if(drained && !user.stamina_add(drained))
+				user.Immobilize(30)
+				addtimer(CALLBACK(user, TYPE_PROC_REF(/mob/living, Knockdown), 30), 1 SECONDS)
+
+/turf/open/water/proc/get_stamina_drain(mob/living/swimmer, travel_dir)
+	var/const/BASE_STAM_DRAIN = 15
+	var/const/MIN_STAM_DRAIN = 1
+	var/const/STAM_PER_LEVEL = 5
+	var/const/NPC_SWIM_LEVEL = SKILL_LEVEL_APPRENTICE
+	var/const/UNSKILLED_ARMOR_PENALTY = 40
+	if(!isliving(swimmer))
+		return 0
+	if(!swim_skill)
+		return 0 // no stam cost
+	if(swimmer.is_floor_hazard_immune())
+		return 0 // floating!
+	if(swimdir && travel_dir && travel_dir == dir)
+		return 0 // going with the flow
+	if(swimmer.buckled)
+		return 0
+	var/swimming_skill_level = swimmer.mind ? swimmer.mind.get_skill_level(/datum/skill/misc/swimming) : NPC_SWIM_LEVEL
+	. = max(BASE_STAM_DRAIN - (swimming_skill_level * STAM_PER_LEVEL), MIN_STAM_DRAIN)
+//	. += (swimmer.checkwornweight()*2)
+	if(!swimmer.check_armor_skill())
+		. += UNSKILLED_ARMOR_PENALTY
+	if(.) // this check is expensive so we only run it if we do expect to use stamina	
+		for(var/obj/structure/S in src)
+			if(S.obj_flags & BLOCK_Z_OUT_DOWN)
+				return 0
+		for(var/D in GLOB.cardinals) //adjacent to a floor to hold onto
+			if(istype(get_step(src, D), /turf/open/floor))
+				return 0
+
+// Mobs won't try to path through water if low on stamina,
+// and will take advantage of water flow to move faster.
+/turf/open/water/get_heuristic_slowdown(mob/traverser, travel_dir)
+	/// Mobs will heavily avoid pathing through this turf if their stamina is too low.
+	var/const/LOW_STAM_PENALTY = 7 // only go through this if we'd have to go offscreen otherwise
+	. = ..()
+	if(isliving(traverser) && !HAS_TRAIT(traverser, TRAIT_INFINITE_STAMINA))
+		var/mob/living/living_traverser = traverser
+		var/remaining_stamina = (living_traverser.max_stamina - living_traverser.stamina)
+		if(remaining_stamina < get_stamina_drain(living_traverser, travel_dir)) // not enough stamina reserved to cross
+			. += LOW_STAM_PENALTY // really want to avoid this unless we don't have any better options
 
 /turf/open/water/hitby(atom/movable/AM, skipcatch, hitpush, blocked, datum/thrownthing/throwingdatum, damage_flag = "blunt")
 	..()
@@ -117,6 +145,11 @@
 	for(var/obj/structure/S in src)
 		if(S.obj_flags & BLOCK_Z_OUT_DOWN)
 			return
+	if(istype(AM, /obj/item/reagent_containers/food/snacks/fish))
+		var/obj/item/reagent_containers/food/snacks/fish/F = AM
+		SEND_GLOBAL_SIGNAL(COMSIG_GLOBAL_FISH_RELEASED, F.type, F.rarity_rank)
+		F.visible_message("<span class='warning'>[F] dives into \the [src] and disappears!</span>")
+		qdel(F)
 	if(isliving(AM) && !AM.throwing)
 		var/mob/living/L = AM
 		if(!(L.mobility_flags & MOBILITY_STAND) || water_level == 3)
@@ -137,6 +170,14 @@
 					if(AM.loc == src)
 						water_overlay.layer = ABOVE_MOB_LAYER
 						water_overlay.plane = GAME_PLANE_UPPER
+		if(!istype(L, /mob/living/carbon/human/species/skeleton))
+			return
+		if(!istype(src, /turf/open/water/sewer))
+			return
+		if(!istype(src, /turf/open/water/swamp))
+			return
+		L.apply_damage(30, BRUTE, BODY_ZONE_CHEST, forced = TRUE)
+		to_chat(L, span_warningbig("The water seeps into my pores. I am crumbling!"))
 
 /turf/open/water/attackby(obj/item/C, mob/user, params)
 	if(user.used_intent.type == /datum/intent/fill)
@@ -147,11 +188,8 @@
 			playsound(user, 'sound/foley/drawwater.ogg', 100, FALSE)
 			if(do_after(user, 8, target = src))
 				user.changeNext_move(CLICK_CD_MELEE)
-				var/list/L = list()
-				var/message = "I fill [C] from [src]."
-				L[water_reagent] = 100
-				C.reagents.add_reagent_list(L)
-				to_chat(user, span_notice(message))
+				C.reagents.add_reagent(water_reagent, 200)
+				to_chat(user, span_notice("I fill [C] from [src]."))
 				// If the user is filling a water purifier and the water isn't already clean...
 				if (istype(C, /obj/item/reagent_containers/glass/bottle/waterskin/purifier) && water_reagent != water_reagent_purified)
 					var/obj/item/reagent_containers/glass/bottle/waterskin/purifier/P = C
@@ -169,7 +207,7 @@
 		var/item2wash = user.get_active_held_item()
 		if(!item2wash)
 			user.visible_message(span_info("[user] starts to wash in [src]."))
-			if(do_after(L, 30, target = src))
+			if(do_after(L, 3 SECONDS, target = src))
 				if(wash_in)
 					wash_atom(user, CLEAN_STRONG)
 				playsound(user, pick(wash), 100, FALSE)
@@ -199,11 +237,12 @@
 		user.visible_message(span_info("[user] starts to drink from [src]."))
 		if(do_after(L, 25, target = src))
 			var/list/waterl = list()
-			waterl[water_reagent] = 2
+			waterl[water_reagent] = 5
 			var/datum/reagents/reagents = new()
 			reagents.add_reagent_list(waterl)
 			reagents.trans_to(L, reagents.total_volume, transfered_by = user, method = INGEST)
 			playsound(user,pick('sound/items/drink_gen (1).ogg','sound/items/drink_gen (2).ogg','sound/items/drink_gen (3).ogg'), 100, TRUE)
+			onbite(user) // Auto repeat drinking
 		return
 	..()
 
@@ -215,13 +254,16 @@
 		QDEL_NULL(water_top_overlay)
 
 /turf/open/water/hitby(atom/movable/AM, skipcatch, hitpush, blocked, datum/thrownthing/throwingdatum, damage_flag = "blunt")
-	if(isobj(AM))
-		var/obj/O = AM
-		O.extinguish()
+	if(!isobj(AM))
+		return
+	var/obj/O = AM
+	if(!O.extinguishable)
+		return
+	O.extinguish()
 
 /turf/open/water/get_slowdown(mob/user)
 	var/returned = slowdown
-	if(user.mind && swim_skill)
+	if(user?.mind && swim_skill)
 		returned = returned - (user.mind.get_skill_level(/datum/skill/misc/swimming))
 	return returned
 
@@ -271,14 +313,33 @@
 	wash_in = TRUE
 	water_reagent = /datum/reagent/water/gross
 
+/turf/open/water/bloody
+	name = "blood"
+	desc = "Is that... a river of blood? EVIL!"
+	icon = 'icons/turf/roguefloor.dmi'
+	icon_state = "dirtW2"
+	water_level = 2
+	water_color = "#880808"
+	slowdown = 3
+	wash_in = TRUE
+	water_reagent = /datum/reagent/blood
+
 /turf/open/water/swamp/Initialize()
 	icon_state = "dirt"
 	dir = pick(GLOB.cardinals)
 	water_color = pick("#705a43")
 	.  = ..()
 
+/turf/open/water/bloody/Initialize()
+	icon_state = "dirt"
+	dir = pick(GLOB.cardinals)
+	water_color = pick("#880808")
+	.  = ..()
+
 /turf/open/water/swamp/Entered(atom/movable/AM, atom/oldLoc)
 	. = ..()
+	if(HAS_TRAIT(AM, TRAIT_LEECHIMMUNE))
+		return
 	if(isliving(AM) && !AM.throwing)
 		if(ishuman(AM))
 			var/mob/living/carbon/human/C = AM
@@ -314,6 +375,8 @@
 
 /turf/open/water/swamp/deep/Entered(atom/movable/AM, atom/oldLoc)
 	. = ..()
+	if(HAS_TRAIT(AM, TRAIT_LEECHIMMUNE))
+		return
 	if(isliving(AM) && !AM.throwing)
 		if(ishuman(AM))
 			var/mob/living/carbon/human/C = AM
@@ -355,7 +418,7 @@
 
 /turf/open/water/river
 	name = "river"
-	desc = "Crystal clear water! Flowing swiflty along the river."
+	desc = "A river of crystal clear water flows swiftly along the contours of the land."
 	icon = 'icons/turf/roguefloor.dmi'
 	icon_state = "rivermove"
 	water_level = 3
@@ -384,6 +447,20 @@
 	if(isliving(AM))
 		if(!river_processing)
 			river_processing = addtimer(CALLBACK(src, PROC_REF(process_river)), 5, TIMER_STOPPABLE)
+
+/turf/open/water/river/get_heuristic_slowdown(mob/traverser, travel_dir)
+	var/const/UPSTREAM_PENALTY = 2
+	var/const/DOWNSTREAM_BONUS = -2
+	. = ..()
+	if(traverser.is_floor_hazard_immune())
+		return
+	for(var/obj/structure/S in src)
+		if(S.obj_flags & BLOCK_Z_OUT_DOWN)
+			return
+	if(travel_dir == dir) // downriver
+		. += DOWNSTREAM_BONUS // faster!
+	else if(travel_dir == GLOB.reverse_dir[dir]) // upriver
+		. += UPSTREAM_PENALTY // slower
 
 /turf/open/water/river/proc/process_river()
 	river_processing = null

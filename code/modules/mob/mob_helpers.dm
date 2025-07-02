@@ -528,6 +528,9 @@
 			mmb_intent.movement_interrupt = ranged_ability.movement_interrupt
 			mmb_intent.charging_slowdown = ranged_ability.charging_slowdown
 			mmb_intent.chargedloop = ranged_ability.chargedloop
+			mmb_intent.glow_intensity = ranged_ability.glow_intensity
+			mmb_intent.glow_color = ranged_ability.glow_color
+			mmb_intent.mob_charge_effect = ranged_ability.mob_charge_effect
 			mmb_intent.update_chargeloop()
 	
 	if(hud_used)		
@@ -586,15 +589,15 @@
 	if(hud_used)
 		if(hud_used.cmode_button)
 			hud_used.cmode_button.update_icon()
+	on_cmode()
+
+/mob/proc/on_cmode()
+	return
 
 /mob
 	var/last_aimhchange = 0
 	var/aimheight = 11
-	var/cmode_music = list(
-						'sound/music/combat.ogg',
-						'sound/music/combat2.ogg',
-						'sound/music/combat_weird.ogg',
-						)
+	var/cmode_music = list('sound/music/combat_old.ogg') //This should minimize the lag it creates by picking from multiple ones
 
 /mob/proc/aimheight_change(input)
 	var/old_zone = zone_selected
@@ -631,17 +634,17 @@
 		if(8)
 			zone_selected = BODY_ZONE_R_ARM
 		if(7)
-			zone_selected = BODY_ZONE_PRECISE_R_HAND
-		if(6)
 			zone_selected = BODY_ZONE_L_ARM
+		if(6)
+			zone_selected = BODY_ZONE_PRECISE_R_HAND
 		if(5)
 			zone_selected = BODY_ZONE_PRECISE_L_HAND
 		if(4)
 			zone_selected = BODY_ZONE_R_LEG
 		if(3)
-			zone_selected = BODY_ZONE_PRECISE_R_FOOT
-		if(2)
 			zone_selected = BODY_ZONE_L_LEG
+		if(2)
+			zone_selected = BODY_ZONE_PRECISE_R_FOOT
 		if(1)
 			zone_selected = BODY_ZONE_PRECISE_L_FOOT
 

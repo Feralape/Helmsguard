@@ -2,7 +2,7 @@
 
 /obj/structure/glowshroom
 	name = "kneestingers"
-	desc = ""
+	desc = "Deceptively-delicate stalks sprout from the ground in luminous-green repose. Some scholars claim they're not really a fungus, even if the Dendorites insist otherwise. Either way they hurt like hell."
 	anchored = TRUE
 	opacity = 0
 	density = FALSE
@@ -18,6 +18,9 @@
 	var/turf/T = get_turf(src)
 	qdel(src)
 	new /obj/effect/hotspot(T)
+
+/obj/structure/glowshroom/CanAStarPass(ID, to_dir, caller)
+	return !can_zap(caller)
 
 /obj/structure/glowshroom/CanPass(atom/movable/mover, turf/target)
 	if(isliving(mover) && mover.z == z)
@@ -37,16 +40,41 @@
 			return FALSE
 	. = ..()
 
-/obj/structure/glowshroom/Crossed(AM as mob|obj)
-	if(isliving(AM))
-		var/mob/living/L = AM
-		if(L.z == z)
-			if(!HAS_TRAIT(L, TRAIT_KNEESTINGER_IMMUNITY))
-				if(L.electrocute_act(30, src))
-					L.emote("painscream")
-					L.update_sneak_invis(TRUE)
-					L.consider_ambush(always = TRUE)
+/obj/structure/glowshroom/proc/can_zap(atom/movable/movable_victim)
+	if(!isliving(movable_victim))
+		return FALSE
+	var/mob/living/victim = movable_victim
+	if(HAS_TRAIT(victim, TRAIT_KNEESTINGER_IMMUNITY)) //Dendor kneestinger immunity
+		return FALSE
+	if(victim.throwing)	//Exemption from floor hazard, you're thrown over it.
+		victim.throwing.finalize(FALSE)
+	//if(victim.is_floor_hazard_immune)	//Floating, flying, etc
+		//return FALSE
+	return TRUE
+
+/obj/structure/glowshroom/proc/do_zap(atom/movable/movable_victim)
+	if(!isliving(movable_victim))
+		return FALSE
+	var/mob/living/victim = movable_victim
+	if(victim.electrocute_act(30, src))
+		victim.emote("painscream")
+		victim.update_sneak_invis(TRUE)
+		victim.consider_ambush(always = TRUE)
+		if(victim.throwing)
+			victim.throwing.finalize(FALSE)
+		return TRUE
+	return FALSE
+
+/obj/structure/glowshroom/Bumped(atom/movable/bumper)
 	. = ..()
+	if(can_zap(bumper))
+		do_zap(bumper)
+
+/obj/structure/glowshroom/Crossed(atom/movable/crosser)
+	if(can_zap(crosser))
+		do_zap(crosser)
+	. = ..()
+
 
 /obj/structure/glowshroom/attackby(obj/item/W, mob/user, params)
 	if(isliving(user) && W && user.z == z)

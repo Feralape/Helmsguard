@@ -21,9 +21,8 @@
 	cmode_music = 'sound/music/combat_weird.ogg'
 
 /datum/job/roguetown/deathknight/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
-	var/datum/game_mode/chaosmode/C = SSticker.mode
-	C.deathknightspawn = FALSE
-	C.deathknights |= L.mind
+	SSmapping.find_and_remove_world_trait(/datum/world_trait/death_knight)
+	SSmapping.retainer.death_knights |= L.mind
 	..()
 	if(L)
 		var/mob/living/carbon/human/H = L
@@ -64,7 +63,7 @@
 		H.name = "Death Knight"
 		H.real_name = "Death Knight"
 		ADD_TRAIT(H, TRAIT_NOMOOD, TRAIT_GENERIC)
-		ADD_TRAIT(H, TRAIT_NOROGSTAM, TRAIT_GENERIC)
+		ADD_TRAIT(H, TRAIT_INFINITE_STAMINA, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_NOLIMBDISABLE, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_NOHUNGER, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_NOBREATH, TRAIT_GENERIC)

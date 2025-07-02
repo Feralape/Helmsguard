@@ -111,6 +111,7 @@
 		else
 			SSticker.rulertype = "Lord Castellan"
 		SSticker.rulermob = HU
+		SSticker.regentmob = null
 		var/dispjob = mind.assigned_role
 		removeomen(OMEN_NOLORD)
 		say("By the authority of the Church, I pronounce you Ruler of all Sundmark!")
@@ -155,7 +156,7 @@
 		if(!istype(get_area(src), /area/rogue/indoors/sund/church/interior/cathedral))
 			to_chat(src, span_warning("I need to do this from the cathedral."))
 			return FALSE
-		priority_announce("[inputty]", title = "The Priest Speaks", sound = 'sound/misc/bell.ogg')
+		priority_announce("[inputty]", title = "The Priest Speaks", sound = 'sound/misc/bell.ogg', sender = src)
 
 /obj/effect/proc_holder/spell/self/convertrole/knight_hospitaler
 	name = "Recruit Knight Hospitaler"

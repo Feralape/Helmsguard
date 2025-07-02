@@ -13,7 +13,13 @@
 	see_in_dark = 9
 	move_to_delay = 3
 	base_intents = list(/datum/intent/simple/bite, /datum/intent/simple/claw)
-	butcher_results = list(/obj/item/reagent_containers/food/snacks/meat/steak = 1,
+	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 1,
+						/obj/item/reagent_containers/food/snacks/fat = 1)
+	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 1,
+						/obj/item/reagent_containers/food/snacks/fat = 2,
+						/obj/item/alch/sinew = 2,
+						/obj/item/alch/bone = 1)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 2,
 						/obj/item/reagent_containers/food/snacks/fat = 2,
 						/obj/item/alch/sinew = 2,
 						/obj/item/alch/bone = 1)
@@ -36,7 +42,6 @@
 	STASPD = 10
 	deaggroprob = 0
 	defprob = 10
-	defdrain = 5
 	del_on_deaggro = 999 SECONDS
 	retreat_health = 0.1
 	food = 0

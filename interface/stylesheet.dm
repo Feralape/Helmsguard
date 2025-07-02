@@ -139,7 +139,7 @@ h1.alert, h2.alert	{color: #c9c1ba;font-family: Pterra, TrueType;}
 .orc					{font-family: "Thief by The Riddler", Pterra;}
 .beast					{font-family: "Thief by The Riddler", Pterra;}
 .reptile				{font-family: "Kingthings Petrock", Pterra; font-size: 120%;}
-.lupian					{font-family: "Emperialisme", Pterra; font-size: 120%;}
+.grenzelhoftian			{font-family: "Emperialisme", Pterra; font-size: 120%;}
 .kazengunese 			{font-family: "Yuji Boku", Pterra;}
 .otavan					{font-family: "Notredame", "Pterra"; font-size: 200%;}
 .etruscan				{font-family: "Feronia", "Pterra"; font-size: 100%;}

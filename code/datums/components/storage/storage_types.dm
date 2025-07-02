@@ -7,7 +7,7 @@
 
 /datum/component/storage/concrete/roguetown/backpack
 	screen_max_rows = 7
-	screen_max_columns = 4
+	screen_max_columns = 5
 	max_w_class = WEIGHT_CLASS_NORMAL
 	not_while_equipped = TRUE
 
@@ -19,6 +19,16 @@
 /datum/component/storage/concrete/roguetown/surgery_bag/New(datum/P, ...)
 	. = ..()
 	can_hold = typecacheof(list(/obj/item/rogueweapon/surgery, /obj/item/needle, /obj/item/natural/worms/leech, /obj/item/reagent_containers/lux))
+
+/datum/component/storage/concrete/roguetown/messkit
+	screen_max_rows = 3
+	screen_max_columns = 3
+	max_w_class = WEIGHT_CLASS_HUGE
+	not_while_equipped = TRUE
+
+/datum/component/storage/concrete/roguetown/messkit/New(datum/P, ...)
+	. = ..()
+	can_hold = typecacheof(list(/obj/item/cooking, /obj/item/reagent_containers/food/snacks, /obj/item/reagent_containers/, /obj/item/kitchen))
 
 /datum/component/storage/concrete/roguetown/belt
 	screen_max_rows = 3
@@ -82,3 +92,42 @@
 	allow_quick_gather = TRUE
 	allow_quick_empty = TRUE
 	insert_preposition = "in"
+
+/datum/component/storage/concrete/roguetown/sack/bag
+	dump_time = 10
+	not_while_equipped = TRUE
+	click_gather = FALSE
+	allow_quick_gather = FALSE
+	allow_quick_empty = FALSE
+
+/datum/component/storage/concrete/roguetown/saddle
+	screen_max_rows = 4
+	screen_max_columns = 4
+	max_w_class = WEIGHT_CLASS_NORMAL
+
+/datum/component/storage/tray
+	insert_preposition = "on"
+	max_w_class = WEIGHT_CLASS_NORMAL
+
+/datum/component/storage/concrete/grid/headhook
+	max_w_class = WEIGHT_CLASS_NORMAL
+	screen_max_rows = 6
+	screen_max_columns = 4
+	click_gather = TRUE
+	collection_mode = COLLECT_EVERYTHING
+	dump_time = 0
+	allow_quick_gather = TRUE
+	allow_quick_empty = TRUE
+	allow_dump_out = TRUE
+	insert_preposition = "in"
+
+/datum/component/storage/concrete/grid/headhook/New(datum/P, ...)
+	. = ..()
+	set_holdable(
+		typecacheof(list(/obj/item/natural/head,
+		/obj/item/bodypart/head)
+	))
+
+/datum/component/storage/concrete/grid/headhook/bronze
+	screen_max_rows = 8
+	screen_max_columns = 6

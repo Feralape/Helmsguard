@@ -27,7 +27,7 @@
 
 /obj/structure/fluff/walldeco/wantedposter
 	name = "bandit notice"
-	desc = ""
+	desc = "A place for posters displaying the faces of roving bandits. Let's see if there are any this week..."
 	icon_state = "wanted1"
 	layer = BELOW_MOB_LAYER
 	pixel_y = 32
@@ -79,6 +79,13 @@
 	icon_state = "goblet"
 	layer = ABOVE_MOB_LAYER
 
+/obj/structure/fluff/walldeco/flower
+	name = "sign"
+	desc = ""
+	icon = 'icons/roguetown/misc/tallstructure.dmi'
+	icon_state = "flower"
+	layer = ABOVE_MOB_LAYER
+
 /obj/structure/fluff/walldeco/barbersign
 	name = "sign"
 	desc = "The iconic swirl of the barber surgeon."
@@ -125,6 +132,15 @@
 	desc = ""
 	icon_state = "wallshield"
 
+/obj/structure/fluff/walldeco/sign/merchantsign
+	name = "merchant shop sign"
+	icon_state = "shopsign_merchant_right"
+	plane = -1
+	pixel_y = 16
+
+/obj/structure/fluff/walldeco/sign/merchantsign/left
+	icon_state = "shopsign_merchant_left"
+
 /obj/structure/fluff/walldeco/psybanner
 	name = "banner"
 	icon_state = "Psybanner-PURPLE"
@@ -137,6 +153,9 @@
 	desc = ""
 	icon_state = "walldec1"
 	mouse_opacity = 0
+
+/obj/structure/fluff/walldeco/stone/bronze
+	color = "#ff9c1a"
 
 /obj/structure/fluff/walldeco/church/line
 	name = ""
@@ -185,7 +204,7 @@
 	icon = 'icons/roguetown/misc/tallstructure.dmi'
 	can_buckle = 1
 	buckle_lying = 0
-	breakoutextra = 10 MINUTES
+	breakoutextra = 5 MINUTES
 	buckleverb = "tie"
 
 /obj/structure/fluff/walldeco/chains/Initialize()
@@ -194,7 +213,7 @@
 
 /obj/structure/fluff/walldeco/customflag
 	name = "Sundmark flag"
-	desc = ""
+	desc = "A banner flutters in the breeze in the proud heraldic colors of the Duchy."
 	icon_state = "wallflag"
 
 /obj/structure/fluff/walldeco/customflag/Initialize()

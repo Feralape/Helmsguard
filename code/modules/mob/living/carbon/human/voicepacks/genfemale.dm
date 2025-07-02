@@ -103,5 +103,31 @@
 				used = list('sound/vo/fsnap3.ogg')
 			if("blink")
 				used = list('sound/vo/blink.ogg')
+			if("cackle")
+				used = list('sound/vo/mobs/hyena/cackle.ogg')
+			if("whine")
+				used = list('sound/vo/mobs/vw/whine.ogg')
+			if("roar")
+				used = list('sound/vo/mobs/cat/roar1.ogg', 'sound/vo/mobs/cat/roar2.ogg', 'sound/vo/mobs/cat/roar3.ogg', 'sound/vo/mobs/cat/roar4.ogg')
+			if("howl")
+				used = list('sound/vo/mobs/wwolf/ehowl1.ogg', 'sound/vo/mobs/wwolf/ehowl2.ogg', 'sound/vo/mobs/wwolf/ehowl3.ogg', 'sound/vo/mobs/wwolf/ehowl4.ogg', 'sound/vo/mobs/wwolf/ehowl5.ogg')
+			if("trill")
+				used = list('sound/vo/mobs/cat/trill.ogg')
+			if("purr")
+				used = list('sound/vo/mobs/cat/cat_purr1.ogg', 'sound/vo/mobs/cat/cat_purr2.ogg', 'sound/vo/mobs/cat/cat_purr3.ogg', 'sound/vo/mobs/cat/cat_purr4.ogg')
+			if("moo")
+				used = list('sound/vo/mobs/minotaur/minoidle.ogg', 'sound/vo/mobs/minotaur/minoidle2.ogg', 'sound/vo/mobs/minotaur/minoidle3.ogg')
+			if("bark")
+				used = list('sound/vo/mobs/vw/bark (1).ogg', 'sound/vo/mobs/vw/bark (2).ogg', 'sound/vo/mobs/vw/bark (3).ogg', 'sound/vo/mobs/vw/bark (4).ogg', 'sound/vo/mobs/vw/bark (5).ogg', 'sound/vo/mobs/vw/bark (6).ogg', 'sound/vo/mobs/vw/bark (7).ogg')
+			if("growl")
+				used = list('sound/vo/mobs/vw/idle (1).ogg', 'sound/vo/mobs/vw/idle (2).ogg', 'sound/vo/mobs/vw/idle (3).ogg', 'sound/vo/mobs/vw/idle (4).ogg')
+			if("bleat")
+				used = list('sound/vo/mobs/goat/idle (1).ogg', 'sound/vo/mobs/goat/idle (2).ogg', 'sound/vo/mobs/goat/idle (3).ogg')
+			if("chitter")
+				used = 'sound/vo/moth/mothchitter.ogg'
+			if("flutter")
+				used = 'sound/vo/moth/moth_flutter.ogg'
+			if("strain")
+				used = 'sound/vo/female/gen/strain.ogg'
 
 	return used

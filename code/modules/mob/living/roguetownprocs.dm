@@ -12,6 +12,9 @@
 			return zone
 	if(!(target.mobility_flags & MOBILITY_STAND))
 		return zone
+	// If you're floored, you will aim feet and legs easily. There's a check for whether the victim is laying down already.
+	if(!(user.mobility_flags & MOBILITY_STAND) && (zone in list(BODY_ZONE_L_LEG, BODY_ZONE_R_LEG, BODY_ZONE_PRECISE_R_FOOT, BODY_ZONE_PRECISE_L_FOOT)))
+		return zone
 	if( (target.dir == turn(get_dir(target,user), 180)))
 		return zone
 	if(!(target.cmode)) // Someone who isn't alert will let you line up a shot. Maybe this should just be a modifier.
@@ -128,9 +131,7 @@
 		if(INTENT_PARRY)
 			if(HAS_TRAIT(src, TRAIT_CHUNKYFINGERS))
 				return FALSE
-			if(pulledby == user && pulledby.grab_state >= GRAB_AGGRESSIVE)
-				return FALSE
-			if(pulling == user && grab_state >= GRAB_AGGRESSIVE)
+			if(pulledby || pulling)
 				return FALSE
 			if(world.time < last_parry + setparrytime)
 				if(!istype(rmb_intent, /datum/rmb_intent/riposte))
@@ -142,7 +143,7 @@
 			last_parry = world.time
 			if(intenty && !intenty.canparry)
 				return FALSE
-			var/drained = user.defdrain
+			var/drained = BASE_PARRY_STAMINA_DRAIN
 			var/weapon_parry = FALSE
 			var/offhand_defense = 0
 			var/mainhand_defense = 0
@@ -161,11 +162,11 @@
 			if(mainhand)
 				if(mainhand.can_parry)
 					mainhand_defense += (H.mind ? (H.mind.get_skill_level(mainhand.associated_skill) * 20) : 20)
-					mainhand_defense += (mainhand.wdefense * 10)
+					mainhand_defense += (mainhand.wdefense_dynamic * 10)
 			if(offhand)
 				if(offhand.can_parry)
 					offhand_defense += (H.mind ? (H.mind.get_skill_level(offhand.associated_skill) * 20) : 20)
-					offhand_defense += (offhand.wdefense * 10)
+					offhand_defense += (offhand.wdefense_dynamic * 10)
 
 			if(mainhand_defense >= offhand_defense)
 				highest_defense += mainhand_defense
@@ -185,7 +186,10 @@
 					prob2defend += (defender_skill * 10)		// no bracers gonna be butts.
 				weapon_parry = FALSE
 			else
-				defender_skill = H.mind?.get_skill_level(used_weapon.associated_skill)
+				if(used_weapon)
+					defender_skill = H.mind?.get_skill_level(used_weapon.associated_skill)
+				else
+					defender_skill = H.mind?.get_skill_level(/datum/skill/combat/unarmed)
 				prob2defend += highest_defense
 				weapon_parry = TRUE
 
@@ -193,17 +197,28 @@
 				if(intenty.masteritem)
 					attacker_skill = U.mind.get_skill_level(intenty.masteritem.associated_skill)
 					prob2defend -= (attacker_skill * 20)
-					if((intenty.masteritem.wbalance > 0) && (user.STASPD > src.STASPD)) //enemy weapon is quick, so get a bonus based on spddiff
-						prob2defend -= ( intenty.masteritem.wbalance * ((user.STASPD - src.STASPD) * 10) )
+					if((intenty.masteritem.wbalance == WBALANCE_SWIFT) && (user.STASPD > src.STASPD)) //enemy weapon is quick, so get a bonus based on spddiff
+						var/spdmod = ((user.STASPD - src.STASPD) * 10)
+						var/permod = ((src.STAPER - user.STAPER) * 10)
+						var/intmod = ((src.STAINT - user.STAINT) * 3)
+						if(mind)
+							if(permod > 0)
+								spdmod -= permod
+							if(intmod > 0)
+								spdmod -= intmod
+						var/finalmod = spdmod
+						if(mind)
+							finalmod = clamp(spdmod, 0, 30)
+						prob2defend -= finalmod
 				else
 					attacker_skill = U.mind.get_skill_level(/datum/skill/combat/unarmed)
 					prob2defend -= (attacker_skill * 20)
 
 			if(HAS_TRAIT(src, TRAIT_GUIDANCE))
-				prob2defend += 15
+				prob2defend += 20
 
 			if(HAS_TRAIT(user, TRAIT_GUIDANCE))
-				prob2defend -= 15
+				prob2defend -= 20
 
 			// parrying while knocked down sucks ass
 			if(!(mobility_flags & MOBILITY_STAND))
@@ -218,6 +233,9 @@
 			prob2defend = clamp(prob2defend, 5, 90)
 			if(HAS_TRAIT(user, TRAIT_HARDSHELL) && H.client)	//Dwarf-merc specific limitation w/ their armor on in pvp
 				prob2defend = clamp(prob2defend, 5, 70)
+			if(!H?.check_armor_skill())
+				prob2defend = clamp(prob2defend, 5, 75)			//Caps your max parry to 75 if using armor you're not trained in. Bad dexerity.
+				drained = drained + 5							//More stamina usage for not being trained in the armor you're using.
 
 			//Dual Wielding
 			var/attacker_dualw
@@ -334,7 +352,45 @@
 
 					var/dam2take = round((get_complex_damage(AB,user,used_weapon.blade_dulling)/2),1)
 					if(dam2take)
-						used_weapon.take_damage(max(dam2take,1), BRUTE, used_weapon.d_type)
+						if(!user.mind)
+							dam2take = dam2take * 0.25
+						if(dam2take > 0 && (intenty.masteritem?.intdamage_factor != 1 || intenty.intent_intdamage_factor != 1))
+							var/higher_intfactor = max(intenty.masteritem?.intdamage_factor, intenty.intent_intdamage_factor)
+							var/lowest_intfactor = min(intenty.masteritem?.intdamage_factor, intenty.intent_intdamage_factor)
+							var/used_intfactor
+							if(lowest_intfactor < 1)	//Our intfactor multiplier can be either 0 to 1, or 1 to whatever.
+								used_intfactor = lowest_intfactor
+							if(higher_intfactor > 1)	//Make sure to keep your weapon and intent intfactors consistent to avoid problems here!
+								used_intfactor = higher_intfactor
+							dam2take *= used_intfactor
+					else	//This is normally handled in get_complex_damage, but it doesn't support simple mobs... at all, so we do a clunky mini-version of it.
+						if(istype(user, /mob/living/simple_animal))
+							var/mob/living/simple_animal/SM = user
+							dam2take = rand(SM.melee_damage_lower, SM.melee_damage_upper)
+							dam2take *= (SM.STASTR / 10)
+							dam2take *= 0.25
+							switch(used_weapon.blade_dulling)
+								if(DULLING_SHAFT_CONJURED)
+									dam2take *= 1.3
+								if(DULLING_SHAFT_METAL)
+									switch(SM.d_type)
+										if("slash")
+											dam2take *= 0.5
+										if("blunt")
+											dam2take *= 1.5
+								if(DULLING_SHAFT_WOOD)
+									switch(SM.d_type)
+										if("slash")
+											dam2take *= 1.5
+										if("blunt")
+											dam2take *= 0.5
+								if(DULLING_SHAFT_REINFORCED)
+									switch(SM.d_type)
+										if("slash")
+											dam2take *= 0.75
+										if("stab")
+											dam2take *= 1.5
+					used_weapon.take_damage(max(dam2take,1), BRUTE, used_weapon.d_type)
 					return TRUE
 				else
 					return FALSE
@@ -353,9 +409,7 @@
 					testing("failparry")
 					return FALSE
 		if(INTENT_DODGE)
-			if(pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE)
-				return FALSE
-			if(pulling == user)
+			if(pulledby || pulling)
 				return FALSE
 			if(world.time < last_dodge + dodgetime)
 				if(!istype(rmb_intent, /datum/rmb_intent/riposte))
@@ -393,15 +447,21 @@
 						dirry += NORTH
 						dirry += SOUTH
 				var/turf/turfy
-				for(var/x in shuffle(dirry.Copy()))
-					turfy = get_step(src,x)
-					if(turfy)
-						if(turfy.density)
-							continue
-						for(var/atom/movable/AM in turfy)
-							if(AM.density)
+				if(fixedeye)
+					var/dodgedir = turn(dir, 180)
+					var/turf/turfcheck = get_step(src, dodgedir)
+					if(turfcheck && !turfcheck.density)
+						turfy = turfcheck
+				if(!turfy)
+					for(var/x in shuffle(dirry.Copy()))
+						turfy = get_step(src,x)
+						if(turfy)
+							if(turfy.density)
 								continue
-						break
+							for(var/atom/movable/AM in turfy)
+								if(AM.density)
+									continue
+							break
 				if(pulledby)
 					return FALSE
 				if(!turfy)
@@ -426,12 +486,38 @@
 			else
 				return FALSE
 
+// origin is used for multi-step dodges like jukes
+/mob/living/proc/get_dodge_destinations(mob/living/attacker, atom/origin = src)
+	var/dodge_dir = get_dir(attacker, origin)
+	if(!dodge_dir)
+		return null
+	var/list/dirry = list()
+	// pick a random dir
+	var/list/turf/dodge_candidates = list()
+	for(var/dir_to_check in dirry)
+		var/turf/dodge_candidate = get_step(origin, dir_to_check)
+		if(!dodge_candidate)
+			continue
+		if(dodge_candidate.density)
+			continue
+		var/has_impassable_atom = FALSE
+		for(var/atom/movable/AM in dodge_candidate)
+			if(!AM.CanPass(src, dodge_candidate))
+				has_impassable_atom = TRUE
+				break
+		if(has_impassable_atom)
+			continue
+		dodge_candidates += dodge_candidate
+	return dodge_candidates
+
 /mob/proc/do_parry(obj/item/W, parrydrain as num, mob/living/user)
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
-		if(H.rogfat_add(parrydrain))
+		if(H.stamina_add(parrydrain))
 			if(W)
 				playsound(get_turf(src), pick(W.parrysound), 100, FALSE)
+			if(src.client)
+				GLOB.azure_round_stats[STATS_PARRIES]++
 			if(istype(rmb_intent, /datum/rmb_intent/riposte))
 				src.visible_message(span_boldwarning("<b>[src]</b> ripostes [user] with [W]!"))
 			else
@@ -448,14 +534,18 @@
 /mob/proc/do_unarmed_parry(parrydrain as num, mob/living/user)
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
-		if(H.rogfat_add(parrydrain))
+		if(H.stamina_add(parrydrain))
 			playsound(get_turf(src), pick(parry_sound), 100, FALSE)
 			src.visible_message(span_warning("<b>[src]</b> parries [user]!"))
+			if(src.client)
+				GLOB.azure_round_stats[STATS_PARRIES]++
 			return TRUE
 		else
 			to_chat(src, span_boldwarning("I'm too tired to parry!"))
 			return FALSE
 	else
+		if(src.client)
+			GLOB.azure_round_stats[STATS_PARRIES]++
 		playsound(get_turf(src), pick(parry_sound), 100, FALSE)
 		return TRUE
 
@@ -469,13 +559,14 @@
 	var/mob/living/carbon/human/UH
 	var/obj/item/I
 	var/drained = 10
+	var/drained_npc = 5
 	if(ishuman(src))
 		H = src
 	if(ishuman(user))
 		UH = user
 		I = UH.used_intent.masteritem
 	var/prob2defend = U.defprob
-	if(L.rogfat >= L.maxrogfat)
+	if(L.stamina >= L.max_stamina)
 		return FALSE
 	if(L)
 		if(HAS_TRAIT(H, TRAIT_DODGEEXPERT) && (H.wear_armor.armor_class == ARMOR_CLASS_HEAVY || H.wear_shirt.armor_class == ARMOR_CLASS_HEAVY || H.wear_pants.armor_class == ARMOR_CLASS_HEAVY))
@@ -489,9 +580,9 @@
 	if(U)
 		prob2defend = prob2defend - (U.STASPD * 10)
 	if(I)
-		if(I.wbalance > 0 && U.STASPD > L.STASPD) //nme weapon is quick, so they get a bonus based on spddiff
+		if(I.wbalance == WBALANCE_SWIFT && U.STASPD > L.STASPD) //nme weapon is quick, so they get a bonus based on spddiff
 			prob2defend = prob2defend - ( I.wbalance * ((U.STASPD - L.STASPD) * 10) )
-		if(I.wbalance < 0 && L.STASPD > U.STASPD) //nme weapon is slow, so its easier to dodge if we're faster
+		if(I.wbalance == WBALANCE_HEAVY && L.STASPD > U.STASPD) //nme weapon is slow, so its easier to dodge if we're faster
 			prob2defend = prob2defend + ( I.wbalance * ((U.STASPD - L.STASPD) * 10) )
 		if(UH?.mind)
 			prob2defend = prob2defend - (UH.mind.get_skill_level(I.associated_skill) * 10)
@@ -522,10 +613,10 @@
 						prob2defend = prob2defend + (H.mind.get_skill_level(/datum/skill/combat/unarmed) * 10)
 
 		if(HAS_TRAIT(L, TRAIT_GUIDANCE))
-			prob2defend += 15
+			prob2defend += 20
 
 		if(HAS_TRAIT(U, TRAIT_GUIDANCE))
-			prob2defend -= 15
+			prob2defend -= 20
 
 		// dodging while knocked down sucks ass
 		if(!(L.mobility_flags & MOBILITY_STAND))
@@ -591,7 +682,9 @@
 
 		if(!dodge_status)
 			return FALSE
-		if(!H.rogfat_add(max(drained,5)))
+		if(!UH?.mind) // For NPC, reduce the drained to 5 stamina
+			drained = drained_npc
+		if(!H.stamina_add(max(drained,5)))
 			to_chat(src, span_warning("I'm too tired to dodge!"))
 			return FALSE
 	else //we are a non human
@@ -607,6 +700,66 @@
 		src.visible_message(span_warning("<b>[src]</b> dodges [user]'s attack!"))
 	else
 		src.visible_message(span_warning("<b>[src]</b> easily dodges [user]'s attack!"))
+	if(get_dist(src, user) <= user.used_intent?.reach)	//We are still in range of the attacker's weapon post-dodge
+		var/probclip = 50
+		var/obj/item/IS = L.get_active_held_item()
+		var/obj/item/IU = U.get_active_held_item()
+		if(IS)
+			if(IS.wlength > WLENGTH_NORMAL)
+				probclip += (IS.wlength - WLENGTH_NORMAL) * 10	//if wlength isn't standardised this might skyrocket it to >100%
+			else
+				probclip -= (WLENGTH_NORMAL - IS.wlength) * 10
+		var/dist = (user.used_intent?.reach - get_dist(src, user)) - 1 //-1 because we already are in range and triggered this check to begin with.
+		if(dist > 0)
+			probclip += dist * 10
+		if(L.STALUC != U.STALUC)
+			var/lucmod = L.STALUC - U.STALUC
+			probclip += lucmod * 10
+		if(prob(probclip) && IS && IU)
+			var/dam2take = round((get_complex_damage(IU, user, FALSE)/2),1)
+			if(dam2take)
+				if(!user.mind)
+					dam2take = dam2take * 0.25
+				if(dam2take > 0 && (user.used_intent.masteritem?.intdamage_factor != 1 || user.used_intent.intent_intdamage_factor != 1))
+					var/higher_intfactor = max(user.used_intent.masteritem?.intdamage_factor, user.used_intent.intent_intdamage_factor)
+					var/lowest_intfactor = min(user.used_intent.masteritem?.intdamage_factor, user.used_intent.intent_intdamage_factor)
+					var/used_intfactor
+					if(lowest_intfactor < 1)	//Our intfactor multiplier can be either 0 to 1, or 1 to whatever.
+						used_intfactor = lowest_intfactor
+					if(higher_intfactor > 1)	//Make sure to keep your weapon and intent intfactors consistent to avoid problems here!
+						used_intfactor = higher_intfactor
+					dam2take *= used_intfactor
+				else
+					if(istype(user, /mob/living/simple_animal))
+						var/mob/living/simple_animal/SM = user
+						dam2take = rand(SM.melee_damage_lower, SM.melee_damage_upper)
+						dam2take *= (SM.STASTR / 10)
+						dam2take *= 0.25
+						switch(IS.blade_dulling)
+							if(DULLING_SHAFT_CONJURED)
+								dam2take *= 1.3
+							if(DULLING_SHAFT_METAL)
+								switch(SM.d_type)
+									if("slash")
+										dam2take *= 0.5
+									if("blunt")
+										dam2take *= 1.5
+							if(DULLING_SHAFT_WOOD)
+								switch(SM.d_type)
+									if("slash")
+										dam2take *= 1.5
+									if("blunt")
+										dam2take *= 0.5
+							if(DULLING_SHAFT_REINFORCED)
+								switch(SM.d_type)
+									if("slash")
+										dam2take *= 0.75
+									if("stab")
+										dam2take *= 1.5
+				IS.take_damage(max(dam2take,1), BRUTE, IU.d_type)
+
+			user.visible_message(span_warning("<b>[user]</b> clips [src]'s weapon!"))
+			playsound(user, 'sound/misc/weapon_clip.ogg', 100)
 	dodgecd = FALSE
 //		if(H)
 //			if(H.IsOffBalanced())
@@ -645,6 +798,21 @@
 	hud.leave_hud(src)
 	set_antag_hud(src, null)
 
+/mob/living/carbon/human/proc/is_noble()
+	var/noble = FALSE
+	if (job in GLOB.noble_positions)
+		noble = TRUE
+	if (HAS_TRAIT(src, TRAIT_NOBLE))
+		noble = TRUE
+
+	return noble
+
+/mob/living/carbon/human/proc/is_yeoman()
+	return job in GLOB.yeoman_positions
+
+/mob/living/carbon/human/proc/is_courtier()
+	return job in GLOB.courtier_positions
+
 /mob/living/carbon/human/proc/calculate_sentinel_bonus()
 	if(STAINT > 10)
 		var/fakeint = STAINT
@@ -668,3 +836,239 @@
 	else
 		return 0
 
+
+/mob/living/carbon/human/proc/process_clash(mob/user, obj/item/IM, obj/item/IU)
+	if(!ishuman(user))
+		return
+	if(user == src)
+		bad_guard(span_warning("I hit myself."))
+		return
+	var/mob/living/carbon/human/H = user
+	if(!IU)	//The opponent is trying to rawdog us with their bare hands while we have Guard up. We get a free attack on their active hand.
+		var/obj/item/bodypart/affecting = H.get_bodypart("[(user.active_hand_index % 2 == 0) ? "r" : "l" ]_arm")
+		var/force = get_complex_damage(IM, src)
+		var/armor_block = H.run_armor_check(BODY_ZONE_PRECISE_L_HAND, used_intent.item_d_type, armor_penetration = used_intent.penfactor, damage = force)
+		if(H.apply_damage(force, IM.damtype, affecting, armor_block))
+			visible_message(span_suicide("[src] gores [user]'s hands with \the [IM]!"))
+			affecting.bodypart_attacked_by(used_intent.blade_class, force, crit_message = TRUE)
+		else
+			visible_message(span_suicide("[src] clashes into [user]'s hands with \the [IM]!"))
+		playsound(src, pick(used_intent.hitsound), 80)
+		remove_status_effect(/datum/status_effect/buff/clash)
+		return
+	if(H.has_status_effect(/datum/status_effect/buff/clash))	//They also have Clash active. It'll trigger the special event.
+		clash(user, IM, IU)
+	else	//Otherwise, we just riposte them.
+		var/damage = get_complex_damage(IM, src, IU.blade_dulling)
+		if(IM.intdamage_factor != 1 || used_intent.intent_intdamage_factor != 1)
+			var/higher_intfactor = max(IM.intdamage_factor, used_intent.intent_intdamage_factor)
+			var/lowest_intfactor = min(IM.intdamage_factor, used_intent.intent_intdamage_factor)
+			var/used_intfactor
+			if(lowest_intfactor < 1)	//Our intfactor multiplier can be either 0 to 1, or 1 to whatever.
+				used_intfactor = lowest_intfactor
+			if(higher_intfactor > 1)	//Make sure to keep your weapon and intent intfactors consistent to avoid problems here!
+				used_intfactor = higher_intfactor
+			damage *= used_intfactor
+		if(IM.wbalance == WBALANCE_HEAVY)
+			damage *= 1.5
+		IU.take_damage(max(damage,1), BRUTE, IM.d_type)
+		visible_message(span_suicide("[src] ripostes [H] with \the [IM]!"))
+		playsound(src, 'sound/combat/clash_struck.ogg', 100)
+		var/staminadef = (stamina * 100) / max_stamina
+		var/staminaatt = (H.stamina * 100) / H.max_stamina
+		if(staminadef > staminaatt) 
+			H.apply_status_effect(/datum/status_effect/debuff/exposed, 2 SECONDS)
+			H.apply_status_effect(/datum/status_effect/debuff/clickcd, 3 SECONDS)
+			H.Slowdown(3)
+			to_chat(src, span_notice("[H.p_theyre()] exposed!"))
+		else
+			H.changeNext_move(CLICK_CD_MELEE)
+		remove_status_effect(/datum/status_effect/buff/clash)
+		purge_peel(GUARD_PEEL_REDUCTION)
+
+//This is a gargantuan, clunky proc that is meant to tally stats and weapon properties for the potential disarm.
+//For future coders: Feel free to change this, just make sure someone like Struggler statpack doesn't get 3-fold advantage.
+/mob/living/carbon/human/proc/clash(mob/user, obj/item/IM, obj/item/IU)
+	var/mob/living/carbon/human/HU = user
+	var/instantloss = FALSE
+	var/instantwin = FALSE
+
+	//Stat checks. Basic comparison.
+	var/strdiff = STASTR - HU.STASTR
+	var/perdiff = STAPER - HU.STAPER
+	var/spddiff = STASPD - HU.STASPD
+	var/fordiff = STALUC - HU.STALUC
+	var/intdiff = STAINT - HU.STAINT
+
+	var/list/statdiffs = list(strdiff, perdiff, spddiff, fordiff, intdiff)
+
+	//Skill check, very simple. If you're more skilled with your weapon than the opponent is with theirs -> +10% to disarm or vice-versa.
+	var/skilldiff
+	if(IM.associated_skill)
+		skilldiff = mind.get_skill_level(IM.associated_skill)
+	else
+		instantloss = TRUE	//We are Guarding with a book or something -- no chance for us.
+
+	if(IU.associated_skill)
+		skilldiff = skilldiff - HU.mind?.get_skill_level(IU.associated_skill)
+	else
+		instantwin = TRUE	//THEY are Guarding with a book or something -- no chance for them.
+	
+	//Weapon checks.
+	var/lengthdiff = IM.wlength - IU.wlength //The longer the weapon the better.
+	var/wieldeddiff = IM.wielded - IU.wielded //If ours is wielded but theirs is not.
+	var/weightdiff = (IM.wbalance < IU.wbalance) //If our weapon is heavy-balanced and theirs is not.
+	var/wildcard = pick(-1,0,1)
+
+	var/list/wepdiffs = list(lengthdiff, wieldeddiff, weightdiff)
+
+	var/prob_us = 0
+	var/prob_opp = 0
+
+	//Stat checks only matter if their difference is 2 or more.
+	for(var/statdiff in statdiffs)
+		if(statdiff >= 2)
+			prob_us += 10
+		else if(statdiff <= -2)
+			prob_opp += 10
+	
+	for(var/wepdiff in wepdiffs)
+		if(wepdiff > 0)
+			prob_us += 10
+		else if(wepdiff < 0)
+			prob_opp += 10
+
+	//Wildcard modifier that can go either way or to neither.
+	if(wildcard > 0)
+		prob_us += 10
+	else if(wildcard < 0 )
+		prob_opp += 10
+	
+	//Small bonus to the first one to strike in a Clash.
+	var/initiator_bonus = rand(5, 10)
+	prob_us += initiator_bonus
+
+	if(has_duelist_ring() && HU.has_duelist_ring())
+		prob_us = max(prob_us, prob_opp)
+		prob_opp = max(prob_us, prob_opp)
+
+	if((!instantloss && !instantwin) || (instantloss && instantwin))	//We are both using normal weapons OR we're both using memes. Either way, proceed as normal.
+		visible_message(span_boldwarning("[src] and [HU] clash!"))
+		flash_fullscreen("whiteflash")
+		HU.flash_fullscreen("whiteflash")
+		var/datum/effect_system/spark_spread/S = new()
+		var/turf/front = get_step(src,src.dir)
+		S.set_up(1, 1, front)
+		S.start()
+		var/success
+		if(prob(prob_us))
+			HU.remove_status_effect(/datum/status_effect/buff/clash)
+			HU.play_overhead_indicator('icons/mob/overhead_effects.dmi', "clashtwo", 1 SECONDS, OBJ_LAYER, soundin = 'sound/combat/clash_disarm_us.ogg', y_offset = 24)
+			disarmed(IM)
+			Slowdown(5)
+			success = TRUE
+		if(prob(prob_opp))
+			HU.disarmed(IU)
+			HU.Slowdown(5)
+			remove_status_effect(/datum/status_effect/buff/clash)
+			play_overhead_indicator('icons/mob/overhead_effects.dmi', "clashtwo", 1 SECONDS, OBJ_LAYER, soundin = 'sound/combat/clash_disarm_opp.ogg', y_offset = 24)
+			success = TRUE
+		if(!success)
+			to_chat(src, span_warningbig("Draw! Opponent's chances were... [prob_opp]%"))
+			to_chat(HU, span_warningbig("Draw! Opponent's chances were... [prob_us]%"))
+			playsound(src, 'sound/combat/clash_draw.ogg', 100, TRUE)
+	else
+		if(instantloss)
+			disarmed(IM)
+		if(instantwin)
+			HU.disarmed(IU)
+	
+	remove_status_effect(/datum/status_effect/buff/clash)
+	HU.remove_status_effect(/datum/status_effect/buff/clash)
+
+/mob/living/carbon/human/proc/disarmed(obj/item/I)
+	visible_message(span_suicide("[src] is disarmed!"), 
+					span_boldwarning("I'm disarmed!"))
+	var/turnangle = (prob(50) ? 270 : 90)
+	var/turndir = turn(dir, turnangle)
+	var/dist = rand(1, 5)
+	var/current_turf = get_turf(src)
+	var/target_turf = get_ranged_target_turf(current_turf, turndir, dist)
+	throw_item(target_turf, FALSE)
+	apply_status_effect(/datum/status_effect/debuff/clickcd, 3 SECONDS)
+
+/mob/living/carbon/human/proc/bad_guard(msg, cheesy = FALSE)
+	stamina_add(((max_stamina * BAD_GUARD_FATIGUE_DRAIN) / 100))
+	if(cheesy)	//We tried to hit someone with Guard up. Unfortunately this must be super punishing to prevent cheese.
+		energy_add(-((max_energy * BAD_GUARD_FATIGUE_DRAIN) / 100))
+		Immobilize(2 SECONDS)
+	if(msg)
+		to_chat(src, msg)
+		emote("strain", forced = TRUE)
+	remove_status_effect(/datum/status_effect/buff/clash)
+
+/mob/living/carbon/human/proc/purge_peel(amt)
+	//Equipment slots manually picked out cus we don't have a proc for this apparently
+	var/list/slots = list(wear_armor, wear_pants, wear_wrists, wear_shirt, gloves, head, shoes, wear_neck, wear_mask)
+	for(var/slot in slots)
+		if(isnull(slot) || !istype(slot, /obj/item/clothing))
+			slots.Remove(slot)
+
+	for(var/obj/item/clothing/C in slots)
+		if(C.peel_count > 0)
+			C.reduce_peel(amt)
+
+/mob/living/carbon/human/proc/highest_ac_worn()
+	var/list/slots = list(wear_armor, wear_pants, wear_wrists, wear_shirt, gloves, head, shoes, wear_neck, wear_mask)
+	for(var/slot in slots)
+		if(isnull(slot) || !istype(slot, /obj/item/clothing))
+			slots.Remove(slot)
+	
+	var/highest_ac = ARMOR_CLASS_NONE
+
+	for(var/obj/item/clothing/C in slots)
+		if(C.armor_class)
+			if(C.armor_class > highest_ac)
+				highest_ac = C.armor_class
+	
+	return highest_ac
+
+/mob/living/carbon/human/proc/has_duelist_ring()
+	if(wear_ring)
+		if(istype(wear_ring, /obj/item/clothing/ring/duelist))
+			return TRUE
+	return FALSE
+
+/mob/living/carbon/human/proc/purge_bait()
+	if(!cmode)
+		if(bait_stacks > 0)
+			bait_stacks = 0
+			to_chat(src, span_info("My focus and balance returns. I won't lose my footing if I am baited again."))
+
+/mob/living/carbon/human/proc/measured_statcheck(mob/living/carbon/human/HT)
+	var/finalprob = 40
+
+	//We take the highest and the lowest stats, clamped to 14.
+	var/max_target = min(max(HT.STASTR, HT.STACON, HT.STAEND, HT.STAINT, HT.STAPER, HT.STASPD), 14)
+	var/min_target = min(HT.STASTR, HT.STACON, HT.STAEND, HT.STAINT, HT.STAPER, HT.STASPD)
+	var/max_user = min(max(STASTR, STACON, STAEND, STAINT, STAPER, STASPD), 14)
+	var/min_user = min(STASTR, STACON, STAEND, STAINT, STAPER, STASPD)
+	
+	if(max_target > max_user)
+		finalprob -= max_target
+	if(min_target > min_user)
+		finalprob -= 3 * min_target
+	
+	if(max_target < max_user)
+		finalprob += max_user
+	if(min_target < min_user)
+		finalprob += 3 * min_user
+
+	finalprob = clamp(finalprob, 5, 75)
+
+	if(STALUC > HT.STALUC)
+		finalprob += rand(1, rand(1,25))	//good luck mathing this out, code divers
+	if(STALUC < HT.STALUC)
+		finalprob -= rand(1, rand(1,25))
+
+	return prob(finalprob)

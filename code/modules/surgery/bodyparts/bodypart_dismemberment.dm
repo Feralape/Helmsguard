@@ -29,12 +29,23 @@
 	if(user && (body_zone == BODY_ZONE_HEAD))
 		if(zone_precise != BODY_ZONE_PRECISE_NECK)
 			return FALSE
-		if(C.mind && (C.mobility_flags & MOBILITY_STAND) && !C.buckled) //Only allows upright decapitations if it's not a player. Unless they're buckled.
-			return FALSE
+		if(!HAS_TRAIT(C, TRAIT_CRITICAL_WEAKNESS) && !HAS_TRAIT(C, TRAIT_EASYDISMEMBER))	//People with these traits can be decapped standing, or buckled, or however.
+			if(!isnull(C.mind) && (C.mobility_flags & MOBILITY_STAND) && !C.buckled) //Only allows upright decapitations if it's not a player. Unless they're buckled.
+				return FALSE
 	if(C.status_flags & GODMODE)
 		return FALSE
 	if(HAS_TRAIT(C, TRAIT_NODISMEMBER))
 		return FALSE
+
+	if(ishuman(owner))
+		var/mob/living/carbon/human/H = owner
+		var/obj/item/clothing/checked_armor = H.checkcritarmorreference(src.body_zone, bclass)
+		if(checked_armor && checked_armor.max_integrity != 0)
+			var/int_percent = round(((checked_armor.obj_integrity / checked_armor.max_integrity) * 100), 1) //lifted from examine
+			if(int_percent > 80 && !HAS_TRAIT(H, TRAIT_CRITICAL_WEAKNESS) && !HAS_TRAIT(H, TRAIT_EASYDISMEMBER))
+				to_chat(H, span_warning("My [checked_armor.name] just saved me from losing my [src.name]!"))
+				checked_armor.obj_integrity -= checked_armor.max_integrity / 2 //Armor sundered
+				return FALSE
 
 	var/obj/item/bodypart/affecting = C.get_bodypart(BODY_ZONE_CHEST)
 	if(affecting && dismember_wound)
@@ -356,7 +367,7 @@
 	if(brain)
 		if(brainmob)
 			brainmob.forceMove(brain) //Throw mob into brain.
-			brain.brainmob = brainmob //Set the brain to use the brainmob
+			brain.brainmob = brainmob
 			brainmob = null //Set head brainmob var to null
 		brain.Insert(C) //Now insert the brain proper
 		brain = null //No more brain in the head

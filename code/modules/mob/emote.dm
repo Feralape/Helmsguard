@@ -23,12 +23,12 @@
 			var/list/custom_emote = GLOB.emote_list["me"]
 			for(var/datum/emote/P in custom_emote)
 				mute_time = P.mute_time
-				P.run_emote(src, oldact, m_type, intentional, targetted)
+				P.run_emote(src, oldact, m_type, intentional, targetted, (animal ? animal : P.is_animal))
 				break
 	else
 		for(var/datum/emote/P in key_emotes)
 			mute_time = P.mute_time
-			if(P.run_emote(src, param, m_type, intentional, targetted))
+			if(P.run_emote(src, param, m_type, intentional, targetted, (animal ? animal : P.is_animal)))
 				break
 
 	if(custom_me)

@@ -76,7 +76,7 @@
 		if(length(sprite_accessories) > 1)
 			dat += "<br>[arrows_string]<a [accessory_link]>[accessory.name]</a>"
 
-		if(allows_accessory_color_customization)
+		if(allows_accessory_color_customization && !(accessory.color_disabled))
 			dat += "<br><a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=reset_colors'>Reset colors</a>"
 			var/list/color_list = color_string_to_list(entry.accessory_colors)
 			for(var/index in 1 to accessory.color_keys)
@@ -131,7 +131,7 @@
 			if(index > accessory.color_keys)
 				return
 			var/list/color_list = color_string_to_list(entry.accessory_colors)
-			var/new_color = color_pick_sanitized_lumi(user, "Choose your accessory color:", "Character Preference","[color_list[index]]")
+			var/new_color = color_pick_sanitized(user, "Choose your accessory color:", "Character Preference","[color_list[index]]")
 			if(!new_color)
 				return
 			color_list[index] = sanitize_hexcolor(new_color, 6, TRUE)

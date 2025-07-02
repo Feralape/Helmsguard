@@ -12,10 +12,23 @@
 	see_in_dark = 6
 	move_to_delay = 5
 	base_intents = list(/datum/intent/simple/claw/mole)
-	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 7,
+	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 2, /obj/item/alch/viscera = 1)
+	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 3,
 						/obj/item/natural/hide = 2,
 						/obj/item/natural/fur = 1,
-						/obj/item/natural/bone = 3, /obj/item/alch/sinew = 3, /obj/item/alch/bone = 1, /obj/item/alch/viscera = 1)
+						/obj/item/natural/bone = 3, 
+						/obj/item/alch/sinew = 3, 
+						/obj/item/alch/bone = 1, 
+						/obj/item/alch/viscera = 1,
+						/obj/item/natural/head/mole = 1)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 5,
+						/obj/item/natural/hide = 3,
+						/obj/item/natural/fur = 2,
+						/obj/item/natural/bone = 3, 
+						/obj/item/alch/sinew = 3, 
+						/obj/item/alch/bone = 1, 
+						/obj/item/alch/viscera = 1,
+						/obj/item/natural/head/mole = 1)
 	faction = list("wolfs")
 	mob_biotypes = MOB_ORGANIC|MOB_BEAST
 	health = MOLE_HEALTH
@@ -39,7 +52,6 @@
 	STASPD = 13
 	deaggroprob = 0
 	defprob = 40
-	defdrain = 10
 	del_on_deaggro = 44 SECONDS
 	retreat_health = 0.3
 	food = 0
@@ -48,7 +60,7 @@
 	aggressive = 1
 //	stat_attack = UNCONSCIOUS
 	remains_type = /obj/effect/decal/remains/mole
-	rot_type = null
+	
 
 //new ai, old ai off
 	AIStatus = AI_OFF

@@ -46,6 +46,7 @@
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/music, 1, TRUE)
+			backpack_contents = list(/obj/item/recipe_book/survival = 1) // Someone gonna argue it is sovlful to not have this but whatever
 			var/turf/TU = get_turf(H)
 			if(TU)
 				new /mob/living/simple_animal/hostile/retaliate/rogue/saiga/tame/saddled(TU)
@@ -68,6 +69,7 @@
 				"Armet"				= /obj/item/clothing/head/roguetown/helmet/heavy/knight/armet,
 				"Hounskull Bascinet" 		= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/hounskull,
 				"Klappvisier Bascinet" 		= /obj/item/clothing/head/roguetown/helmet/bascinet/klappvisier,
+				"Slitted Kettle"		= /obj/item/clothing/head/roguetown/helmet/heavy/knight/skettle,
 				"None"
 				)
 			var/helmchoice = input("Choose your Helm.", "TAKE UP HELMS") as anything in helmets
@@ -89,10 +91,10 @@
 			shirt = /obj/item/clothing/suit/roguetown/armor/chainmail
 			wrists = /obj/item/clothing/wrists/roguetown/bracers
 			shoes = /obj/item/clothing/shoes/roguetown/boots/armor
-			belt = /obj/item/storage/belt/rogue/leather/plaquegold
+			belt = /obj/item/storage/belt/rogue/leather/steel/tasset
 			backl = /obj/item/storage/backpack/rogue/satchel
 			beltl = /obj/item/flashlight/flare/torch/lantern
-			backpack_contents = list(/obj/item/storage/belt/rogue/pouch/coins/poor = 1)
+			backpack_contents = list(/obj/item/storage/belt/rogue/pouch/coins/poor = 1, /obj/item/recipe_book/survival = 1)
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 3, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 2, TRUE)
@@ -113,10 +115,10 @@
 			H.set_blindness(0)
 			ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 			ADD_TRAIT(H, TRAIT_NOBLE, TRAIT_GENERIC)
-			var/weapons = list("Bastard Sword","Mace + Shield","Flail + Shield","Billhook")
+			var/weapons = list("Longsword","Mace + Shield","Flail + Shield","Billhook","Battle Axe","Greataxe")
 			var/weapon_choice = input("Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 			switch(weapon_choice)
-				if("Bastard Sword")
+				if("Longsword")
 					H.mind.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
 					beltr = /obj/item/rogueweapon/sword/long
 				if("Mace + Shield")
@@ -133,6 +135,13 @@
 					H.mind.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
 					r_hand = /obj/item/rogueweapon/spear/billhook
 					backr = /obj/item/gwstrap
+				if("Battle Axe")
+					H.mind.adjust_skillrank(/datum/skill/combat/axes, 3, TRUE)
+					r_hand = /obj/item/rogueweapon/stoneaxe/battle
+				if("Greataxe")
+					H.mind.adjust_skillrank(/datum/skill/combat/axes, 3, TRUE)
+					r_hand = /obj/item/rogueweapon/greataxe
+					backr = /obj/item/gwstrap
 			H.change_stat("strength", 2)
 			H.change_stat("constitution", 1)
 			H.change_stat("endurance", 1)
@@ -148,7 +157,7 @@
 			belt = /obj/item/storage/belt/rogue/leather
 			backr = /obj/item/storage/backpack/rogue/satchel
 			beltl = /obj/item/flashlight/flare/torch/lantern
-			backpack_contents = list(/obj/item/storage/belt/rogue/pouch/coins/poor = 1, /obj/item/rogueweapon/hammer = 1, /obj/item/rogueweapon/tongs = 1)
+			backpack_contents = list(/obj/item/storage/belt/rogue/pouch/coins/poor = 1, /obj/item/rogueweapon/hammer/iron = 1, /obj/item/rogueweapon/tongs = 1, /obj/item/recipe_book/survival = 1)
 			var/armors = list("Light Armor","Medium Armor")
 			var/armor_choice = input("Choose your armor.", "TAKE UP ARMS") as anything in armors
 			switch(armor_choice)
@@ -164,17 +173,17 @@
 					gloves = /obj/item/clothing/gloves/roguetown/chain/iron
 					beltr = /obj/item/rogueweapon/sword/iron
 					ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 2, TRUE)
+			H.mind.adjust_skillrank_up_to(/datum/skill/combat/polearms, 3, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 2, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 2, TRUE)
+			H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 3, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/shields, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 2, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 2, TRUE)
-			H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 2, TRUE)
+			H.mind.adjust_skillrank_up_to(/datum/skill/misc/athletics, 3, TRUE)
+			H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 3, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/riding, 2, TRUE)
 			H.set_blindness(0)

@@ -13,6 +13,8 @@
 	var/revived = FALSE
 	var/next_idle_sound
 
+	antag_flags = FLAG_FAKE_ANTAG
+
 	// CACHE VARIABLES SO ZOMBIFICATION CAN BE CURED
 	var/was_i_undead = FALSE
 	var/special_role
@@ -35,7 +37,7 @@
 	/// Traits applied to the owner mob when we turn into a zombie
 	var/static/list/traits_zombie = list(
 		TRAIT_CRITICAL_RESISTANCE,
-		TRAIT_NOROGSTAM,
+		TRAIT_INFINITE_STAMINA,
 		TRAIT_NOMOOD,
 		TRAIT_NOHUNGER,
 		TRAIT_EASYDISMEMBER,
@@ -155,7 +157,10 @@
 		zombie.base_intents = base_intents
 		zombie.update_a_intents()
 		zombie.aggressive = FALSE
-		zombie.mode = AI_OFF
+		zombie.mode = NPC_AI_OFF
+		zombie.npc_jump_chance = initial(zombie.npc_jump_chance)
+		zombie.rude = initial(zombie.rude)
+		zombie.tree_climber = initial(zombie.tree_climber)
 		if(zombie.charflaw)
 			zombie.charflaw.ephemeral = FALSE
 		zombie.update_body()
@@ -234,7 +239,7 @@
 	zombie.base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB, /datum/intent/unarmed/claw)
 	zombie.update_a_intents()
 	zombie.aggressive = TRUE
-	zombie.mode = AI_IDLE
+	zombie.mode = NPC_AI_IDLE
 	zombie.handle_ai()
 	ambushable = zombie.ambushable
 	zombie.ambushable = FALSE
@@ -287,18 +292,47 @@
 	for(var/slot in removed_slots)
 		zombie.dropItemToGround(zombie.get_item_by_slot(slot), TRUE)
 
+// Infected wake param is just a transition from living to zombie, via zombie_infect()
+// Prevoously you just died without warning in ~3 min, now you just become an antag instead of having to die first if infected.
+/datum/antagonist/zombie/proc/wake_zombie(infected_wake = FALSE)
+	if(!owner.current)
+		return
+	var/mob/living/carbon/human/zombie = owner.current
+	if(!zombie || !istype(zombie))
+		return
+	var/obj/item/bodypart/head = zombie.get_bodypart(BODY_ZONE_HEAD)
+	if(!head)
+		qdel(src)
+		return
+	if(zombie.stat != DEAD && !infected_wake)
+		qdel(src)
+		return
+	if(istype(zombie.loc, /obj/structure/closet/dirthole) || istype(zombie.loc, /obj/structure/closet/crate/coffin))
+		qdel(src)
+		return
+	
+	zombie.can_do_sex = FALSE	//no fuck off
+
+	zombie.blood_volume = BLOOD_VOLUME_NORMAL
+	zombie.setOxyLoss(0, updating_health = FALSE, forced = TRUE)
+	zombie.setToxLoss(0, updating_health = FALSE, forced = TRUE)
+	if(!infected_wake)	// if we died, heal all this too
+		zombie.adjustBruteLoss(-INFINITY, updating_health = FALSE, forced = TRUE)
+		zombie.adjustFireLoss(-INFINITY, updating_health = FALSE, forced = TRUE)
+		zombie.heal_wounds(INFINITY)
+	zombie.stat = UNCONSCIOUS
+	zombie.updatehealth()
+	zombie.update_mobility()
+	zombie.update_sight()
+	zombie.reload_fullscreen()
+	transform_zombie()
+	if(zombie.stat >= DEAD)
+		//could not revive
+		qdel(src)
 
 /datum/antagonist/zombie/greet()
 	to_chat(owner.current, span_userdanger("Death is not the end..."))
 	return ..()
-
-/datum/antagonist/zombie/on_life(mob/user)
-	if(!user || user.stat >= DEAD || !has_turned)
-		return
-	var/mob/living/carbon/human/zombie = user
-	if(world.time > next_idle_sound)
-		zombie.emote("idle")
-		next_idle_sound = world.time + rand(5 SECONDS, 10 SECONDS)
 
 /*
 	Check for zombie infection post bite
@@ -338,12 +372,6 @@
 	return zombie_antag
 
 /*
-
-*/
-/mob/living/carbon/human/proc/zombie_infect_attempt()
-	return attempt_zombie_infection(usr, "bite", ZOMBIE_BITE_CONVERSION_TIME)
-
-/*
 	Proc for our newly infected to wake up as a zombie
 */
 /proc/wake_zombie(mob/living/carbon/zombie, infected_wake = FALSE, converted = FALSE)
@@ -366,6 +394,7 @@
 		qdel(zombie)
 		return
 
+	GLOB.azure_round_stats[STATS_DEADITES_WOKEN_UP]++
 	// Heal the zombie
 	zombie.blood_volume = BLOOD_VOLUME_NORMAL
 	zombie.setOxyLoss(0, updating_health = FALSE, forced = TRUE) // Zombies don't breathe
@@ -414,3 +443,4 @@
 	if(HAS_TRAIT(src, TRAIT_ZOMBIE_IMMUNE))
 		return
 	return mind.add_antag_datum(/datum/antagonist/zombie)
+

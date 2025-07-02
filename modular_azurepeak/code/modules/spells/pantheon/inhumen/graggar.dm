@@ -3,7 +3,7 @@
 	name = "Call to Slaughter"
 	desc = "Grants you and all allies nearby a buff to their strength, endurance, and constitution."
 	overlay_state = "call_to_slaughter"
-	charge_max = 5 MINUTES
+	recharge_time = 5 MINUTES
 	invocation = "LAMBS TO THE SLAUGHTER!"
 	invocation_type = "shout"
 	sound = 'sound/magic/timestop.ogg'
@@ -40,7 +40,7 @@
 	releasedrain = 30
 	chargedrain = 0
 	chargetime = 15
-	charge_max = 10 SECONDS
+	recharge_time = 10 SECONDS
 
 /obj/projectile/magic/unholy_grasp
 	name = "viceral organ net"
@@ -69,7 +69,7 @@
 	name = "Revel in Slaughter"
 	desc = "The blood of your enemy shall boil, their skin feeling as if it's being ripped apart! Gaggar demands their blood must FLOW!!!."
 	overlay_state = "bloodsteal"
-	charge_max = 5 MINUTES
+	recharge_time = 5 MINUTES
 	invocation = "YOUR BLOOD WILL BOIL TILL IT'S SPILLED!"
 	invocation_type = "shout"
 	sound = 'sound/magic/antimagic.ogg'
@@ -98,3 +98,37 @@
 			human_target.visible_message(span_danger("[target]'s wounds become inflammed as their vitality is sapped away!"))
 			to_chat(target, span_warning("My skins feels like pins and needles, as if something were ripping and tearing at me!"))
 			return ..()
+
+//Bloodrage T0 -- Uncapped STR buff.
+/obj/effect/proc_holder/spell/self/graggar_bloodrage
+	name = "Bloodrage"
+	desc = "Grants you unbound strength for a short while."
+	overlay_state = "bloodrage"
+	recharge_time = 5 MINUTES
+	invocation = "GRAGGAR!! GRAGGAR!! GRAGGAR!!"
+	invocation_type = "shout"
+	sound = 'sound/magic/bloodrage.ogg'
+	releasedrain = 30
+	miracle = TRUE
+	devotion_cost = 80
+	antimagic_allowed = FALSE
+	var/static/list/purged_effects = list(
+	/datum/status_effect/incapacitating/immobilized,
+	/datum/status_effect/incapacitating/paralyzed,
+	/datum/status_effect/incapacitating/stun,
+	/datum/status_effect/incapacitating/knockdown,)
+
+/obj/effect/proc_holder/spell/self/graggar_bloodrage/cast(list/targets, mob/user)
+	. = ..()
+	if(!ishuman(user))
+		revert_cast()
+		return FALSE
+	var/mob/living/carbon/human/H = user
+	if(H.resting)
+		H.set_resting(FALSE, FALSE)
+	H.emote("warcry")
+	for(var/effect in purged_effects)
+		H.remove_status_effect(effect)
+	H.apply_status_effect(/datum/status_effect/buff/bloodrage)
+	H.visible_message(span_danger("[H] rises upward, boiling with immense rage!"))
+	return TRUE

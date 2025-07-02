@@ -1045,7 +1045,7 @@
 	
 	if(user != target)
 		var/reverse_message = "has been [what_done] by [ssource][postfix]"
-		target.log_message(reverse_message, LOG_ATTACK, color="orange", log_globally=FALSE)
+		target?.log_message(reverse_message, LOG_ATTACK, color="orange", log_globally=FALSE)
 
 /proc/log_seen(mob/user, atom/target, list/viewers, message, seen_type)
 	var/color

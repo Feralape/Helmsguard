@@ -16,7 +16,7 @@
 	smeltresult = /obj/item/ingot/iron
 	swingsound = BLUNTWOOSH_MED
 	minstr = 5
-	blade_dulling = DULLING_BASHCHOP
+	blade_dulling = DULLING_SHAFT_WOOD
 
 	grid_height = 96
 	grid_width = 32
@@ -28,7 +28,7 @@
 	blade_class = BCLASS_BLUNT
 	icon_state = "inbash"
 	attack_verb = list("bashes", "strikes")
-	penfactor = 10
+	penfactor = BLUNT_DEFAULT_PENFACTOR
 	item_d_type = "blunt"
 
 /datum/intent/lord_electrocute
@@ -110,7 +110,7 @@
 	gripped_intents = null
 	w_class = WEIGHT_CLASS_NORMAL
 	possible_item_intents = list(/datum/intent/mace/strike/stunner, /datum/intent/mace/smash/stunner)
-	wbalance = 0
+	wbalance = WBALANCE_NORMAL
 	minstr = 5
 	wdefense = 0
 	var/charge = 100
@@ -210,7 +210,7 @@
 
 /obj/item/rogueweapon/katar
 	slot_flags = ITEM_SLOT_HIP
-	force = 16
+	force = 24
 	possible_item_intents = list(/datum/intent/katar/cut, /datum/intent/katar/thrust)
 	name = "katar"
 	desc = "A blade that sits above the users fist. Commonly used by those proficient at unarmed fighting"
@@ -221,13 +221,13 @@
 	w_class = WEIGHT_CLASS_SMALL
 	parrysound = list('sound/combat/parry/bladed/bladedsmall (1).ogg','sound/combat/parry/bladed/bladedsmall (2).ogg','sound/combat/parry/bladed/bladedsmall (3).ogg')
 	max_blade_int = 150
-	max_integrity = 300
+	max_integrity = 80
 	swingsound = list('sound/combat/wooshes/bladed/wooshsmall (1).ogg','sound/combat/wooshes/bladed/wooshsmall (2).ogg','sound/combat/wooshes/bladed/wooshsmall (3).ogg')
 	associated_skill = /datum/skill/combat/unarmed
 	pickup_sound = 'sound/foley/equip/swordsmall2.ogg'
 	throwforce = 12
 	wdefense = 4
-	wbalance = 1
+	wbalance = WBALANCE_SWIFT
 	thrown_bclass = BCLASS_CUT
 	anvilrepair = /datum/skill/craft/weaponsmithing
 	smeltresult = /obj/item/ingot/steel
@@ -242,12 +242,13 @@
 	icon_state = "incut"
 	attack_verb = list("cuts", "slashes")
 	animname = "cut"
-	blade_class = BCLASS_CUT
+	blade_class = BCLASS_CHOP
 	hitsound = list('sound/combat/hits/bladed/smallslash (1).ogg', 'sound/combat/hits/bladed/smallslash (2).ogg', 'sound/combat/hits/bladed/smallslash (3).ogg')
 	penfactor = 0
 	chargetime = 0
 	swingdelay = 0
-	clickcd = 8
+	damfactor = 1.3
+	clickcd = CLICK_CD_INTENTCAP
 	item_d_type = "slash"
 
 /datum/intent/katar/thrust
@@ -259,7 +260,7 @@
 	hitsound = list('sound/combat/hits/bladed/genstab (1).ogg', 'sound/combat/hits/bladed/genstab (2).ogg', 'sound/combat/hits/bladed/genstab (3).ogg')
 	penfactor = 40
 	chargetime = 0
-	clickcd = 8
+	clickcd = CLICK_CD_INTENTCAP
 	item_d_type = "stab"
 
 /obj/item/rogueweapon/katar/getonmobprop(tag)
@@ -276,13 +277,14 @@
 	name = "barotrauma"
 	desc = "A gift from a creature of the sea. The claw is sharpened to a wicked edge."
 	icon_state = "abyssorclaw"
-	force = 20
+	force = 27	//Its thrust will be able to pen 80 stab armor if the wielder has 17 STR. (With softcap)
+	max_integrity = 150
 
 
 /obj/item/rogueweapon/knuckles
 	name = "steel knuckles"
 	desc = "A mean looking pair of steel knuckles."
-	force = 15
+	force = 22
 	possible_item_intents = list(/datum/intent/knuckles/strike,/datum/intent/knuckles/smash)
 	icon = 'icons/roguetown/weapons/32.dmi'
 	icon_state = "steelknuckle"
@@ -296,13 +298,14 @@
 	swingsound = list('sound/combat/wooshes/punch/punchwoosh (1).ogg','sound/combat/wooshes/punch/punchwoosh (2).ogg','sound/combat/wooshes/punch/punchwoosh (3).ogg')
 	associated_skill = /datum/skill/combat/unarmed
 	throwforce = 12
-	wdefense = 4
-	wbalance = 1
-	blade_dulling = DULLING_BASHCHOP
+	wdefense = 8
+	wbalance = WBALANCE_HEAVY
+	blade_dulling = DULLING_SHAFT_WOOD
 	anvilrepair = /datum/skill/craft/weaponsmithing
 	smeltresult = /obj/item/ingot/steel
 	grid_width = 64
 	grid_height = 32
+	intdamage_factor = 1.45
 
 /obj/item/rogueweapon/knuckles/getonmobprop(tag)
 	. = ..()
@@ -316,7 +319,7 @@
 /obj/item/rogueweapon/knuckles/bronzeknuckles
 	name = "bronze knuckles"
 	desc = "A mean looking pair of bronze knuckles. Mildly heavier than it's steel counterpart, making it a solid defensive option, if less wieldy."
-	force = 13
+	force = 20
 	possible_item_intents = list(/datum/intent/knuckles/strike,/datum/intent/knuckles/smash)
 	icon = 'icons/roguetown/weapons/32.dmi'
 	icon_state = "bronzeknuckle"
@@ -330,11 +333,12 @@
 	swingsound = list('sound/combat/wooshes/punch/punchwoosh (1).ogg','sound/combat/wooshes/punch/punchwoosh (2).ogg','sound/combat/wooshes/punch/punchwoosh (3).ogg')
 	associated_skill = /datum/skill/combat/unarmed
 	throwforce = 12
-	wdefense = 5
-	wbalance = 1
-	blade_dulling = DULLING_BASHCHOP
+	wdefense = 10	//literally no clue how else to balance these
+	wbalance = WBALANCE_HEAVY
+	blade_dulling = DULLING_SHAFT_WOOD
 	anvilrepair = /datum/skill/craft/weaponsmithing
 	smeltresult = /obj/item/ingot/bronze
+	intdamage_factor = 1.30
 
 /datum/intent/knuckles
 	clickcd = 8
@@ -345,7 +349,9 @@
 	attack_verb = list("punches", "clocks")
 	hitsound = list('sound/combat/hits/punch/punch_hard (1).ogg', 'sound/combat/hits/punch/punch_hard (2).ogg', 'sound/combat/hits/punch/punch_hard (3).ogg')
 	chargetime = 0
-	penfactor = 15
+	penfactor = BLUNT_DEFAULT_PENFACTOR
+	clickcd = 8
+	damfactor = 1
 	swingdelay = 0
 	icon_state = "inpunch"
 	item_d_type = "blunt"
@@ -356,15 +362,298 @@
 	blade_class = BCLASS_SMASH
 	attack_verb = list("smashes")
 	hitsound = list('sound/combat/hits/punch/punch_hard (1).ogg', 'sound/combat/hits/punch/punch_hard (2).ogg', 'sound/combat/hits/punch/punch_hard (3).ogg')
-	penfactor = 40
-	damfactor = 1.1
+	penfactor = BLUNT_DEFAULT_PENFACTOR
+	damfactor = 1.3
+	clickcd = 10
 	swingdelay = 6
 	icon_state = "insmash"
 	item_d_type = "blunt"
+
+/obj/item/rogueweapon/knuckles/aknuckles
+	name = "decrepit knuckles"
+	desc = "a set of knuckles made of ancient metals, Aeon's grasp wither their form."
+	icon_state = "aknuckle"
+	force = 12
+	max_integrity = 150
+	smeltresult = /obj/item/ingot/aalloy
+	blade_dulling = DULLING_SHAFT_CONJURED
+
+/obj/item/rogueweapon/knuckles/paknuckles
+	name = "ancient knuckles"
+	desc = "a set of knuckles made of ancient metals, Aeon's grasp has been lifted from their form."
+	icon_state = "aknuckle"
+	smeltresult = /obj/item/ingot/aaslag
 
 
 /obj/item/rogueweapon/knuckles/eora
 	name = "close caress"
 	desc = "Some times call for a more intimate approach."
-	force = 20
+	force = 25
 	icon_state = "eoraknuckle"
+
+///Peasantry / Militia Weapon Pack///
+
+/obj/item/rogueweapon/woodstaff/militia
+	force = 20
+	force_wielded = 30
+	possible_item_intents = list(SPEAR_BASH, /datum/intent/spear/cut)
+	gripped_intents = list(/datum/intent/pick/ranged, /datum/intent/spear/thrust, SPEAR_BASH)
+	name = "militia goedendag"
+	desc = "Clubs - and their spiked descendants - are older than most languages and civilizations. Tyme hasn't made them any less deadly, however. "
+	icon_state = "peasantwarclub"
+	icon = 'icons/roguetown/weapons/64.dmi'
+	smeltresult = /obj/item/rogueore/coal
+	sharpness = IS_SHARP
+	walking_stick = TRUE
+	wdefense = 6
+	max_blade_int = 80
+
+/obj/item/rogueweapon/woodstaff/militia/getonmobprop(tag)
+	. = ..()
+	if(tag)
+		switch(tag)
+			if("gen")
+				return list("shrink" = 0.8,"sx" = -9,"sy" = 5,"nx" = 9,"ny" = 5,"wx" = -4,"wy" = 4,"ex" = 4,"ey" = 4,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = -38,"sturn" = 37,"wturn" = 32,"eturn" = -23,"nflip" = 0,"sflip" = 8,"wflip" = 8,"eflip" = 0)
+			if("wielded")
+				return list("shrink" = 0.8,"sx" = 8,"sy" = 0,"nx" = -1,"ny" = 0,"wx" = -5,"wy" = -1,"ex" = 3,"ey" = 0,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = 7,"sturn" = -7,"wturn" = 16,"eturn" = -22,"nflip" = 8,"sflip" = 0,"wflip" = 8,"eflip" = 0)
+
+/obj/item/rogueweapon/greataxe/militia
+	name = "militia war axe"
+	desc = "Shovels have always held some manner of importance in a militiaman's lyfe. Instead of digging corpsepits, however, this poleaxe will now fill them up."
+	icon_state = "peasantwaraxe"
+	possible_item_intents = list(/datum/intent/axe/cut, /datum/intent/axe/chop, SPEAR_BASH) //bash is for nonlethal takedowns, only targets limbs
+	gripped_intents = list(/datum/intent/rend/reach, /datum/intent/axe/chop/battle/greataxe, /datum/intent/sword/peel/big, SPEAR_BASH)
+	force = 15
+	force_wielded = 25
+	minstr = 10
+	max_blade_int = 100
+	anvilrepair = /datum/skill/craft/carpentry
+	smeltresult = /obj/item/rogueore/coal
+	wdefense = 4
+	wbalance = WBALANCE_HEAVY
+
+/obj/item/rogueweapon/spear/militia
+	force = 18
+	force_wielded = 30
+	possible_item_intents = list(SPEAR_THRUST, SPEAR_BASH)
+	gripped_intents = list(SPEAR_THRUST, SPEAR_CUT, SPEAR_BASH)
+	name = "militia spear"
+	desc = "Pitchforks and hoes traditionally till the soil. In tymes of peril, however, it isn't uncommon for a militiaman to pound them into polearms."
+	icon_state = "peasantwarspear"
+	icon = 'icons/roguetown/weapons/64.dmi'
+	minstr = 8
+	max_blade_int = 100
+	max_integrity = 200
+	anvilrepair = /datum/skill/craft/carpentry
+	smeltresult = /obj/item/rogueore/coal
+	resistance_flags = FIRE_PROOF
+	light_system = MOVABLE_LIGHT
+	light_power = 5
+	light_outer_range = 5
+	light_on = FALSE
+	light_color = "#db892b"
+	var/is_loaded = FALSE 
+	var/list/hay_types = list(/obj/structure/fluff/nest, /obj/structure/composter, /obj/structure/flora/roguegrass, /obj/item/reagent_containers/food/snacks/grown/wheat)
+
+/obj/item/rogueweapon/spear/militia/ComponentInitialize()
+	. = ..()
+	AddComponent(/datum/component/ignitable/warspear)
+
+/obj/item/rogueweapon/spear/militia/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	. = ..()
+	if(user.Adjacent(target) || get_dist(target, user) <= user.used_intent?.reach)
+		if(!is_loaded)
+			for(var/type in hay_types)
+				if(istype(target, type))
+					load_hay()
+					update_icon()
+					user.regenerate_icons()
+					visible_message(span_warning("[user] grabs a clump of [target] and wraps it around \the [src]!"))
+					playsound(src, 'sound/misc/hay_collect.ogg', 100)
+					qdel(target)
+					break
+
+/obj/item/rogueweapon/spear/militia/proc/load_hay()
+	var/datum/component/ignitable/CI = GetComponent(/datum/component/ignitable)
+	is_loaded = TRUE
+	toggle_state = "peasantwarspear_hay"
+	icon_state = "[toggle_state][wielded ? "1" : ""]"
+	CI.make_ignitable()
+
+/datum/component/ignitable/warspear
+	single_use = TRUE
+	is_ignitable = FALSE
+	icon_state_ignited = "peasantwarspear_hayfire"
+
+
+/datum/component/ignitable/warspear/light_off()
+	..()
+	if(istype(parent, /obj/item/rogueweapon/spear/militia))
+		var/obj/item/rogueweapon/spear/militia/P = parent
+		P.is_loaded = FALSE
+
+//Component used to make any item gain the ability to be lit afire and turned into a light source / usable for single-use fire attack.
+//Uses toggle_state for the 'on-fire' sprites.
+//By default, all it does is become ignited when you click a fire / light source with it, and spread it to anything else, then extinguish.
+/datum/component/ignitable
+	var/is_ignitable = TRUE	//This var makes it actually ignitable, so you want to handle it on a per-item-with-component basis.
+	var/is_active
+	var/single_use = TRUE
+	var/icon_state_ignited
+
+/datum/component/ignitable/Initialize(...)
+	. = ..()
+	RegisterSignal(parent, COMSIG_ITEM_AFTERATTACK, PROC_REF(item_afterattack))
+	RegisterSignal(parent, COMSIG_PARENT_EXAMINE, PROC_REF(on_examine))
+	RegisterSignal(parent, COMSIG_ATOM_FIRE_ACT, PROC_REF(on_fireact))
+
+/datum/component/ignitable/proc/on_fireact(added, maxstacks)
+	if(is_ignitable && !is_active)
+		light_on()
+
+/datum/component/ignitable/proc/make_ignitable()
+	if(!is_ignitable && !is_active)
+		is_ignitable = TRUE
+
+/datum/component/ignitable/proc/light_on()
+	var/obj/I = parent
+	I.set_light_on(TRUE)
+	playsound(I.loc, 'sound/items/firelight.ogg', 100)
+	is_active = TRUE
+	is_ignitable = FALSE
+	update_icon()
+
+/datum/component/ignitable/proc/light_off()
+	var/obj/I = parent
+	I.set_light_on(FALSE)
+	playsound(get_turf(I), 'sound/items/firesnuff.ogg', 100)
+
+/datum/component/ignitable/proc/update_icon()
+	var/obj/item/I = parent
+	if(is_active)
+		I.toggle_state = "[icon_state_ignited]"
+		I.icon_state = "[icon_state_ignited][I.wielded ? "1" : ""]"
+	else
+		I.icon_state = "[initial(I.icon_state)][I.wielded ? "1" : ""]"
+		I.toggle_state = null
+		I.update_icon()
+
+
+/datum/component/ignitable/proc/item_afterattack(obj/item/source, atom/target, mob/user, proximity_flag, click_parameters)
+	var/ignited = FALSE
+	if(user.used_intent?.reach >= get_dist(target, user))
+		if(is_active)
+			if(isobj(target))
+				var/obj/O = target
+				if(!(O.resistance_flags & FIRE_PROOF))
+					O.spark_act()
+					O.fire_act()
+					ignited = TRUE
+			if(isliving(target))
+				var/mob/living/M = target
+				M.adjust_fire_stacks(5)
+				M.IgniteMob()
+				ignited = TRUE
+			if(ignited && single_use)
+				is_active = FALSE
+				light_off()
+				update_icon()
+				user.regenerate_icons()
+		else if(is_ignitable && !is_active)
+			if(isobj(target))
+				var/obj/O = target
+				if(O.damtype == BURN || O.light_on == TRUE)	//Super hacky, but should work on every conventional source you'd expect to ignite it. But also a few other weird ones.
+					light_on()
+					user.regenerate_icons()
+
+
+	
+/datum/component/ignitable/proc/on_examine(datum/source, mob/user, list/examine_list)
+	return
+
+/obj/item/rogueweapon/scythe
+	force = 15
+	force_wielded = 25
+	possible_item_intents = list(SPEAR_BASH)
+	gripped_intents = list(/datum/intent/spear/cut/scythe, SPEAR_BASH, MACE_STRIKE)
+	name = "scythe"
+	desc = "The bane of fields, the trimmer of grass, the harvester of wheat, and - depending on who you ask - the shepherd of souls to the afterlyfe."
+	icon_state = "peasantscythe"
+	icon = 'icons/roguetown/weapons/64.dmi'
+	pixel_y = -16
+	pixel_x = -16
+	inhand_x_dimension = 64
+	inhand_y_dimension = 64
+	bigboy = TRUE
+	gripsprite = TRUE
+	wlength = WLENGTH_GREAT
+	w_class = WEIGHT_CLASS_BULKY
+	minstr = 8
+	max_blade_int = 100
+	anvilrepair = /datum/skill/craft/carpentry
+	smeltresult = /obj/item/rogueore/coal
+	associated_skill = /datum/skill/labor/farming
+	blade_dulling = DULLING_SHAFT_WOOD
+	walking_stick = TRUE
+	wdefense = 6
+	thrown_bclass = BCLASS_BLUNT
+	throwforce = 10
+	resistance_flags = FLAMMABLE
+
+/obj/item/rogueweapon/scythe/getonmobprop(tag)
+	. = ..()
+	if(tag)
+		switch(tag)
+			if("gen")
+				return list("shrink" = 0.7,"sx" = -7,"sy" = 2,"nx" = 7,"ny" = 3,"wx" = -2,"wy" = 1,"ex" = 1,"ey" = 1,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = -38,"sturn" = 37,"wturn" = 30,"eturn" = -30,"nflip" = 0,"sflip" = 8,"wflip" = 8,"eflip" = 0)
+			if("wielded")
+				return list("shrink" = 0.7,"sx" = 5,"sy" = -3,"nx" = -5,"ny" = -2,"wx" = -5,"wy" = -1,"ex" = 3,"ey" = -2,"northabove" = 0,"southabove" = 1,"eastabove" = 1,"westabove" = 0,"nturn" = 7,"sturn" = -7,"wturn" = 16,"eturn" = -22,"nflip" = 8,"sflip" = 0,"wflip" = 8,"eflip" = 0)
+
+
+/obj/item/rogueweapon/pick/militia
+	name = "militia warpick"
+	desc = "At the end of the dae, a knight's bascinet isn't much different than a particularly large stone. After all, both tend to rupture with sobering ease when introduced to a sharpened pickend."
+	force = 20
+	force_wielded = 25
+	possible_item_intents = list(/datum/intent/pick)
+	gripped_intents = list(/datum/intent/pick, /datum/intent/stab/militia)
+	icon_state = "milpick"
+	icon = 'icons/roguetown/weapons/32.dmi'
+	sharpness = IS_SHARP
+	wlength = WLENGTH_SHORT
+	max_blade_int = 80
+	max_integrity = 400
+	slot_flags = ITEM_SLOT_HIP
+	associated_skill = /datum/skill/labor/mining
+	anvilrepair = /datum/skill/craft/carpentry
+	smeltresult = /obj/item/ingot/iron
+	wdefense = 1
+	wbalance = WBALANCE_NORMAL
+
+/obj/item/rogueweapon/pick/militia/steel
+	force = 25
+	force_wielded = 30
+	name = "militia steel warpick"
+	desc = "At the end of the dae, a knight's bascinet isn't much different than a particularly large stone. After all, both tend to rupture with sobering ease when introduced to a sharpened pickend. This one is honed out of steel parts."
+	icon_state = "milsteelpick"
+	max_blade_int = 160
+	max_integrity = 600
+	associated_skill = /datum/skill/combat/axes
+	anvilrepair = /datum/skill/craft/weaponsmithing
+	smeltresult = /obj/item/ingot/steel
+	wdefense = 5
+	wbalance = WBALANCE_HEAVY
+
+/obj/item/rogueweapon/sword/falchion/militia
+	name = "maciejowski"
+	desc = "Fittingly coined as a 'peasant's falchion', this hunting sword's blade has been retempered to hunt the most dangerous game. Those jagged edges are perfect for tearing into flesh-and-maille."
+	possible_item_intents = list(/datum/intent/sword/cut, /datum/intent/sword/strike)
+	icon_state = "maciejowski"
+	gripped_intents = list(/datum/intent/rend, /datum/intent/sword/chop/militia, /datum/intent/sword/peel, /datum/intent/sword/strike)
+	force = 18
+	force_wielded = 25
+	anvilrepair = /datum/skill/craft/carpentry
+	smeltresult = /obj/item/ingot/iron
+	wdefense = 3
+	wbalance = WBALANCE_HEAVY
+	intdamage_factor = 0.6

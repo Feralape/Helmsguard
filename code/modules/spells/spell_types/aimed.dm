@@ -30,7 +30,7 @@
 			msg = span_notice("[deactive_msg]")
 		if(charge_type == "recharge")
 			var/refund_percent = current_amount/projectile_amount
-			charge_counter = charge_max * refund_percent
+			charge_counter = recharge_time * refund_percent
 			start_recharge()
 		active = FALSE
 		remove_ranged_ability(msg)
@@ -100,7 +100,7 @@
 	name = "Fireball"
 	desc = ""
 	school = "evocation"
-	charge_max = 60
+	recharge_time = 60
 	clothes_req = FALSE
 	invocation = "ONI SOMA"
 	invocation_type = "shout"

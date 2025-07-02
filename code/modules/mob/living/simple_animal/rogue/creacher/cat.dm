@@ -40,13 +40,14 @@
 	faction = list("rogueanimal")
 	deaggroprob = 15
 	defprob = 30
-	defdrain = 10
 	dodgetime = 10
 	del_on_deaggro = 99 SECONDS
 	
 	// Loot
+	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat = 1)
 	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat = 2)
-	rot_type = null
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat = 2, /obj/item/natural/fur/bobcat = 1)	//Not a bobcat but fuck it, it's kinda funny.
+	
 	
 	// Misc
 	mob_size = MOB_SIZE_SMALL

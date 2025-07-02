@@ -1,6 +1,7 @@
 /datum/crafting_recipe/roguetown/weaving
 	structurecraft = /obj/machinery/loom
 	skillcraft = /datum/skill/misc/sewing
+	subtype_reqs = TRUE		//For subtypes of fur
 
 /datum/crafting_recipe/roguetown/weaving/rags
 	name = "webbed shirt (1 silk)"

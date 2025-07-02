@@ -30,7 +30,7 @@ GLOBAL_VAR_INIT(running_create_and_destroy, FALSE)
 		/obj/effect/DPfall,
 		/obj/effect/DPtarget,
 		// prompts loc for input
-		/obj/item/clothing/suit/roguetown/shirt/freishirt,
+		/obj/item/clothing/suit/roguetown/armor/gambeson/heavy/freishirt,
 	)
 	//these are VERY situational and need info passed
 	ignore += typesof(/obj/effect/abstract)

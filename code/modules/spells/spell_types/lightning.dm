@@ -2,7 +2,7 @@
 	name = "Tesla Blast"
 	desc = ""
 	charge_type = "recharge"
-	charge_max	= 300
+	recharge_time	= 300
 	clothes_req = TRUE
 	invocation = "UN'LTD P'WAH!"
 	invocation_type = "shout"

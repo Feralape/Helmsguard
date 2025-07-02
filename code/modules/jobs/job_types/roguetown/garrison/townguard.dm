@@ -23,6 +23,9 @@
 
 	cmode_music = 'sound/music/combat_guard.ogg'
 
+/datum/outfit/job/roguetown/guardsman
+	job_bitflag = BITFLAG_GARRISON
+
 /datum/job/roguetown/guardsman/after_spawn(mob/living/L, mob/M, latejoin = TRUE)
 	. = ..()
 	if(ishuman(L))
@@ -93,7 +96,7 @@ Archer is basically a 'bounty-catcher' in function, less specialized at close-qu
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	beltl = /obj/item/storage/keyring/sund/sund_watch
 	belt = /obj/item/storage/belt/rogue/leather/black
-	gloves = /obj/item/clothing/gloves/roguetown/leather
+	gloves = /obj/item/clothing/gloves/roguetown/fingerless_leather
 	backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/steel = 1, /obj/item/rope/chain = 1)
 	H.verbs |= /mob/proc/haltyell
 

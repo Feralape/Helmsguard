@@ -67,6 +67,8 @@
 		/datum/body_marking/eyeliner,
 		/datum/body_marking/tonage,
 		/datum/body_marking/nose,
+		/datum/body_marking/bangs,
+		/datum/body_marking/bun,
 	)
 
 /datum/species/human/northern/check_roundstart_eligible()
@@ -86,6 +88,7 @@
 		"West Raneshen (Vrdaqnan)" = SKIN_COLOR_SHALVISTINE,
 		"East Raneshen (Nshkormh)" = SKIN_COLOR_LALVESTINE,
 		"Naledi" = SKIN_COLOR_NALEDI,
+		"Naledi South" = SKIN_COLOR_NALEDI_LIGHT,
 		"Kazengun" = SKIN_COLOR_KAZENGUN
 	)
 

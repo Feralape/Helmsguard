@@ -72,6 +72,19 @@
 	new /obj/item/reagent_containers/glass/bottle/rogue/healthpot(src)
 	new /obj/item/reagent_containers/glass/bottle/rogue/healthpot(src)
 
+/datum/roguestock/import/rotpotion
+	name = "Crate of Rot Cure Potions"
+	desc = "A sought-after crate of rare potions of rot-curing."
+	item_type = /obj/structure/closet/crate/chest/steward/rotpotion
+	export_price = 400		//Expensive, 200 each roughly. Four uses total, as only 5u needed to reverse rot. Each bottle is 10u.
+	importexport_amt = 1
+
+/obj/structure/closet/crate/chest/steward/rotpotion/Initialize()
+	. = ..()
+	new /obj/item/reagent_containers/glass/bottle/alchemical/rogue/rotcure(src)
+	new /obj/item/reagent_containers/glass/bottle/alchemical/rogue/rotcure(src)
+
+
 /datum/roguestock/import/knight
 	name = "Knight Equipment Crate"
 	desc = "Kit for a Knight."
@@ -222,7 +235,7 @@
 
 /obj/structure/closet/crate/chest/steward/blacksmith/Initialize()
 	. = ..()
-	new /obj/item/rogueweapon/hammer(src)
+	new /obj/item/rogueweapon/hammer/iron(src)
 	new /obj/item/rogueweapon/tongs(src)
 	new /obj/item/natural/stone(src)
 	new /obj/item/natural/stone(src)
@@ -236,10 +249,35 @@
 	new /obj/item/natural/stone(src)
 	new /obj/item/natural/stone(src)
 	new /obj/item/roguebin(src)
-	new /obj/item/reagent_containers/glass/bucket/wooden(src)
+	new /obj/item/reagent_containers/glass/bucket(src)
 
+/datum/roguestock/import/craftsman
+	name = "Craftsman Crate"
+	desc = "Handsaw, chisel, hammer."
+	item_type = /obj/structure/closet/crate/chest/steward/craftsman
+	export_price = 60
+	importexport_amt = 1
 
+/obj/structure/closet/crate/chest/steward/craftsman/Initialize()
+	. = ..()
+	new /obj/item/rogueweapon/hammer/wood(src)
+	new /obj/item/rogueweapon/chisel(src)
+	new /obj/item/rogueweapon/handsaw(src)
 
+/datum/roguestock/import/glasscrate
+	name = "Glass Crate"
+	desc = "A crate full of glass for windows, repairs, and works of art.."
+	item_type = /obj/structure/closet/crate/chest/steward/glasscrate
+	export_price = 150
+	importexport_amt = 1
+
+/obj/structure/closet/crate/chest/steward/glasscrate/Initialize()
+	. = ..()
+	new /obj/item/natural/glass(src)
+	new /obj/item/natural/glass(src)
+	new /obj/item/natural/glass(src)
+	new /obj/item/natural/glass(src)
+	new /obj/item/natural/glass(src)
 
 
 

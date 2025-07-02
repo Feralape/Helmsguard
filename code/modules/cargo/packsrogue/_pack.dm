@@ -10,6 +10,10 @@
 	var/crate_name = "crate"
 	var/desc = ""//no desc by default
 	var/crate_type = /obj/structure/closet/crate
+	var/no_name_quantity = FALSE // If TRUE, do not display the name as "[Name] x [Amount]".
+	var/not_in_public = FALSE // If true, this pack will not be listed in the public goldface.
+	var/mandated_public_profit = 0 // If set, this pack will always additional cost this much percentage on top of the base cost when in the public vendor. All of the forced profit
+	// Goes to the merchant in stored profit. It cannot be changed nor set by the merchant in anyway to avoid players seeing the merchant as the enemy.
 	var/dangerous = FALSE // Should we message admins?
 	var/special = FALSE //Event/Station Goals/Admin enabled packs
 	var/special_enabled = FALSE
@@ -19,16 +23,10 @@
 
 /datum/supply_pack/New()
 	..()
-	var/lim = round(cost * 0.3)
+	var/lim = round(cost * 0.1)
 	cost = rand(cost-lim, cost+lim)
 	if(cost < 1)
 		cost = 1
-//	var/amt = 0
-//	for(var/I in contains)
-//		amt++
-//	if(amt > 1)
-//		name = "[name] x[amt]"
-//	name = "[name] ([cost])"
 
 /datum/supply_pack/proc/generate(atom/A, datum/bank_account/paying_account)
 	var/obj/structure/closet/crate/C

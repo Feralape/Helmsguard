@@ -82,8 +82,7 @@
 
 
 	var/datum/devotion/C = new /datum/devotion(H, H.patron)
-	C.grant_spells(H)
-	H.verbs += list(/mob/living/carbon/human/proc/devotionreport, /mob/living/carbon/human/proc/clericpray)
+	C.grant_miracles(H, cleric_tier = CLERIC_T1, passive_gain = CLERIC_REGEN_MINOR)	//Minor regen, can level up to T4.
 
 /obj/item/clothing/cloak/stabard/crusader
 	name = "surcoat of the golden order"

@@ -123,6 +123,10 @@
 	..()
 	. = 1
 
+/datum/reagent/consumable/sugar/molasses
+	name = "Molasses"
+	color = "#835c5c"
+
 /datum/reagent/consumable/virus_food
 	name = "Virus Food"
 	description = "A mixture of water and milk. Virus cells can use this mixture to reproduce."
@@ -648,3 +652,10 @@
 	color = "#78280A" // rgb: 120 40, 10
 	taste_mult = 2.5 //sugar's 1.5, capsacin's 1.5, so a good middle ground.
 	taste_description = "smokey sweetness"
+
+/datum/reagent/consumable/oil/tallow
+	name = "Tallow"
+	description = "Oil made from rendering animal fat. Used for deep frying."
+	nutriment_factor = 20
+	color = "#A6987B" // rgb: 48, 32, 0
+	taste_description = "rendered fat"

@@ -7,6 +7,9 @@
 	category_tags = list(CTAG_INQUISITION)
 	cmode_music = 'sound/music/combat_rogue.ogg'
 
+/datum/outfit/job/roguetown/confessor
+	job_bitflag = BITFLAG_CHURCH
+
 /datum/outfit/job/roguetown/confessor/pre_equip(mob/living/carbon/human/H)
 	..()
 	H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 3, TRUE) // Cudgellin - Nonlethals
@@ -24,7 +27,7 @@
 	H.mind.adjust_skillrank_up_to(/datum/skill/combat/crossbows, 4, TRUE)
 	cloak = /obj/item/clothing/suit/roguetown/armor/longcoat
 	wrists = /obj/item/clothing/neck/roguetown/psicross/silver
-	gloves = /obj/item/clothing/gloves/roguetown/leather/black
+	gloves = /obj/item/clothing/gloves/roguetown/fingerless_leather
 	beltl = /obj/item/rogueweapon/mace/cudgel
 	beltr = /obj/item/quiver/bolts
 	backr = /obj/item/storage/backpack/rogue/satchel/black

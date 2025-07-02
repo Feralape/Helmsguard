@@ -7,6 +7,9 @@
 	category_tags = list(CTAG_INQUISITION)
 	cmode_music = 'sound/music/templarofpsydonia.ogg'
 
+/datum/outfit/job/roguetown/psydoniantemplar
+	job_bitflag = BITFLAG_CHURCH
+
 /datum/outfit/job/roguetown/psydoniantemplar/pre_equip(mob/living/carbon/human/H)
 	..()
 	has_loadout = TRUE
@@ -51,8 +54,7 @@
 
 		H.dna.species.soundpack_m = new /datum/voicepack/male/knight()
 		var/datum/devotion/C = new /datum/devotion(H, H.patron)
-		C.grant_spells_templar(H)
-		H.verbs += list(/mob/living/carbon/human/proc/devotionreport, /mob/living/carbon/human/proc/clericpray)
+		C.grant_miracles(H, cleric_tier = CLERIC_T2, passive_gain = FALSE, devotion_limit = CLERIC_REQ_1) //Capped to T2 miracles. It's just a self-heal.
 
 
 /datum/outfit/job/roguetown/psydoniantemplar/choose_loadout(mob/living/carbon/human/H)

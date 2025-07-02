@@ -15,6 +15,7 @@
 	var/foodtype = NONE
 	var/last_check_time
 	var/in_container = FALSE //currently just stops "was bitten X times!" messages on canned food
+	var/fat_yield = 0 // How much tallow / oil can be rendered from this 
 	grid_width = 32
 	grid_height = 32
 

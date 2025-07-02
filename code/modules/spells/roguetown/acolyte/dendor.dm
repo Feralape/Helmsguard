@@ -4,7 +4,7 @@
 	range = 5
 	overlay_state = "blesscrop"
 	releasedrain = 30
-	charge_max = 30 SECONDS
+	recharge_time = 30 SECONDS
 	req_items = list(/obj/item/clothing/neck/roguetown/psicross)
 	max_targets = 0
 	cast_without_targets = TRUE
@@ -36,7 +36,7 @@
 	range = 5
 	overlay_state = "tamebeast"
 	releasedrain = 30
-	charge_max = 30 SECONDS
+	recharge_time = 30 SECONDS
 	req_items = list(/obj/item/clothing/neck/roguetown/psicross)
 	max_targets = 0
 	cast_without_targets = TRUE
@@ -70,7 +70,7 @@
 	range = 1
 	overlay_state = "blesscrop"
 	releasedrain = 30
-	charge_max = 30 SECONDS
+	recharge_time = 30 SECONDS
 	req_items = list(/obj/item/clothing/neck/roguetown/psicross)
 	max_targets = 0
 	cast_without_targets = TRUE
@@ -94,7 +94,7 @@
 	desc = "Draw upon the the secrets of the hidden firmament to converse with the mooncursed."
 	overlay_state = "howl"
 	antimagic_allowed = FALSE
-	charge_max = 600
+	recharge_time = 600
 	ignore_cockblock = TRUE
 	use_language = TRUE
 	var/first_cast = FALSE
@@ -115,20 +115,31 @@
 		to_chat(user, span_boldwarning("Ware thee well, child of Dendor."))
 		first_cast = TRUE
 	. = ..()
-	
-/obj/effect/proc_holder/spell/targeted/shapeshift/dendor
-	name = "Beast Form"
-	desc = "Take on the form of one of Dendor's sacred beasts."
+
+/obj/effect/proc_holder/spell/invoked/spiderspeak
+	name = "Spider Speak"
 	overlay_state = "tamebeast"
-	releasedrain = 60
-	charge_max = 30 SECONDS
-	invocation = "Treefather grant me your form!"
+	releasedrain = 15
+	chargedrain = 0
+	chargetime = 1 SECONDS
+	range = 2
+	warnie = "sydwarning"
+	movement_interrupt = FALSE
+	sound = 'sound/magic/churn.ogg'
+	invocation = "Spiders of psydonia, allow me to pass safely!"
 	invocation_type = "shout"
 	associated_skill = /datum/skill/magic/holy
-	devotion_cost = 80
+	recharge_time = 4 SECONDS
 	miracle = TRUE
-	clothes_req = FALSE
-	human_req = FALSE
+	devotion_cost = 25
 
-	die_with_shapeshifted_form =  FALSE
-	pick_again = TRUE
+/obj/effect/proc_holder/spell/invoked/spiderspeak/cast(list/targets, mob/living/user)
+	. = ..()
+	if(isliving(targets[1]))
+		var/mob/living/target = targets[1]
+		user.visible_message("<font color='yellow'>[user] infuses [target] with swirling strands of spectral webs!</font>")
+		target.visible_message("<font color='yellow'>You feel your tongue shift strangely, producing odd clicking noises.</font>")
+		target.apply_status_effect(/datum/status_effect/buff/spider_speak)
+		return TRUE
+	revert_cast()
+	return FALSE

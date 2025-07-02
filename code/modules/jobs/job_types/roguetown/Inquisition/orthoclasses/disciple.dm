@@ -6,22 +6,23 @@
 	outfit = /datum/outfit/job/roguetown/disciple
 	category_tags = list(CTAG_INQUISITION)
 
+/datum/outfit/job/roguetown/disciple
+	job_bitflag = BITFLAG_CHURCH
+
 /datum/outfit/job/roguetown/disciple/pre_equip(mob/living/carbon/human/H)
 	..()
 	neck = /obj/item/clothing/neck/roguetown/psicross/silver
-	pants = /obj/item/clothing/under/roguetown/heavy_leather_pants
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
+	gloves = /obj/item/clothing/gloves/roguetown/chain/psydon
 	shoes = /obj/item/clothing/shoes/roguetown/sandals
-	belt = /obj/item/storage/belt/rogue/leather/black
-	beltl = /obj/item/storage/belt/rogue/pouch/coins/mid
 	id = /obj/item/clothing/ring/silver
 	backl = /obj/item/storage/backpack/rogue/satchel
 	mask = /obj/item/clothing/mask/rogue/facemask/psydonmask
 	head = /obj/item/clothing/head/roguetown/roguehood/psydon
-	var/classes = list("Otavan Monk", "Naledi-Trained Scholar")
+	var/classes = list("Otavan Disciple", "Naledi-Trained Scholar")
 	var/classchoice = input("Choose your archetypes", "Available archetypes") as anything in classes
 	switch(classchoice)
-		if("Otavan Monk")
+		if("Otavan Disciple")
 			H.set_blindness(0)
 			brute_equip(H)
 		if("Naledi-Trained Scholar")
@@ -32,8 +33,7 @@
 		H.mind.adjust_skillrank_up_to(/datum/skill/magic/holy, 2, TRUE)
 
 	var/datum/devotion/C = new /datum/devotion(H, H.patron)
-	C.grant_spells_templar(H)
-	H.verbs += list(/mob/living/carbon/human/proc/devotionreport, /mob/living/carbon/human/proc/clericpray)
+	C.grant_miracles(H, cleric_tier = CLERIC_T2, passive_gain = FALSE, devotion_limit = CLERIC_REQ_1)	//Capped to T2 miracles. It's just a self-heal.
 
 /datum/outfit/job/roguetown/disciple/proc/brute_equip(mob/living/carbon/human/H)
 	backpack_contents = list(/obj/item/storage/keyring/sund/sund_inquisitor = 1)
@@ -50,9 +50,11 @@
 		H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 1, TRUE)
 		H.mind.adjust_skillrank_up_to(/datum/skill/craft/cooking, 1, TRUE)
 		H.change_stat("strength", 3)
-		H.change_stat("endurance", 4)
-		H.change_stat("constitution", 4)
+		H.change_stat("endurance", 3)
+		H.change_stat("constitution", 3)
 		H.change_stat("intelligence", -2)
+		H.change_stat("speed", -1)
+		ADD_TRAIT(H, TRAIT_CIVILIZEDBARBARIAN, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_INQUISITION, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_CRITICAL_RESISTANCE, TRAIT_GENERIC)
@@ -63,6 +65,9 @@
 /datum/outfit/job/roguetown/disciple/proc/naledi_equip(mob/living/carbon/human/H)
 	backpack_contents = list(/obj/item/storage/keyring/sund/sund_inquisitor = 1)
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat
+	pants = /obj/item/clothing/under/roguetown/heavy_leather_pants
+	belt = /obj/item/storage/belt/rogue/leather/black
+	beltl = /obj/item/storage/belt/rogue/pouch/coins/mid
 	cloak = /obj/item/clothing/cloak/psydontabard/alt
 	if(H.mind)
 		H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 5, TRUE)
@@ -85,6 +90,7 @@
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/forcewall)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/self/message)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/summonrogueweapon/bladeofpsydon)
+		ADD_TRAIT(H, TRAIT_CIVILIZEDBARBARIAN, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_INQUISITION, TRAIT_GENERIC)

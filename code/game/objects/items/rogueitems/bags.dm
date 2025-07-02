@@ -94,11 +94,35 @@
 
 /obj/item/storage/roguebag/food
 	populate_contents = list(
-	/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
-	/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
-	/obj/item/reagent_containers/food/snacks/rogue/crackerscooked,
-	/obj/item/reagent_containers/food/snacks/rogue/meat/coppiette,
-	/obj/item/reagent_containers/food/snacks/rogue/meat/coppiette,
+	/obj/item/reagent_containers/food/snacks/rogue/bread,
 	/obj/item/reagent_containers/food/snacks/grown/apple,
-	/obj/item/reagent_containers/glass/bottle/waterskin/milk
+	/obj/item/reagent_containers/glass/bottle/waterskin/milk,
+	/obj/item/fishingrod,
+	/obj/item/natural/worms/grubs,
+	/obj/item/natural/worms/grubs,
+	/obj/item/natural/worms/grubs,
+	/obj/item/natural/worms,
+	/obj/item/natural/worms,
+	/obj/item/natural/worms,
+	/obj/item/natural/worms/leech,
+	/obj/item/natural/worms/leech,
+	/obj/item/natural/worms/leech,
+	/obj/item/cooking/pan
+	)
+
+/obj/item/storage/roguebag/ash
+	populate_contents = list(
+		/obj/item/ash,
+		/obj/item/ash,
+		/obj/item/ash,
+		/obj/item/ash,
+		/obj/item/ash,
+		/obj/item/ash,
+		/obj/item/ash,
+		/obj/item/ash,
+		/obj/item/ash,
+		/obj/item/ash,
+		/obj/item/ash,
+		/obj/item/ash,
+	/obj/item/ash
 	)

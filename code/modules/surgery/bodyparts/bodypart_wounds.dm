@@ -124,13 +124,12 @@
 		var/mob/living/carbon/human/human_owner = owner
 		if(human_owner.checkcritarmor(zone_precise, bclass))
 			return FALSE
-		if(owner.mind && get_damage() < max_damage/2) //No crits except if it hits a damage threshold on players.
-			if(owner.mobility_flags & MOBILITY_STAND && !owner.buckled) //Unless they're buckled or lying down.
-				do_crit = FALSE
+		if(owner.mind && (get_damage() <= (max_damage * 0.9))) //No crits unless the damage is maxed out.
+			do_crit = FALSE // We used to check if they are buckled or lying down but being grounded is a big enough advantage.
 	if(user)
 		if(user.goodluck(2))
 			dam += 10
-		if(istype(user.rmb_intent, /datum/rmb_intent/weak))
+		if(istype(user.rmb_intent, /datum/rmb_intent/weak) || bclass == BCLASS_PEEL)
 			do_crit = FALSE
 	testing("bodypart_attacked_by() dam [dam]")
 	var/added_wound
@@ -159,6 +158,14 @@
 					added_wound = /datum/wound/puncture
 				if(1 to 10)
 					added_wound = /datum/wound/puncture/small
+		if(BCLASS_LASHING)
+			switch(dam)
+				if(20 to INFINITY)
+					added_wound = /datum/wound/lashing/large
+				if(10 to 20)
+					added_wound = /datum/wound/lashing
+				if(1 to 10)
+					added_wound = /datum/wound/lashing/small
 		if(BCLASS_BITE)
 			switch(dam)
 				if(20 to INFINITY)
@@ -187,7 +194,7 @@
 	var/from_behind = FALSE
 	if(user && (owner.dir == turn(get_dir(owner,user), 180)))
 		from_behind = TRUE
-	if (user && dam)
+	if(user && dam)
 		if(user.goodluck(2))
 			dam += 10
 	if(owner.resting)
@@ -202,7 +209,7 @@
 			to_chat(src, span_userdanger("SNEAK ATTACK!!! CRITICAL HIT CHANCE INCREASED!"))
 			to_chat(user, span_userdanger("SNEAK ATTACK!!! CRITICAL HIT CHANCE INCREASED!"))
 			user.mind?.adjust_experience(/datum/skill/misc/sneaking, user.STAINT * 5, TRUE)
-	if ((bclass = BCLASS_PUNCH) && (user && dam))
+	if((bclass = BCLASS_PUNCH) && (user && dam))
 		if(user && HAS_TRAIT(user, TRAIT_CIVILIZEDBARBARIAN))
 			dam += 15
 	if(bclass in GLOB.dislocation_bclasses)
@@ -222,8 +229,10 @@
 		if(HAS_TRAIT(src, TRAIT_BRITTLE))
 			used += 10
 		if(prob(used))
-			attempted_wounds += /datum/wound/dislocation
-			attempted_wounds += /datum/wound/fracture
+			if(damage_dividend >= 0.6)
+				attempted_wounds += /datum/wound/fracture		//More sevre wound
+			else
+				attempted_wounds += /datum/wound/dislocation	//Less sevre wound
 	if(bclass in GLOB.artery_bclasses)
 		used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
 		if(user)
@@ -233,10 +242,20 @@
 				used += 10
 		if(prob(used))
 			attempted_wounds += /datum/wound/artery
+	if(bclass in GLOB.whipping_bclasses)
+		used = round(damage_dividend * 20 + (dam / 3) - 10 * resistance, 1)
+		if(user && istype(user.rmb_intent, /datum/rmb_intent/strong))
+			dam += 10
+		if(HAS_TRAIT(src, TRAIT_CRITICAL_WEAKNESS))
+			attempted_wounds += /datum/wound/artery		//basically does sword-tier wounds.
+		if(prob(used))
+			attempted_wounds += /datum/wound/scarring
 
 	for(var/wound_type in shuffle(attempted_wounds))
 		var/datum/wound/applied = add_wound(wound_type, silent, crit_message)
 		if(applied)
+			if(user?.client)
+				GLOB.azure_round_stats[STATS_CRITS_MADE]++
 			return applied
 	return FALSE
 
@@ -283,7 +302,8 @@
 			used += 10
 		var/fracture_type = /datum/wound/fracture/chest
 		if(zone_precise == BODY_ZONE_PRECISE_GROIN)
-			fracture_type = /datum/wound/fracture/groin
+			if(damage_dividend >= 0.7)
+				fracture_type = /datum/wound/fracture/groin	//Paralyzes lower body
 		if(prob(used))
 			attempted_wounds += fracture_type
 	if(bclass in GLOB.artery_bclasses)
@@ -296,11 +316,26 @@
 		if(prob(used))
 			if((zone_precise == BODY_ZONE_PRECISE_STOMACH) && !resistance)
 				attempted_wounds += /datum/wound/slash/disembowel
-			attempted_wounds += /datum/wound/artery
+			if(owner.has_wound(/datum/wound/fracture/chest) || (bclass in GLOB.artery_heart_bclasses) || HAS_TRAIT(owner, TRAIT_CRITICAL_WEAKNESS))
+				attempted_wounds += /datum/wound/artery/chest
+			else
+				attempted_wounds += /datum/wound/artery
+	if(bclass in GLOB.whipping_bclasses)
+		used = round(damage_dividend * 20 + (dam / 4) - 10 * resistance, 1)
+		if(user)
+			if(istype(user.rmb_intent, /datum/rmb_intent/strong))
+				dam += 10
+		if(prob(used))
+			if(HAS_TRAIT(owner, TRAIT_CRITICAL_WEAKNESS))
+				attempted_wounds += /datum/wound/artery/chest
+			else
+				attempted_wounds += /datum/wound/scarring
 
 	for(var/wound_type in shuffle(attempted_wounds))
 		var/datum/wound/applied = add_wound(wound_type, silent, crit_message)
 		if(applied)
+			if(user?.client)
+				GLOB.azure_round_stats[STATS_CRITS_MADE]++
 			return applied
 	return FALSE
 
@@ -344,9 +379,9 @@
 		if(HAS_TRAIT(src, TRAIT_BRITTLE))
 			used += 20
 		if(user)
-			if(istype(user.rmb_intent, /datum/rmb_intent/strong))
+			if(istype(user.rmb_intent, /datum/rmb_intent/strong) || (user.m_intent == MOVE_INTENT_SNEAK))
 				used += 10
-		if(!owner.stat && !resistance && (zone_precise in knockout_zones) && (bclass != BCLASS_CHOP) && prob(used))
+		if(!owner.stat && !resistance && (zone_precise in knockout_zones) && (bclass != BCLASS_CHOP && bclass != BCLASS_PIERCE) && prob(used))
 			owner.next_attack_msg += " <span class='crit'><b>Critical hit!</b> [owner] is knocked out[from_behind ? " FROM BEHIND" : ""]!</span>"
 			owner.flash_fullscreen("whiteflash3")
 			owner.Unconscious(5 SECONDS + (from_behind * 10 SECONDS))
@@ -359,15 +394,19 @@
 		if(resistance)
 			fracture_type = /datum/wound/fracture
 		else if(zone_precise == BODY_ZONE_PRECISE_SKULL)
+			fracture_type = /datum/wound/fracture/head/brain
+		else if(zone_precise== BODY_ZONE_PRECISE_EARS)
+			fracture_type = /datum/wound/fracture/head/ears
 			necessary_damage = 0.8
-			used += 5
+		else if(zone_precise == BODY_ZONE_PRECISE_NOSE)
+			fracture_type = /datum/wound/fracture/head/nose
+			necessary_damage = 0.7
 		else if(zone_precise == BODY_ZONE_PRECISE_MOUTH)
 			fracture_type = /datum/wound/fracture/mouth
-			necessary_damage = 0.6
+			necessary_damage = 0.7
 		else if(zone_precise == BODY_ZONE_PRECISE_NECK)
 			fracture_type = /datum/wound/fracture/neck
 			dislocation_type = /datum/wound/dislocation/neck
-			necessary_damage = 0.9
 		if(prob(used) && (damage_dividend >= necessary_damage))
 			if(dislocation_type)
 				attempted_wounds += dislocation_type
@@ -403,7 +442,7 @@
 						else if(zone_precise == BODY_ZONE_PRECISE_L_EYE)
 							attempted_wounds += /datum/wound/facial/eyes/left
 				else if(zone_precise in tonguestab_zones)
-					var/obj/item/organ/tongue/tongue_up_my_asshole = owner.getorganslot(ORGAN_SLOT_TONGUE)
+					var/obj/item/organ/tongue/tongue_up_my_asshole = owner.getorganslot(ORGAN_SLOT_TONGUE)		//..hello?
 					if(!tongue_up_my_asshole || has_wound(/datum/wound/facial/tongue))
 						attempted_wounds += /datum/wound/fracture/mouth
 					else
@@ -419,6 +458,8 @@
 	for(var/wound_type in shuffle(attempted_wounds))
 		var/datum/wound/applied = add_wound(wound_type, silent, crit_message)
 		if(applied)
+			if(user?.client)
+				GLOB.azure_round_stats[STATS_CRITS_MADE]++
 			return applied
 	return FALSE
 
@@ -428,14 +469,21 @@
 		return FALSE
 	if(owner && ((owner.status_flags & GODMODE) || HAS_TRAIT(owner, TRAIT_PIERCEIMMUNE)))
 		return FALSE
+	if(istype(embedder, /obj/item/natural/worms/leech))
+		GLOB.azure_round_stats[STATS_LEECHES_EMBEDDED]++
 	LAZYADD(embedded_objects, embedder)
 	embedder.is_embedded = TRUE
 	embedder.forceMove(src)
 	if(owner)
 		embedder.add_mob_blood(owner)
-		if(!silent)
-			owner.emote("embed")
+		if (!silent)
 			playsound(owner, 'sound/combat/newstuck.ogg', 100, vary = TRUE)
+			if (owner.has_status_effect(/datum/status_effect/buff/ozium))
+				owner.emote ("exhales")
+			if (owner.has_status_effect(/datum/status_effect/buff/drunk) && !owner.has_status_effect(/datum/status_effect/buff/ozium))
+				owner.emote("pain")
+			if (!owner.has_status_effect(/datum/status_effect/buff/drunk) && !owner.has_status_effect(/datum/status_effect/buff/ozium))
+				owner.emote("embed")
 		if(crit_message)
 			owner.next_attack_msg += " <span class='userdanger'>[embedder] runs through [owner]'s [src]!</span>"
 		update_disabled()
@@ -564,6 +612,8 @@
 		returned_flags |= SURGERY_DISLOCATED
 	if(has_wound(/datum/wound/fracture))
 		returned_flags |= SURGERY_BROKEN
+	if(has_wound(/datum/wound/slash/vein))
+		returned_flags |= SURGERY_CUTVEIN
 	for(var/datum/wound/puncture/drilling/drilling in wounds)
 		if(drilling.is_sewn())
 			continue

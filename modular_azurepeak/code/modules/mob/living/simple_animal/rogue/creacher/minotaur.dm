@@ -4,6 +4,7 @@
 	icon_state = "MinotaurMale"
 	icon_living = "MinotaurMale"
 	icon_dead = "MinotaurMale_dead"
+	pixel_x = -16
 	gender = MALE
 	mob_biotypes = MOB_ORGANIC|MOB_BEAST
 	emote_hear = null
@@ -17,8 +18,12 @@
 	STASTR = 16
 	STASPD = 5
 	base_intents = list(/datum/intent/simple/minotaur_unarmed)
-	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 10,
-						/obj/item/natural/hide = 10, /obj/item/natural/bundle/bone/full = 2, /obj/item/natural/mino_head = 1)
+	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 2,
+						/obj/item/natural/hide = 2, /obj/item/natural/bundle/bone/full = 2, /obj/item/natural/mino_head = 1) // Made in-line w/ troll..
+	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 3,
+						/obj/item/natural/hide = 3, /obj/item/natural/bundle/bone/full = 2)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 5,
+						/obj/item/natural/hide = 5, /obj/item/natural/bundle/bone/full = 2) // No heads (yet). TBA.
 	faction = list("caves")
 
 	health = MINOTAUR_HEALTH

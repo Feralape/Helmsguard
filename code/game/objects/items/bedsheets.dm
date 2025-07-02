@@ -25,7 +25,7 @@ LINEN BINS
 	. = ..()
 	AddElement(/datum/element/bed_tuckable, 0, 0, 0)
 
-/obj/item/bedsheet/attack_self(mob/living/user)
+/obj/item/bedsheet/attack(mob/living/user)
 	if(!user.CanReach(src))		//No telekenetic grabbing.
 		return
 	if(!user.resting)
@@ -35,14 +35,19 @@ LINEN BINS
 	coverup(user)
 	add_fingerprint(user)
 
+/obj/item/bedsheet/rmb_self(mob/living/user)
+	setDir(turn(dir,180))
+	update_icon()
+	to_chat(user, span_notice("I flip [src]."))
+
 /obj/item/bedsheet/proc/coverup(mob/living/sleeper)
 	layer = ABOVE_MOB_LAYER
 	plane = -2
 	pixel_x = 0
 	pixel_y = 0
-	to_chat(sleeper, "<span class='notice'>I cover myself with [src].</span>")
+	visible_message(span_notice("[sleeper] covers with [src]."))
 	var/angle = sleeper.lying_prev
-	dir = angle2dir(angle + 180) // 180 flips it to be the same direction as the mob
+	dir = angle2dir(angle)
 
 	signal_sleeper = WEAKREF(sleeper)
 	RegisterSignal(src, COMSIG_ITEM_PICKUP, PROC_REF(on_pickup))
@@ -57,7 +62,7 @@ LINEN BINS
 	UnregisterSignal(sleeper, COMSIG_MOVABLE_MOVED)
 	UnregisterSignal(sleeper, COMSIG_LIVING_SET_RESTING)
 	UnregisterSignal(sleeper, COMSIG_PARENT_QDELETING)
-	to_chat(sleeper, "<span class='notice'>I smooth [src] out beneath you.</span>")
+	to_chat(sleeper, span_notice("I smooth [src] out beneath you."))
 	layer = initial(layer)
 	plane = initial(plane)
 	signal_sleeper = null
@@ -77,37 +82,37 @@ LINEN BINS
 
 /obj/item/bedsheet/rogue/cloth
 	desc = ""
-	icon = 'icons/roguetown/misc/structure.dmi'
+	icon = 'icons/roguetown/misc/beds.dmi'
 	icon_state = "cloth_bedsheet"
 	item_state = "cloth_bedsheet"
 
 /obj/item/bedsheet/rogue/pelt
 	desc = ""
-	icon = 'icons/roguetown/misc/structure.dmi'
+	icon = 'icons/roguetown/misc/beds.dmi'
 	icon_state = "pelt_bedsheet"
 	item_state = "pelt_bedsheet"
 
 /obj/item/bedsheet/rogue/wool
 	desc = ""
-	icon = 'icons/roguetown/misc/structure.dmi'
+	icon = 'icons/roguetown/misc/beds.dmi'
 	icon_state = "wool_bedsheet"
 	item_state = "wool_bedsheet"
 
 /obj/item/bedsheet/rogue/double_pelt
 	desc = ""
-	icon = 'icons/roguetown/misc/structure.dmi'
+	icon = 'icons/roguetown/misc/beds.dmi'
 	icon_state = "double_pelt_bedsheet"
 	item_state = "double_pelt_bedsheet"
 
 /obj/item/bedsheet/rogue/fabric
 	desc = ""
-	icon = 'icons/roguetown/misc/structure.dmi'
+	icon = 'icons/roguetown/misc/beds.dmi'
 	icon_state = "fabric_bedsheet"
 	item_state = "fabric_bedsheet"
 
 /obj/item/bedsheet/rogue/fabric_double
 	desc = ""
-	icon = 'icons/roguetown/misc/structure.dmi'
+	icon = 'icons/roguetown/misc/beds.dmi'
 	icon_state = "double_fabric_bedsheet"
 	item_state = "double_fabric_bedsheet"
 

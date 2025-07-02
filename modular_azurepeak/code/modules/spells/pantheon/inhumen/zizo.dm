@@ -10,11 +10,12 @@
 	projectile_type = /obj/projectile/magic/profane
 	chargedloop = /datum/looping_sound/invokeholy
 	invocation = "Oblino!"
-	invocation_type = "shout"
+	invocation_type = "whisper"
 	releasedrain = 30
 	chargedrain = 0
 	chargetime = 15
-	charge_max = 10 SECONDS
+	recharge_time = 10 SECONDS
+	hide_charge_effect = TRUE // Left handed magick babe
 
 /obj/effect/proc_holder/spell/invoked/projectile/profane/miracle
 	miracle = TRUE
@@ -108,41 +109,9 @@
 	releasedrain = 90
 	no_early_release = TRUE
 	movement_interrupt = TRUE
-	charge_max = 2 MINUTES
+	recharge_time = 2 MINUTES
 	var/list/excluded_bodyparts = list(/obj/item/bodypart/head)
-	var/list/obj/effect/proc_holder/spell/spell_choices = list(/obj/effect/proc_holder/spell/invoked/projectile/fireball,
-		/obj/effect/proc_holder/spell/invoked/projectile/lightningbolt,
-		/obj/effect/proc_holder/spell/invoked/projectile/fetch,
-		/obj/effect/proc_holder/spell/invoked/projectile/spitfire,
-		/obj/effect/proc_holder/spell/invoked/forcewall_weak,
-		/obj/effect/proc_holder/spell/invoked/slowdown_spell_aoe,
-		/obj/effect/proc_holder/spell/self/message,
-		/obj/effect/proc_holder/spell/invoked/push_spell,
-		/obj/effect/proc_holder/spell/invoked/blade_burst,
-		/obj/effect/proc_holder/spell/targeted/touch/nondetection,
-		/obj/effect/proc_holder/spell/invoked/haste,
-		/obj/effect/proc_holder/spell/invoked/featherfall,
-		/obj/effect/proc_holder/spell/targeted/touch/darkvision,
-		/obj/effect/proc_holder/spell/invoked/longstrider,
-		/obj/effect/proc_holder/spell/invoked/invisibility,
-		/obj/effect/proc_holder/spell/invoked/blindness,
-		/obj/effect/proc_holder/spell/invoked/projectile/acidsplash,
-//		/obj/effect/proc_holder/spell/invoked/frostbite,
-		/obj/effect/proc_holder/spell/invoked/guidance,
-		/obj/effect/proc_holder/spell/invoked/fortitude,
-		/obj/effect/proc_holder/spell/invoked/snap_freeze,
-		/obj/effect/proc_holder/spell/invoked/projectile/frostbolt,
-		/obj/effect/proc_holder/spell/invoked/projectile/arcynebolt,
-		/obj/effect/proc_holder/spell/invoked/gravity,
-		/obj/effect/proc_holder/spell/invoked/projectile/repel,
-		/obj/effect/proc_holder/spell/invoked/aerosolize,
-		/obj/effect/proc_holder/spell/targeted/touch/lesserknock,
-		/obj/effect/proc_holder/spell/invoked/counterspell,
-		/obj/effect/proc_holder/spell/invoked/enlarge,
-		/obj/effect/proc_holder/spell/invoked/leap,
-		/obj/effect/proc_holder/spell/invoked/blink,
-		/obj/effect/proc_holder/spell/invoked/mirror_transform
-	)
+	hide_charge_effect = TRUE
 
 /obj/effect/proc_holder/spell/invoked/rituos/miracle
 	miracle = TRUE
@@ -198,8 +167,14 @@
 	var/obj/item/bodypart/part_to_bonify = user.get_bodypart(the_part.body_zone)
 
 	var/list/choices = list()
+	var/list/spell_choices = GLOB.learnable_spells
 	for(var/i = 1, i <= spell_choices.len, i++)
-		choices["[spell_choices[i].name]"] = spell_choices[i]
+		var/obj/effect/proc_holder/spell/spell_item = spell_choices[i]
+		if(spell_item.spell_tier > 3) // Hardcap Rituos choice to T3 to avoid Court Mage spells access
+			continue
+		choices["[spell_item.name]"] = spell_item
+
+	choices = sortList(choices)
 
 	var/choice = input("Choose an arcyne expression of the Lesser Work") as null|anything in choices
 	var/obj/effect/proc_holder/spell/item = choices[choice]
@@ -228,7 +203,7 @@
 		//everything but our head is skeletonized now, so grant them journeyman rank and 3 extra spellpoints to grief people with
 		user.mind?.adjust_skillrank(/datum/skill/magic/arcane, 3, TRUE)
 		user.mind?.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
-		user.mind?.adjust_spellpoints(6)
+		user.mind?.adjust_spellpoints(18)
 		user.visible_message(span_boldwarning("[user]'s form swells with terrible power as they cast away almost all of the remnants of their mortal flesh, arcyne runes glowing upon their exposed bones..."), span_notice("I HAVE DONE IT! I HAVE COMPLETED HER LESSER WORK! I stand at the cusp of unspeakable power, but something is yet missing..."))
 		ADD_TRAIT(user, TRAIT_NOHUNGER, "[type]")
 		ADD_TRAIT(user, TRAIT_NOBREATH, "[type]")
@@ -241,3 +216,32 @@
 		user.mind.rituos_spell = item
 		user.mind.AddSpell(new item)
 		return TRUE
+
+
+/obj/effect/proc_holder/spell/self/zizo_snuff
+	name = "Snuff Lights"
+	releasedrain = 10
+	chargedrain = 0
+	chargetime = 0
+	chargedloop = /datum/looping_sound/invokeholy
+	sound = 'sound/magic/zizo_snuff.ogg'
+	overlay_state = "rune2"
+	associated_skill = /datum/skill/magic/holy
+	antimagic_allowed = FALSE
+	recharge_time = 12 SECONDS
+	miracle = TRUE
+	devotion_cost = 30
+	range = 2
+	
+/obj/effect/proc_holder/spell/self/zizo_snuff/cast(list/targets, mob/user = usr)
+	. = ..()
+	if(!ishuman(user))
+		revert_cast()
+		return FALSE
+	var/checkrange = (range + user.mind?.get_skill_level(/datum/skill/magic/holy)) //+1 range per holy skill up to a potential of 8.
+	for(var/obj/O in range(checkrange, user))	
+		O.extinguish()
+	for(var/mob/M in range(checkrange, user))
+		for(var/obj/O in M.contents)
+			O.extinguish()
+	return TRUE

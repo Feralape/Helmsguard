@@ -14,7 +14,7 @@
 	max_integrity = 40
 	integrity_failure = 0.15
 	attacked_sound = 'sound/misc/woodhit.ogg'
-	var/list/eatablez = list(/obj/item/organ, /obj/item/reagent_containers/food/snacks/meat,/obj/item/compost,
+	var/list/eatablez = list(/obj/item/organ, /obj/item/reagent_containers/food/snacks/rogue/meat/steak,/obj/item/compost,
 /obj/item/natural/poo)
 	var/last_eat
 	buckle_lying = 0
@@ -78,7 +78,7 @@
 	if(isliving(user))
 		var/mob/living/L = user
 		var/time2mount = CLAMP((L.STASTR * 2), 1, 99)
-		user.changeNext_move(CLICK_CD_RAPID)
+		user.changeNext_move(CLICK_CD_FAST, override = TRUE)
 		if(user != M)
 			if(prob(time2mount))
 				..()

@@ -45,19 +45,20 @@
 			backr = /obj/item/storage/backpack/rogue/satchel
 			beltr = /obj/item/storage/belt/rogue/surgery_bag/full
 			beltl = /obj/item/flashlight/flare/torch/lantern
-			backpack_contents = list(/obj/item/reagent_containers/powder/spice = 2, /obj/item/reagent_containers/powder/ozium = 1, /obj/item/reagent_containers/powder/moondust = 2, /obj/item/rogueweapon/huntingknife = 1)
+			backpack_contents = list(/obj/item/reagent_containers/powder/spice = 2, /obj/item/reagent_containers/powder/ozium = 1, /obj/item/reagent_containers/powder/moondust = 2, /obj/item/rogueweapon/huntingknife = 1, /obj/item/recipe_book/survival = 1)
 			H.change_stat("intelligence", 3)
 			H.change_stat("perception", 2)
 			H.change_stat("speed", 1)
 
 		if("Brewer")
-			to_chat(H, span_warning("You make your coin peddling imported alcohols from all over the world, though you're no stranger to the craft, and have experience brewing your own ale in a pinch."))
+			to_chat(H, span_warning("You make your coin peddling imported alcohols from all over the world, though you're no stranger to the craft, and have experience brewing your own ale in a pinch. You have the equipments and know how on how to make your own distiller, too."))
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/craft/crafting, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/unarmed, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/maces, 1, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/craft/cooking, 3, TRUE)
+			H.mind.adjust_skillrank(/datum/skill/craft/engineering, 1, TRUE) // CBT to make a copper distillery
 			H.mind.adjust_skillrank_up_to(/datum/skill/labor/farming, 3, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/swimming, 1, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/climbing, 1, TRUE)
@@ -72,11 +73,20 @@
 			backr = /obj/item/storage/backpack/rogue/satchel
 			beltr = /obj/item/rogueweapon/mace/cudgel
 			beltl = /obj/item/flashlight/flare/torch/lantern
-			backpack_contents = list(/obj/item/reagent_containers/glass/bottle/rogue/beer/gronnmead = 1, /obj/item/reagent_containers/glass/bottle/rogue/beer/voddena = 1, /obj/item/reagent_containers/glass/bottle/rogue/beer/blackgoat = 1, /obj/item/reagent_containers/glass/bottle/rogue/elfred = 1, /obj/item/reagent_containers/glass/bottle/rogue/elfblue = 1, /obj/item/rogueweapon/huntingknife = 1)
+			backpack_contents = list(/obj/item/reagent_containers/glass/bottle/rogue/beer/gronnmead = 1, 
+				/obj/item/reagent_containers/glass/bottle/rogue/beer/voddena = 1,
+				/obj/item/reagent_containers/glass/bottle/rogue/beer/blackgoat = 1, 
+				/obj/item/reagent_containers/glass/bottle/rogue/elfred = 1, 
+				/obj/item/reagent_containers/glass/bottle/rogue/elfblue = 1, 
+				/obj/item/rogueweapon/huntingknife = 1,
+				/obj/item/ingot/copper = 2,
+				/obj/item/roguegear = 1, 
+				/obj/item/recipe_book/survival = 1)
 			H.change_stat("intelligence", 3)
 			H.change_stat("perception", 1)
 			H.change_stat("strength", 1)
 			H.change_stat("constitution", 1)
+			ADD_TRAIT(H, TRAIT_CICERONE, TRAIT_GENERIC) // To view what is in a bottle.
 
 		if ("Jeweler")
 			to_chat(H, span_warning("You make your coin peddling exotic jewelry, gems, and shiny things."))
@@ -101,7 +111,7 @@
 			neck = /obj/item/storage/belt/rogue/pouch/coins/mid
 			beltl = /obj/item/flashlight/flare/torch/lantern
 			beltr = /obj/item/rogueweapon/huntingknife
-			backpack_contents = list(/obj/item/clothing/ring/silver = 2, /obj/item/clothing/ring/gold = 1, /obj/item/rogueweapon/tongs = 1, /obj/item/rogueweapon/hammer = 1, /obj/item/roguegem/yellow = 1, /obj/item/roguegem/green = 1)
+			backpack_contents = list(/obj/item/clothing/ring/silver = 2, /obj/item/clothing/ring/gold = 1, /obj/item/rogueweapon/tongs = 1, /obj/item/rogueweapon/hammer/steel = 1, /obj/item/roguegem/yellow = 1, /obj/item/roguegem/green = 1, /obj/item/recipe_book/survival = 1)
 			H.change_stat("intelligence", 3)
 			H.change_stat("perception", 1)
 			H.change_stat("strength", 1)
@@ -131,7 +141,7 @@
 			neck = /obj/item/storage/belt/rogue/pouch/coins/mid
 			beltl = /obj/item/flashlight/flare/torch/lantern
 			beltr = /obj/item/rogueweapon/stoneaxe/woodcut
-			backpack_contents = list(/obj/item/clothing/neck/roguetown/psicross/silver = 3, /obj/item/clothing/neck/roguetown/psicross = 2, /obj/item/clothing/neck/roguetown/psicross/wood = 1, /obj/item/rogueweapon/huntingknife = 1)
+			backpack_contents = list(/obj/item/clothing/neck/roguetown/psicross/silver = 3, /obj/item/clothing/neck/roguetown/psicross = 2, /obj/item/clothing/neck/roguetown/psicross/wood = 1, /obj/item/rogueweapon/huntingknife = 1, /obj/item/recipe_book/survival = 1)
 			H.change_stat("intelligence", 3)
 			H.change_stat("perception", 1)
 			H.change_stat("strength", 1)
@@ -159,7 +169,7 @@
 			beltl = /obj/item/flashlight/flare/torch/lantern
 			beltr = /obj/item/rogueweapon/huntingknife/idagger
 			H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
-			backpack_contents = list(/obj/item/paper/scroll = 3, /obj/item/book/rogue/knowledge1 = 1, /obj/item/reagent_containers/glass/bottle/rogue/manapot = 1, /obj/item/reagent_containers/glass/bottle/rogue/strongmanapot = 1, /obj/item/natural/feather = 1, /obj/item/roguegem/amethyst = 1)
+			backpack_contents = list(/obj/item/paper/scroll = 3, /obj/item/book/rogue/knowledge1 = 1, /obj/item/reagent_containers/glass/bottle/rogue/manapot = 1, /obj/item/reagent_containers/glass/bottle/rogue/strongmanapot = 1, /obj/item/natural/feather = 1, /obj/item/roguegem/amethyst = 1, /obj/item/recipe_book/survival = 1)
 			H.change_stat("intelligence", 3)
 			H.change_stat("perception", 1)
 			H.change_stat("speed", 1)
@@ -177,7 +187,7 @@
 			head = /obj/item/clothing/head/roguetown/jester
 			neck = /obj/item/storage/belt/rogue/pouch/coins/mid
 			H.cmode_music = 'sound/music/combat_jester.ogg'
-			backpack_contents = list(/obj/item/smokebomb = 3, /obj/item/storage/pill_bottle/dice = 1, /obj/item/toy/cards/deck = 1)
+			backpack_contents = list(/obj/item/smokebomb = 3, /obj/item/storage/pill_bottle/dice = 1, /obj/item/toy/cards/deck = 1, /obj/item/recipe_book/survival = 1)
 			H.mind.adjust_skillrank_up_to(/datum/skill/combat/knives, 2, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/reading, 3, TRUE)
 			H.mind.adjust_skillrank_up_to(/datum/skill/misc/sneaking, 3, TRUE)

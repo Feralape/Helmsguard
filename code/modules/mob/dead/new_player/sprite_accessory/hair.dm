@@ -21,6 +21,10 @@
 	name = "80s-style Hair"
 	icon_state = "80s"
 
+/datum/sprite_accessory/hair/head/shorthaireighties_alt
+	name = "80s-style Hair (Alt)"
+	icon_state = "80s_alt"
+
 /datum/sprite_accessory/hair/head/afro
 	name = "Afro"
 	icon_state = "afro"
@@ -449,6 +453,10 @@
 /datum/sprite_accessory/hair/head/nitori
 	name = "Nitori"
 	icon_state = "nitori"
+
+/datum/sprite_accessory/hair/head/newyou
+	name = "New You"
+	icon_state = "newyou"
 
 /datum/sprite_accessory/hair/head/odango
 	name = "Odango"
@@ -1141,6 +1149,14 @@
 /datum/sprite_accessory/hair/head/shorthair6
 	name = "Short Hair 6"
 	icon_state = "shorthair_alt"
+
+/datum/sprite_accessory/hair/head/bubblebraids
+	name = "Bubble Braids"
+	icon_state = "bubblebraid"
+
+/datum/sprite_accessory/hair/head/bubblebraids_v2
+	name = "Bubble Braids Alt"
+	icon_state = "bubblebraid_v2"
 
 /datum/sprite_accessory/hair/head/vulpkian
 	abstract_type = /datum/sprite_accessory/hair/head/vulpkian

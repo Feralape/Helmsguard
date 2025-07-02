@@ -22,6 +22,7 @@ GLOBAL_LIST_EMPTY(crafting_recipes)				//list of all table craft recipes
 GLOBAL_LIST_EMPTY(anvil_recipes)				//list of all table craft recipes
 GLOBAL_LIST_EMPTY(alch_grind_recipes)			//list of all alchemy grinding recipes
 GLOBAL_LIST_EMPTY(alch_cauldron_recipes)		//list of all alchemy cauldron recipes
+GLOBAL_LIST_EMPTY(cooking_recipes)				//list of all cooking recipes. currently unused, pending a broader crafting refactor.
 GLOBAL_LIST_EMPTY(rcd_list)					//list of Rapid Construction Devices.
 GLOBAL_LIST_EMPTY(apcs_list)					//list of all Area Power Controller machines, separate from machines for powernet speeeeeeed.
 GLOBAL_LIST_EMPTY(tracked_implants)			//list of all current implants that are tracked to work out what sort of trek everyone is on. Sadly not on lavaworld not implemented...
@@ -33,6 +34,8 @@ GLOBAL_LIST_EMPTY(meteor_list)				// List of all meteors.
 GLOBAL_LIST_EMPTY(active_jammers)             // List of active radio jammers
 GLOBAL_LIST_EMPTY(ladders)
 GLOBAL_LIST_EMPTY(trophy_cases)
+
+GLOBAL_LIST_EMPTY(stew_recipes) // list of all stew recipes
 
 GLOBAL_LIST_EMPTY(wire_color_directory)
 GLOBAL_LIST_EMPTY(wire_name_directory)

@@ -34,7 +34,7 @@ SUBSYSTEM_DEF(traumas)
 									/obj/item/organ/tail/lizard)),
 
 		"skeletons" = typecacheof(list(/obj/item/organ/tongue/bone,
-										/obj/item/reagent_containers/food/snacks/meat/slab/human/mutant/skeleton,
+										/obj/item/reagent_containers/food/snacks/rogue/meat/steak,
 										/obj/effect/decal/remains/human)),
 
 	)

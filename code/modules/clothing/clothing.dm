@@ -1,8 +1,3 @@
-#define ARMOR_CLASS_NONE 0
-#define ARMOR_CLASS_LIGHT 1
-#define ARMOR_CLASS_MEDIUM 2
-#define ARMOR_CLASS_HEAVY 3
-
 /obj/item/clothing
 	name = "clothing"
 	resistance_flags = FLAMMABLE
@@ -268,7 +263,10 @@
 			return
 		user.changeNext_move(CLICK_CD_MELEE)
 		M.visible_message(span_warning("[user] pats out the flames on [M] with [src]!"))
-		M.adjust_fire_stacks(-2)
+		if(M.divine_fire_stacks > 0)
+			M.adjust_divine_fire_stacks(-2)
+		if(M.fire_stacks > 0)
+			M.adjust_fire_stacks(-2)
 		take_damage(10, BURN, "fire")
 	else
 		return ..()

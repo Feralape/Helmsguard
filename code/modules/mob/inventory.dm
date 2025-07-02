@@ -320,10 +320,10 @@
 
 //Outdated but still in use apparently. This should at least be a human proc.
 //Daily reminder to murder this - Remie.
-/mob/living/proc/get_equipped_items(include_pockets = FALSE)
+/mob/living/proc/get_equipped_items(include_pockets = FALSE, include_beltslots = TRUE)
 	return
 
-/mob/living/carbon/get_equipped_items(include_pockets = FALSE)
+/mob/living/carbon/get_equipped_items(include_pockets = FALSE, include_beltslots = TRUE)
 	var/list/items = list()
 	if(back)
 		items += back
@@ -335,14 +335,15 @@
 		items += wear_neck
 	return items
 
-/mob/living/carbon/human/get_equipped_items(include_pockets = FALSE)
+/mob/living/carbon/human/get_equipped_items(include_pockets = FALSE, include_beltslots = TRUE)
 	var/list/items = ..()
 	if(belt)
 		items += belt
-	if(beltr)
-		items += beltr
-	if(beltl)
-		items += beltl
+	if(include_beltslots) //prototype arg defined as true for legacy
+		if(beltr)
+			items += beltr
+		if(beltl)
+			items += beltl
 	if(backr)
 		items += backr
 	if(backl)

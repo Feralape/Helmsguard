@@ -13,7 +13,9 @@
 	base_intents = list(/datum/intent/use)
 	maxHealth = MUDCRAB_HEALTH
 	health = MUDCRAB_HEALTH
+	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/crab = 1, /obj/item/alch/viscera = 1)
 	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/crab = 2, /obj/item/alch/viscera = 2)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/crab = 3, /obj/item/alch/viscera = 2)
 	food_type = list(/obj/item/reagent_containers/food/snacks)
 	faction = list("crabs")
 	response_help_continuous = "pets"
@@ -29,7 +31,7 @@
 	var/obj/item/inventory_head
 	var/obj/item/inventory_mask
 	gold_core_spawnable = FRIENDLY_SPAWN
-	rot_type = null
+	
 
 	can_have_ai = FALSE //disable native ai
 	AIStatus = AI_OFF

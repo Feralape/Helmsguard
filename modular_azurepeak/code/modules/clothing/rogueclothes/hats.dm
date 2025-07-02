@@ -9,6 +9,7 @@
 	smeltresult = /obj/item/ingot/steel
 	smelt_bar_num = 2
 
+
 /obj/item/clothing/head/roguetown/helmet/heavy/malum
 	name = "helm of malum"
 	desc = "Forged in a coal-black, this helmet carries a sigiled blade upon it's visor, ever reminding it's wearer of Malum's powerful gaze."
@@ -19,6 +20,7 @@
 	block2add = FOV_BEHIND
 	smeltresult = /obj/item/ingot/steel
 	smelt_bar_num = 2
+
 
 /obj/item/clothing/head/roguetown/helmet/heavy/necran
 	name = "necran helmet"
@@ -52,6 +54,7 @@
 	block2add = FOV_BEHIND
 	smeltresult = /obj/item/ingot/steel
 	smelt_bar_num = 2
+
 
 /obj/item/clothing/head/roguetown/helmet/heavy/ravox
 	name = "ravoxian helmet"

@@ -2,7 +2,7 @@
 	name = "Forcewall"
 	desc = ""
 	school = "transmutation"
-	charge_max = 100
+	recharge_time = 100
 	clothes_req = FALSE
 	invocation = "TARCOL MINTI ZHERI"
 	invocation_type = "shout"

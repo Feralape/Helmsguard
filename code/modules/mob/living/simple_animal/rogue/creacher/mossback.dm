@@ -14,7 +14,11 @@
 	see_in_dark = 10
 	move_to_delay = 3
 	base_intents = list(/datum/intent/simple/claw/mossback)
-	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/crab = 5, /obj/item/alch/viscera = 2)
+	botched_butcher_results = list (/obj/item/reagent_containers/food/snacks/rogue/meat/crab = 1, /obj/item/alch/viscera = 1)
+	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/crab = 3, 
+							/obj/item/alch/viscera = 2)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/crab = 5, 
+									/obj/item/alch/viscera = 2)
 	faction = list("crabs")
 	mob_biotypes = MOB_ORGANIC|MOB_BEAST
 	health = MOSSBACK_HEALTH
@@ -33,19 +37,19 @@
 	pooptype = null
 	deaggroprob = 0
 	defprob = 40
-	defdrain = 10
 	del_on_deaggro = 10 SECONDS
 	retreat_health = 0
 	food = 0
 	attack_sound = list('sound/combat/wooshes/blunt/wooshhuge (1).ogg','sound/combat/wooshes/blunt/wooshhuge (2).ogg','sound/combat/wooshes/blunt/wooshhuge (3).ogg')
 	dodgetime = 0
 	aggressive = 1
-	rot_type = null
+	
 //	stat_attack = UNCONSCIOUS
 
 	can_have_ai = FALSE //disable native ai
 	AIStatus = AI_OFF
 	ai_controller = /datum/ai_controller/mossback
+	melee_cooldown = MOSSBACK_ATTACK_SPEED
 
 /mob/living/simple_animal/hostile/retaliate/rogue/mossback/Initialize(mapload, mob/user, townercrab = FALSE)
 	. = ..()
@@ -55,7 +59,7 @@
 		summoner = user.name
 		if (townercrab)
 			faction = list("neutral")
-			tamed(1)
+			tamed(user)
 
 /mob/living/simple_animal/hostile/retaliate/rogue/mossback/get_sound(input)
 	switch(input)

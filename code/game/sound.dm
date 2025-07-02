@@ -45,20 +45,21 @@
 			listeners += SSmobs.dead_players_by_zlevel[below_turf.z]
 
 	listeners += SSmobs.dead_players_by_zlevel[source_z]
-	if(animal_pref)
-		for(var/mob/M as anything in listeners)
-			if(M.client)
-				if(M.client.prefs?.mute_animal_emotes)
-					listeners -= M
 	. = list()
 
 	for(var/mob/M as anything in listeners)
 		if(get_dist(M, turf_source) <= maxdistance)
+			if(animal_pref)
+				if(M.client?.prefs?.mute_animal_emotes)
+					continue
 			if(M.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, channel, pressure_affected, S, repeat))
 				. += M
 
 	for(var/mob/M as anything in muffled_listeners)
 		if(get_dist(M, turf_source) <= maxdistance)
+			if(animal_pref)
+				if(M.client?.prefs?.mute_animal_emotes)
+					continue
 			if(M.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, channel, pressure_affected, S, repeat, muffled = TRUE))
 				. += M
 

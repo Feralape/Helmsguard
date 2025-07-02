@@ -139,7 +139,7 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 	var/dextrous = FALSE
 	var/dextrous_hud_type = /datum/hud/dextrous
 
-	///The Status of our AI, can be set to AI_ON (On, usual processing), AI_IDLE (Will not process, but will return to AI_ON if an enemy comes near), AI_OFF (Off, Not processing ever), AI_Z_OFF (Temporarily off due to nonpresence of players).
+	///The Status of our AI, can be set to AI_ON (On, usual processing), AI_IDLE (Will not process, but will return to AI_ON if an enemy comes near), NPC_AI_OFF (Off, Not processing ever), AI_Z_OFF (Temporarily off due to nonpresence of players).
 	var/AIStatus = AI_ON
 	///once we have become sentient, we can never go back.
 	var/can_have_ai = TRUE
@@ -174,6 +174,10 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 	cmode = 1
 
 	var/remains_type
+	var/binded = FALSE // Whether it is bound to a summoning circle or not
+
+	var/botched_butcher_results
+	var/perfect_butcher_results
 	//stamina stuff
 	var/origin_rogstam
 	var/origin_rogfat
@@ -237,6 +241,7 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 	stop_automated_movement_when_pulled = TRUE
 	if(user)
 		owner = user
+		SEND_SIGNAL(user, COMSIG_ANIMAL_TAMED, src)
 	return
 
 //mob/living/simple_animal/examine(mob/user)
@@ -265,6 +270,8 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 		retreating = null
 		retreat_distance = initial(retreat_distance)
 		minimum_distance = initial(minimum_distance)
+	if(HAS_TRAIT(src, TRAIT_RIGIDMOVEMENT))
+		return
 	if(HAS_TRAIT(src, TRAIT_IGNOREDAMAGESLOWDOWN))
 		move_to_delay = initial(move_to_delay)
 		return
@@ -292,7 +299,8 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 			SEND_SIGNAL(src, COMSIG_MOB_STATCHANGE, DEAD)
 			return
 	if(footstep_type)
-		AddComponent(/datum/component/footstep, footstep_type)
+		if(!QDELING(src))
+			AddComponent(/datum/component/footstep, footstep_type)
 
 /mob/living/simple_animal/handle_status_effects()
 	..()
@@ -391,46 +399,70 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 		if(held_item)
 			if((butcher_results || guaranteed_butcher_results) && held_item.get_sharpness() && held_item.wlength == WLENGTH_SHORT)
 				var/used_time = 210
+				if(src.buckled && istype(src.buckled, /obj/structure/meathook))
+					used_time -= 30
+					visible_message("[user] begins to efficiently butcher [src]...")
+				else
+					visible_message("[user] begins to butcher [src]...")
 				if(user.mind)
 					used_time -= (user.mind.get_skill_level(/datum/skill/labor/butchering) * 30)
-				visible_message("[user] begins to butcher [src].")
 				playsound(src, 'sound/foley/gross.ogg', 100, FALSE)
 				if(do_after(user, used_time, target = src))
-					gib()
+					butcher(user)
 					if(user.mind)
 						user.mind.add_sleep_experience(/datum/skill/labor/butchering, user.STAINT * 4)
-	else if (stat != DEAD && istype(ssaddle, /obj/item/natural/saddle))
+		
+	else if (stat != DEAD && istype(ssaddle, /obj/item/natural/saddle))		//Fallback saftey for saddles
 		var/datum/component/storage/saddle_storage = ssaddle.GetComponent(/datum/component/storage)
 		var/access_time = (user in buckled_mobs) ? 10 : 30
 		if (do_after(user, access_time, target = src))
 			saddle_storage.show_to(user)
 	..()
 
-/mob/living/simple_animal/gib()
+/mob/living/simple_animal/proc/butcher(mob/user)
 	if(ssaddle)
 		ssaddle.forceMove(get_turf(src))
 		ssaddle = null
-	if(butcher_results || guaranteed_butcher_results)
-		var/list/butcher = list()
-
-		if(butcher_results)
-			butcher += butcher_results
-		if(guaranteed_butcher_results)
-			butcher += guaranteed_butcher_results
-		var/rotstuff = FALSE
-		var/datum/component/rot/simple/CR = GetComponent(/datum/component/rot/simple)
-		if(CR)
-			if(CR.amount >= 10 MINUTES)
-				rotstuff = TRUE
-		var/atom/Tsec = drop_location()
-		for(var/path in butcher)
-			for(var/i in 1 to butcher[path])
-				var/obj/item/I = new path(Tsec)
-				I.add_mob_blood(src)
-				if(rotstuff && istype(I,/obj/item/reagent_containers/food/snacks))
-					var/obj/item/reagent_containers/food/snacks/F = I
-					F.become_rotten()
-	..()
+	var/list/butcher = list()
+	var/butchery_skill_level = user.mind.get_skill_level(/datum/skill/labor/butchering)
+	var/botch_chance = 0
+	if(length(botched_butcher_results) && butchery_skill_level < SKILL_LEVEL_JOURNEYMAN)
+		botch_chance = 70 - (20 * butchery_skill_level) // 70% at unskilled, 20% lower for each level above it, 0% at journeyman or higher
+	var/perfect_chance = 0
+	if(length(perfect_butcher_results))
+		switch(butchery_skill_level)
+			if(SKILL_LEVEL_NONE to SKILL_LEVEL_APPRENTICE)
+				perfect_chance = 0
+			if(SKILL_LEVEL_JOURNEYMAN)
+				perfect_chance = 10
+			if(SKILL_LEVEL_EXPERT)
+				perfect_chance = 50
+			if(SKILL_LEVEL_MASTER to INFINITY)
+				perfect_chance = 100
+	butcher = butcher_results
+	if(prob(botch_chance))
+		butcher = botched_butcher_results
+		to_chat(user, "<span class='smallred'>I BOTCHED THE BUTCHERY! ([botch_chance]%!)</span>")
+	else if(prob(perfect_chance))
+		butcher = perfect_butcher_results
+		to_chat(user,"<span class='smallgreen'>My butchering was perfect! ([perfect_chance]%!)</span>")
+	if(guaranteed_butcher_results)
+		butcher += guaranteed_butcher_results
+	
+	var/rotstuff = FALSE
+	var/datum/component/rot/simple/CR = GetComponent(/datum/component/rot/simple)
+	if(CR)
+		if(CR.amount >= 10 MINUTES)
+			rotstuff = TRUE
+	var/atom/Tsec = drop_location()
+	for(var/path in butcher)
+		for(var/i in 1 to butcher[path])
+			var/obj/item/I = new path(Tsec)
+			I.add_mob_blood(src)
+			if(rotstuff && istype(I,/obj/item/reagent_containers/food/snacks))
+				var/obj/item/reagent_containers/food/snacks/F = I
+				F.become_rotten()
+	gib()
 
 /mob/living/simple_animal/spawn_dust(just_ash = FALSE)
 	if(just_ash || !remains_type)
@@ -508,9 +540,9 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 
 /mob/living/simple_animal/handle_fire()
 	. = ..()
-	if(fire_stacks > 0)
+	if(fire_stacks + divine_fire_stacks > 0)
 		apply_damage(5, BURN)
-		if(fire_stacks > 5)
+		if(fire_stacks + divine_fire_stacks > 5)
 			apply_damage(10, BURN)
 
 //mob/living/simple_animal/IgniteMob()

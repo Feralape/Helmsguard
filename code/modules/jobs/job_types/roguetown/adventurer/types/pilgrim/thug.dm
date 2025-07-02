@@ -1,7 +1,7 @@
 /*
 /datum/advclass/thug
 	name = "Thug"
-	tutorial = "You might not have ever been the smartest person in town. But you may have been the sturdiest. Good enough for soilers to pay you to cart around saigashit. Good enough for miners to offload some of their work to you. Good enough for a carpenter who doesn't want to pay top mams for chopped wood. And good enough for just about anyone who wants a meathead to look scary with."
+	tutorial = "Maybe you've never been the smartest person in town, but you may have been the sturdiest; Good enough for soilers to pay you to cart around saigashit, good enough for miners to offload some of their work to you, good enough for a carpenter who doesn't want to pay top mams for chopped wood, and good enough for just about anyone who wants a meathead to look scary with."
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/thug
@@ -31,11 +31,9 @@
 	gloves = /obj/item/clothing/gloves/roguetown/fingerless
 	neck = /obj/item/storage/belt/rogue/pouch/coins/poor
 	armor = /obj/item/clothing/suit/roguetown/armor/workervest
-	beltr = /obj/item/rogueweapon/mace/cudgel
-	beltl = /obj/item/flashlight/flare/torch
 	H.change_stat("strength", 2)
 	H.change_stat("endurance", 1)
-	H.change_stat("constitution", 2)
+	H.change_stat("constitution", 3)
 	H.change_stat("speed", -1)
 
 /datum/advclass/rogue

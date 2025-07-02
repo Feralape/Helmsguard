@@ -59,7 +59,7 @@
 		/obj/item/reagent_containers/glass/cup/steel = 3,
 		/obj/item/reagent_containers/glass/cup/golden = 1,
 		/obj/item/reagent_containers/glass/cup/skull = 1,
-		/obj/item/reagent_containers/glass/bucket/wooden = 3,
+		/obj/item/reagent_containers/glass/bucket = 3,
 		/obj/item/natural/feather = 4,
 		/obj/item/paper/scroll = 3,
 		/obj/item/rope = 3,
@@ -113,7 +113,7 @@
 		/obj/item/flint = 4,
 		/obj/item/rogueweapon/stoneaxe/woodcut = 3,
 		/obj/item/rogueweapon/stoneaxe = 3,
-		/obj/item/rogueweapon/hammer = 3,
+		/obj/item/rogueweapon/hammer/stone = 3,
 		/obj/item/rogueweapon/tongs = 3,
 		/obj/item/rogueweapon/pick = 3,
 
@@ -156,6 +156,7 @@
 	lootcount = 1
 
 /obj/effect/spawner/lootdrop/roguetown/dungeon/materials
+	icon_state = "material"
 	loot = list(
 		// Materials
 		/obj/item/natural/bundle/stick = 2,
@@ -171,6 +172,7 @@
 	lootcount = 2
 
 /obj/effect/spawner/lootdrop/roguetown/dungeon/clothing
+	icon_state = "clothing"
 	loot = list(
 		// Clothing
 		/obj/item/clothing/cloak/stabard = 3,
@@ -190,6 +192,7 @@
 	lootcount = 1
 
 /obj/effect/spawner/lootdrop/roguetown/dungeon/money
+	icon_state = "money"
 	loot = list(
 		// Money
 		/obj/item/roguecoin/copper = 5,
@@ -202,6 +205,7 @@
 	lootcount = 2
 
 /obj/effect/spawner/lootdrop/roguetown/dungeon/misc
+	icon_state = "misc"
 	loot = list(
 		// Garbage and Miscellanous
 		/obj/item/rogue/instrument/flute = 3,
@@ -218,7 +222,7 @@
 		/obj/item/reagent_containers/glass/cup/steel = 3,
 		/obj/item/reagent_containers/glass/cup/golden = 1,
 		/obj/item/reagent_containers/glass/cup/skull = 1,
-		/obj/item/reagent_containers/glass/bucket/wooden = 3,
+		/obj/item/reagent_containers/glass/bucket = 3,
 		/obj/item/natural/feather = 4,
 		/obj/item/paper/scroll = 3,
 		/obj/item/rope = 3,
@@ -226,8 +230,6 @@
 		/obj/item/storage/roguebag/crafted = 3,
 		/obj/item/clothing/mask/cigarette/pipe = 3,
 		/obj/item/clothing/mask/cigarette/rollie = 3,
-		/datum/crafting_recipe/roguetown/sigsweet = 2,
-		/datum/crafting_recipe/roguetown/sigdry = 2,
 		/obj/item/paper = 3,
 		/obj/item/reagent_containers/glass/bowl = 3,
 		/obj/item/storage/bag/tray = 3,
@@ -238,6 +240,7 @@
 	lootcount = 1
 
 /obj/effect/spawner/lootdrop/roguetown/dungeon/medical
+	icon_state = "medical"
 	loot = list(
 		//medical
 		/obj/item/needle = 4,
@@ -247,6 +250,7 @@
 	lootcount = 2
 
 /obj/effect/spawner/lootdrop/roguetown/dungeon/weapons
+	icon_state = "weapon"
 	loot = list(
 		//weapons
 		/obj/item/rogueweapon/mace = 2,
@@ -281,6 +285,7 @@
 	lootcount = 1
 
 /obj/effect/spawner/lootdrop/roguetown/dungeon/tools
+	icon_state = "tools"
 	loot = list(
 		// tools
 		/obj/item/rogueweapon/shovel = 3,
@@ -288,13 +293,14 @@
 		/obj/item/flint = 4,
 		/obj/item/rogueweapon/stoneaxe/woodcut = 3,
 		/obj/item/rogueweapon/stoneaxe = 3,
-		/obj/item/rogueweapon/hammer = 3,
+		/obj/item/rogueweapon/hammer/stone = 3,
 		/obj/item/rogueweapon/tongs = 3,
 		/obj/item/rogueweapon/pick = 3
 	)
 	lootcount = 1
 
 /obj/effect/spawner/lootdrop/roguetown/dungeon/armor
+	icon_state = "armor"
 	loot = list(
 		//armor
 		/obj/item/clothing/suit/roguetown/armor/leather/studded = 2,
@@ -327,6 +333,7 @@
 	lootcount = 1
 
 /obj/effect/spawner/lootdrop/roguetown/dungeon/food
+	icon_state = "food"
 	loot = list(
 		//food
 		/obj/item/reagent_containers/food/snacks/rogue/crackerscooked = 3,
@@ -337,6 +344,7 @@
 	lootcount = 2
 
 /obj/effect/spawner/lootdrop/roguetown/dungeon/spells
+	icon_state = "spells"
 	loot = list(
 		//spells
 		/obj/item/book/granter/spell/blackstone/spitfire = 5,

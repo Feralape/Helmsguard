@@ -44,15 +44,31 @@
 			H.change_stat("endurance", 2)
 			H.change_stat("perception", -1)
 			H.change_stat("speed", 2)
-			backl = /obj/item/rogueweapon/shield/wood
-			r_hand = /obj/item/rogueweapon/mace/steel
-			neck = /obj/item/clothing/neck/roguetown/chaincoif/full
-			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy
+			head = /obj/item/clothing/head/roguetown/helmet/sallet/raneshen
+			neck = /obj/item/clothing/neck/roguetown/bevor
 			armor = /obj/item/clothing/suit/roguetown/armor/plate/scale
-			pants = /obj/item/clothing/under/roguetown/chainlegs
+			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/raneshen
+			wrists = /obj/item/clothing/wrists/roguetown/splintarms
+			gloves = /obj/item/clothing/gloves/roguetown/chain
+			pants = /obj/item/clothing/under/roguetown/splintlegs
 			backr = /obj/item/storage/backpack/rogue/satchel/black
 			backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/navaja, /obj/item/clothing/neck/roguetown/shalal)
 			H.grant_language(/datum/language/celestial)
+			var/weapons = list("Heavy Mace","Shamshir and Shield","Spear and Shield")
+			var/weapon_choice = input("Choose your weapon.", "TAKE UP ARMS") as anything in weapons
+			H.set_blindness(0)
+			switch(weapon_choice)
+				if("Heavy Mace")
+					H.mind.adjust_skillrank(/datum/skill/combat/maces, 1, TRUE)
+					backl = /obj/item/rogueweapon/mace/goden
+				if("Shamshir and Shield")
+					H.mind.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+					r_hand = /obj/item/rogueweapon/sword/sabre/shamshir
+					backl = /obj/item/rogueweapon/shield/tower/raneshen
+				if("Spear and Shield")
+					H.mind.adjust_skillrank(/datum/skill/combat/polearms, 1, TRUE)
+					r_hand = /obj/item/rogueweapon/spear
+					backl = /obj/item/rogueweapon/shield/tower/raneshen
 
 		if("Zeybek")
 			H.set_blindness(0)
@@ -74,6 +90,14 @@
 			H.change_stat("endurance", 2)
 			H.change_stat("intelligence", 1)
 			H.change_stat("speed", 3)
+			head = /obj/item/clothing/head/roguetown/roguehood/shalal/hijab/raneshen
+			neck = /obj/item/clothing/neck/roguetown/leather
+			mask = /obj/item/clothing/mask/rogue/facemask/steel/paalloy
+			armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat/raneshen
+			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/raneshen
+			wrists = /obj/item/clothing/wrists/roguetown/splintarms
+			gloves = /obj/item/clothing/gloves/roguetown/angle
+			pants = /obj/item/clothing/under/roguetown/trou/leather/pontifex/raneshen
 			backr = /obj/item/storage/backpack/rogue/satchel/black
 			backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/navaja, /obj/item/clothing/neck/roguetown/shalal)
 			backl = /obj/item/rogueweapon/sword/sabre/shamshir
@@ -81,15 +105,23 @@
 			armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat
 			pants = /obj/item/clothing/under/roguetown/heavy_leather_pants
 			H.grant_language(/datum/language/celestial)
-			var/weapons = list("Shamshir","Whips and Knives",)
+			var/weapons = list("Shamshir and Javelin","Whips and Knives", "Recurve Bow")
 			var/weapon_choice = input("Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 			H.set_blindness(0)
 			switch(weapon_choice)
-				if("Shamshir")
-					backl = /obj/item/rogueweapon/sword/sabre/shamshir
+				if("Shamshir and Javelin")
+					H.mind.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
+					r_hand = /obj/item/rogueweapon/sword/sabre/shamshir
+					backl = /obj/item/quiver/javelin/iron
 				if("Whips and Knives")	///They DO enslave people after all
+					H.mind.adjust_skillrank(/datum/skill/combat/whipsflails, 1, TRUE)
+					H.mind.adjust_skillrank(/datum/skill/combat/knives, 1, TRUE)
 					r_hand = /obj/item/rogueweapon/whip
 					l_hand = /obj/item/rogueweapon/huntingknife/idagger/steel/parrying
+				if("Recurve Bow")
+					H.mind.adjust_skillrank(/datum/skill/combat/bows, 1, TRUE)
+					r_hand = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve
+					backl = /obj/item/quiver/arrows
 
 		if("Almah")
 			H.set_blindness(0)
@@ -115,18 +147,23 @@
 			H.change_stat("intelligence", 2)
 			H.change_stat("speed", 3)
 			H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
-			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/push_spell)
-			r_hand = /obj/item/rogueweapon/sword/sabre/shamshir
-			armor = /obj/item/clothing/suit/roguetown/shirt/robe/magered
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/repulse)
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/enchant_weapon)
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/airblade)
+			head = /obj/item/clothing/head/roguetown/roguehood/shalal/hijab/raneshen
+			neck = /obj/item/clothing/neck/roguetown/gorget/copper
+			mask = /obj/item/clothing/mask/rogue/facemask/copper
+			armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat/raneshen
+			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/raneshen
+			wrists = /obj/item/clothing/wrists/roguetown/bracers/copper
+			gloves = /obj/item/clothing/gloves/roguetown/angle
+			pants = /obj/item/clothing/under/roguetown/trou/leather/pontifex/raneshen
 			backr = /obj/item/storage/backpack/rogue/satchel/black
 			backpack_contents = list(/obj/item/rogueweapon/huntingknife/idagger/navaja, /obj/item/clothing/neck/roguetown/shalal, /obj/item/spellbook_unfinished/pre_arcyne)
 			backl = /obj/item/rogueweapon/sword/sabre/shamshir
 			H.grant_language(/datum/language/celestial)
-			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/lord
 
 	shoes = /obj/item/clothing/shoes/roguetown/shalal
-	head = /obj/item/clothing/head/roguetown/roguehood/shalal
-	gloves = /obj/item/clothing/gloves/roguetown/angle
 	belt = /obj/item/storage/belt/rogue/leather/shalal
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
 	beltl = /obj/item/flashlight/flare/torch

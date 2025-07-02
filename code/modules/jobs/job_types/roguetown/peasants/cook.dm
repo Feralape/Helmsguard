@@ -50,6 +50,9 @@
 		shirt = /obj/item/clothing/suit/roguetown/shirt/shortshirt/random
 	else if(should_wear_femme_clothes(H))
 		armor = /obj/item/clothing/suit/roguetown/shirt/dress/gen/random
+	backpack_contents = list(
+		/obj/item/recipe_book/survival,
+	)
 	H.change_stat("constitution", 2)
 	H.change_stat("strength", 1)
 	H.change_stat("intelligence", 1) //5 points (weighted)

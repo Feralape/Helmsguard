@@ -53,7 +53,7 @@
 /datum/controller/subsystem/mapping/proc/get_turf_below(turf/T)
 	if (!T || !initialized)
 		return
-	var/offset = multiz_levels[T.z]["[DOWN]"]
+	var/offset = multiz_levels[T.z][Z_LEVEL_DOWN]
 	if (!offset)
 		return
 	return locate(T.x, T.y, T.z - offset)
@@ -62,7 +62,7 @@
 /datum/controller/subsystem/mapping/proc/get_turf_above(turf/T)
 	if (!T || !initialized)
 		return
-	var/offset = multiz_levels[T.z]["[UP]"]
+	var/offset = multiz_levels[T.z][Z_LEVEL_UP]
 	if (!offset)
 		return
 	return locate(T.x, T.y, T.z + offset)

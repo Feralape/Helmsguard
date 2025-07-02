@@ -13,25 +13,24 @@
 	invocation_type = "none"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = TRUE
-	charge_max = 10 SECONDS
+	recharge_time = 30 SECONDS
 	miracle = TRUE
 	devotion_cost = 10
 
 /obj/effect/proc_holder/spell/invoked/baothablessings/cast(list/targets, mob/living/user)
 	if(isliving(targets[1]))
 		var/mob/living/carbon/target = targets[1]
-		if(istype(target.patron, /datum/patron/inhuman/baotha))
-			to_chat(user, span_warning("They already possess Baotha's blessings.."))
-			return FALSE										//This stops us from accidently removing another Baothan's anti-overdose trait.
-		target.apply_status_effect(/datum/status_effect/buff/druqks)
-		ADD_TRAIT(target, TRAIT_CRACKHEAD, TRAIT_GENERIC)		//Gets the trait temorarily, basically will just stop any active/upcoming ODs.
+		if(HAS_TRAIT(target, TRAIT_PSYDONITE))
+			target.visible_message(span_info("[target] stirs for a moment, the miracle dissipates."), span_notice("A dull warmth swells in your heart, only to fade as quickly as it arrived."))
+			user.playsound_local(user, 'sound/magic/PSY.ogg', 100, FALSE, -1)
+			playsound(target, 'sound/magic/PSY.ogg', 100, FALSE, -1)
+			return FALSE
+		if(target.has_status_effect(/datum/status_effect/buff/druqks/baotha))
+			to_chat(user, span_warning("They're already blessed by these effects!"))
+			revert_cast()
+			return FALSE
+		target.apply_status_effect(/datum/status_effect/buff/druqks/baotha) //Gets the trait temorarily, basically will just stop any active/upcoming ODs.	
 		target.visible_message("<span class='info'>[target]'s eyes appear to gloss over!</span>", "<span class='notice'>I feel.. at ease.</span>")
-		addtimer(CALLBACK(src, PROC_REF(remove_buff), target), wait = 2 MINUTES)	//Should be long enough to prevent an overdose.
-
-/obj/effect/proc_holder/spell/invoked/baothablessings/proc/remove_buff(mob/living/carbon/target)
-	REMOVE_TRAIT(target, TRAIT_CRACKHEAD, TRAIT_GENERIC)							
-	to_chat(target, span_warning("I see everything clearly once more.."))
-	target.visible_message("[target]'s eyes appear to return to normal.")
 
 //Enrapturing Powder - T2, basically a crackhead blowing cocaine in your face.
 
@@ -46,8 +45,10 @@
 	releasedrain = 30
 	chargedrain = 0
 	chargetime = 15
-	charge_max = 10 SECONDS
-	invocation = "Have a taste of the maiden's pure-bliss!"
+	recharge_time = 10 SECONDS
+	invocation_type = "whisper"
+	invocation = "Have a taste of the maiden's pure-bliss..."
+	devotion_cost = 30
 
 /obj/projectile/magic/blowingdust
 	name = "unholy dust"
@@ -56,7 +57,7 @@
 	damage = 1
 	poisontype = /datum/reagent/herozium
 	poisonfeel = "burning" //Would make sense for your eyes or nose to burn, I guess.
-	poisonamount = 7 //Decent bit of high, three doses would be just above the overdose threshold if applied fast enough.
+	poisonamount = 8 //Decent bit of high, three doses would be just above the overdose threshold if applied fast enough.
 
 /obj/projectile/magic/blowingdust/on_hit(target, mob/living/M)
 	. = ..()
@@ -80,7 +81,7 @@
 	invocation_type = "shout"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = TRUE
-	charge_max = 20 SECONDS
+	recharge_time = 90 SECONDS
 	miracle = TRUE
 	devotion_cost = 75
 
@@ -93,7 +94,41 @@
 			return FALSE	//No, you don't get to feel good. You're a undead mob. Feel bad.
 		target.visible_message(span_info("[target] begins to twitch as warmth radiates from them!"), span_notice("The pain from my wounds fade, every new one being a mere, pleasent warmth!"))
 		phy.pain_mod *= 0.5	//Literally halves your pain modifier.
-		addtimer(VARSET_CALLBACK(phy, pain_mod, phy.pain_mod /= 0.5), 20 SECONDS)	//Adds back the 0.5 of pain, basically setting it back to 1.
+		addtimer(VARSET_CALLBACK(phy, pain_mod, phy.pain_mod /= 0.5), 1 MINUTES)	//Adds back the 0.5 of pain, basically setting it back to 1.
 		target.apply_status_effect(/datum/status_effect/buff/vitae)					//Basically lowers fortune by 2 but +3 speed, it's powerful. Drugs cus Baotha.
 		return TRUE
 
+//T0 that tells the user the person's vice.
+/obj/effect/proc_holder/spell/invoked/baothavice
+	name = "Tell Vice"
+	overlay_state = "baotha_vice"
+	releasedrain = 10
+	chargedrain = 0
+	chargetime = 0
+	range = 3
+	warnie = "sydwarning"
+	movement_interrupt = FALSE
+	invocation_type = "none"
+	associated_skill = /datum/skill/magic/holy
+	antimagic_allowed = TRUE
+	recharge_time = 5 SECONDS 
+	miracle = TRUE
+	devotion_cost = 10
+	var/list/fake_vices = list()
+
+/obj/effect/proc_holder/spell/invoked/baothavice/cast(list/targets, mob/living/user)
+	if(ishuman(targets[1]))
+		var/vice_found
+		var/mob/living/carbon/human/H = targets[1]
+		if(HAS_TRAIT(H, TRAIT_DECEIVING_MEEKNESS) && user.mind?.get_skill_level(/datum/skill/magic/holy) > SKILL_LEVEL_NOVICE)
+			if(!(H in fake_vices))
+				fake_vices[H] = pick(GLOB.character_flaws)
+				vice_found = fake_vices[H]
+			else
+				vice_found = fake_vices[H]
+		if(!vice_found)
+			vice_found = H.charflaw.name
+		to_chat(user, span_info("They are... [span_warning("a [vice_found]")]"))
+		return TRUE
+	revert_cast()
+	return FALSE

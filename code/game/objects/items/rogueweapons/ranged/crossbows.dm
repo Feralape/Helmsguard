@@ -23,7 +23,8 @@
 	smeltresult = /obj/item/ingot/steel
 	resistance_flags = FIRE_PROOF
 	obj_flags = UNIQUE_RENAME
-	damfactor = 2
+	damfactor = 1.2
+	accfactor = 1.1
 	pickup_sound = 'modular_helmsguard/sound/sheath_sounds/draw_crossbow.ogg'
 	sheathe_sound = 'sound/items/wood_sharpen.ogg'
 
@@ -53,8 +54,8 @@
 		var/newtime = chargetime
 		//skill block
 		newtime = newtime + 40
-		newtime = newtime - (mastermob.mind?.get_skill_level(/datum/skill/combat/crossbows) * 4.25) //minus 4.25 per skill point
-		newtime = newtime - ((mastermob.STAPER)*1) //minus 1 per perception
+		newtime = newtime - (mastermob.mind?.get_skill_level(/datum/skill/combat/crossbows) * 4.25) // minus 4.25 per skill point
+		newtime = newtime - ((mastermob.STAPER)) // minus 1 per perception
 		if(newtime > 1)
 			return newtime
 		else
@@ -134,25 +135,29 @@
 		spread = 0
 	for(var/obj/item/ammo_casing/CB in get_ammo_list(FALSE, TRUE))
 		var/obj/projectile/BB = CB.BB
-		BB.damage = BB.damage * damfactor
+
+		BB.accuracy += accfactor * (user.STAPER - 8) * 3 // 8+ PER gives +3 per level. Exponential.
+		BB.bonus_accuracy += (user.STAPER - 8) // 8+ PER gives +1 per level. Does not decrease over range.
+		BB.bonus_accuracy += (user.mind.get_skill_level(/datum/skill/combat/crossbows) * 5) // +5 per XBow level.
+		BB.damage *= damfactor
 	cocked = FALSE
+	if(user.has_status_effect(/datum/status_effect/buff/clash) && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		H.bad_guard(span_warning("I can't focus on my Guard and loose bolts! This drains me!"), cheesy = TRUE)
 	..()
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow/update_icon()
 	. = ..()
 	cut_overlays()
-	if(cocked)
-		icon_state = "crossbow1"
-	else
-		icon_state = "crossbow0"
+	icon_state = "crossbow[cocked ? "1" : "0"]"
+
 	if(chambered)
-		var/obj/item/I = chambered
-		I.pixel_x = 0
-		I.pixel_y = 0
-		add_overlay(new /mutable_appearance(I))
-	if(ismob(loc))
-		var/mob/M = loc
-		M.update_inv_hands()
+		var/mutable_appearance/ammo = mutable_appearance('icons/roguetown/weapons/ammo.dmi', chambered.icon_state)
+		add_overlay(ammo)
+	if(!ismob(loc))
+		return
+	var/mob/M = loc
+	M.update_inv_hands()
 
 /obj/item/ammo_box/magazine/internal/shot/xbow
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/bolt

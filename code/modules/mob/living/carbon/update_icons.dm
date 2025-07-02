@@ -154,7 +154,12 @@
 
 			inhand_overlay = center_image(inhand_overlay, I.inhand_x_dimension, I.inhand_y_dimension)
 			behindhand_overlay = center_image(behindhand_overlay, I.inhand_x_dimension, I.inhand_y_dimension)
-
+			if(I.icon_y_offset)
+				behindhand_overlay.pixel_y += I.icon_y_offset
+				inhand_overlay.pixel_y += I.icon_y_offset
+			if(I.icon_x_offset)
+				behindhand_overlay.pixel_x += I.icon_x_offset
+				inhand_overlay.pixel_x += I.icon_x_offset
 			if(ishuman(src))
 				var/mob/living/carbon/human/H = src
 				if(H.dna && H.dna.species)

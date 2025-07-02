@@ -257,7 +257,9 @@
 		var/mob/living/carbon/human/H = src
 		if(!(H.mobility_flags & MOBILITY_STAND))
 			return hide_cone()
-		if(!H.client && (H.mode != AI_OFF))
+		if(!H.client && (H.mode != NPC_AI_OFF))
+			return hide_cone()
+		if(H.viewcone_override)
 			return hide_cone()
 	return show_cone()
 
@@ -271,14 +273,10 @@
 		if(H.wear_mask)
 			if(H.wear_mask.block2add)
 				fovangle |= H.wear_mask.block2add
-		if(H.STAPER < 5)
+		if(HAS_TRAIT(src, TRAIT_CYCLOPS_LEFT))
 			fovangle |= FOV_LEFT
+		if(HAS_TRAIT(src, TRAIT_CYCLOPS_RIGHT))
 			fovangle |= FOV_RIGHT
-		else
-			if(HAS_TRAIT(src, TRAIT_CYCLOPS_LEFT))
-				fovangle |= FOV_LEFT
-			if(HAS_TRAIT(src, TRAIT_CYCLOPS_RIGHT))
-				fovangle |= FOV_RIGHT
 
 	if(!hud_used)
 		return

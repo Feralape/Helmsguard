@@ -8,10 +8,11 @@ PROCESSING_SUBSYSTEM_DEF(roguemachine)
 	var/list/cameras = list()
 	var/list/scomm_machines = list()
 	var/list/stock_machines = list()
+	var/list/noticeboards = list()
 	var/hermailermaster
 	var/list/death_queue = list()
 	var/last_death_report
-	var/obj/item/crown
+	var/obj/item/clothing/head/roguetown/crown/serpcrown/crown
 	var/obj/item/key
 
 /datum/controller/subsystem/processing/roguemachine/fire(resumed = 0)

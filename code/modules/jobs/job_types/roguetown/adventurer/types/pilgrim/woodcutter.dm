@@ -32,13 +32,17 @@
 	head = /obj/item/clothing/head/roguetown/roguehood
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
 	backr = /obj/item/storage/backpack/rogue/satchel
+	backl = /obj/item/rogueweapon/stoneaxe/woodcut
 	neck = /obj/item/storage/belt/rogue/pouch/coins/poor
 	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
-	beltr = /obj/item/rogueweapon/stoneaxe/woodcut
-	beltl = /obj/item/rogueweapon/huntingknife
+	beltr = /obj/item/rogueweapon/handsaw
+	beltl = /obj/item/rogueweapon/hammer/wood
 	backpack_contents = list(
 						/obj/item/flint = 1,
 						/obj/item/flashlight/flare/torch = 1,
+						/obj/item/rogueweapon/huntingknife = 1,
+						/obj/item/recipe_book/builder = 1,
+						/obj/item/recipe_book/survival = 1,
 						)
 	if(H.pronouns == SHE_HER || H.pronouns == THEY_THEM_F)
 		armor = /obj/item/clothing/suit/roguetown/shirt/dress/gen

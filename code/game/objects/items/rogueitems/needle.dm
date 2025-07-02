@@ -1,7 +1,7 @@
 /obj/item/needle
 	name = "needle"
 	icon_state = "needle"
-	desc = "This sharp needle can sew wounds, cloth and can be used for self defence if you're crazy."
+	desc = "This sharp needle can sew wounds, mend clothing, and stab someone if you’re desperate."
 	icon = 'icons/roguetown/items/misc.dmi'
 	lefthand_file = 'icons/mob/inhands/misc/food_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/misc/food_righthand.dmi'
@@ -89,32 +89,75 @@
 				to_chat(user, span_warning("I should put this on a table first."))
 				return
 			playsound(loc, 'sound/foley/sewflesh.ogg', 100, TRUE, -2)
-			var/skill = (user.mind.get_skill_level(/datum/skill/misc/sewing) + user.mind.get_skill_level(/datum/skill/craft/tanning)) * 10
-			var/repairskill = (user.mind.get_skill_level(/datum/skill/misc/sewing) + user.mind.get_skill_level(/datum/skill/craft/tanning)) * 5
-			var/sewtime = max(5, (60 - skill))
+
+			// These are all constants used for tuning the balance of sewing.
+			/// The chance to damage an item when entirely unskilled.
+			var/const/BASE_FAIL_CHANCE = 60
+			/// The (combined) skill level at or above which repairs can't fail.
+			var/const/SKILL_NO_FAIL = SKILL_LEVEL_JOURNEYMAN
+			/// Each level in tanning/sewing reduces the skill chance by this much, so that at SKILL_NO_FAIL you don't fail anymore.
+			var/const/FAIL_REDUCTION_PER_LEVEL = BASE_FAIL_CHANCE / SKILL_NO_FAIL
+			/// The damage done to an item when sewing fails while entirely unskilled.
+			var/const/BASE_SEW_DAMAGE = 30
+			/// Each level in either tanning or sewing reduces the damage caused by a failure by this many points
+			var/const/DAMAGE_REDUCTION_PER_LEVEL = 5
+			/// The base integrity repaired when sewing succeeds while entirely unskilled.
+			var/const/BASE_SEW_REPAIR = 10
+			/// The additional integrity repaired per combined level in sewing/tanning.
+			var/const/SEW_REPAIR_PER_LEVEL = 10
+			/// How many seconds does unskilled sewing take?
+			var/const/BASE_SEW_TIME = 6 SECONDS
+			/// At what (combined) level do we 
+			var/const/SKILL_FASTEST_SEW = SKILL_LEVEL_LEGENDARY
+			/// The reduction in sewing time for each (combined) level in sewing/tanning.
+			var/const/SEW_TIME_REDUCTION_PER_LEVEL = 1 SECONDS
+			/// The minimum sewing time to prevent instant sewing at max level.
+			var/const/SEW_MIN_TIME = 0.5 SECONDS
+			/// The maximum sewing time for squires.
+			var/const/SQUIRE_MAX_TIME = BASE_SEW_TIME / 3 // always at least twice as fast as the base time / Apparently takes too long so dunno we will see at 2 seconds
+			/// The XP granted by failure. Scaled by INT. If 0, no XP is granted on failure.
+			var/const/XP_ON_FAIL = 0.5
+			/// The XP granted by success. Scaled by INT. If 0, no XP is granted on success.
+			var/const/XP_ON_SUCCESS = 1
+			/// The minimum delay between automatic sewing attempts.
+			var/const/AUTO_SEW_DELAY = CLICK_CD_MELEE
+
+			// This is the actual code that applies those constants.
+			// If you want to adjust the balance please try just tweaking the above constants first!
+			var/skill = user.mind.get_skill_level(/datum/skill/misc/sewing) + user.mind.get_skill_level(/datum/skill/craft/tanning)
+			// The more knowlegeable we are the less chance we damage the object
+			var/failed = prob(BASE_FAIL_CHANCE - (skill * FAIL_REDUCTION_PER_LEVEL))
+			var/sewtime = max(SEW_MIN_TIME, BASE_SEW_TIME - (SEW_TIME_REDUCTION_PER_LEVEL * skill))
 			if(HAS_TRAIT(user, TRAIT_SQUIRE_REPAIR))
-				skill = skill < 30 ? 30 : skill // Make sure they can't fail but let them suffer sewtime
+				failed = FALSE // Make sure they can't fail but let them suffer sewtime
 			if(!do_after(user, sewtime, target = I))
 				return
-			if(prob(max(0, 60 - (skill * 2)))) //The more knowlegeable we are the less chance we damage the object
-				I.obj_integrity = max(0, I.obj_integrity - (30 - repairskill))
+			if(failed)
+				// We do DAMAGE_REDUCTION_PER_LEVEL less damage per level.
+				// You could write this as I.obj_integrity - BASE_SEW_DAMAGE + (skill * DAMAGE_REDUCTION_PER_LEVEL)
+				// but that's less obvious and makes it look like it could repair it if your skill was high enough (false).
+				I.obj_integrity = max(0, I.obj_integrity - (BASE_SEW_DAMAGE - (skill * DAMAGE_REDUCTION_PER_LEVEL)))
 				user.visible_message(span_info("[user] damages [I] due to a lack of skill!"))
 				playsound(src, 'sound/foley/cloth_rip.ogg', 50, TRUE)
-				user.mind.add_sleep_experience(/datum/skill/misc/sewing, (user.STAINT) / 2) // Only failing a repair teaches us something
-				if(do_after(user, CLICK_CD_MELEE, target = I))
+				if(XP_ON_FAIL > 0)
+					user.mind.add_sleep_experience(/datum/skill/misc/sewing, user.STAINT * XP_ON_FAIL)
+				if(do_after(user, AUTO_SEW_DELAY, target = I))
 					attack_obj(I, user)
 				return
 			else
-				if(I.obj_broken && istype(I, /obj/item/clothing))
-					var/obj/item/clothing/cloth = I
-					cloth.obj_fix()
 				playsound(loc, 'sound/foley/sewflesh.ogg', 50, TRUE, -2)
 				user.visible_message(span_info("[user] repairs [I]!"))
 				if(I.body_parts_covered != I.body_parts_covered_dynamic)
 					user.visible_message(span_info("[user] repairs [I]'s coverage!"))
 					I.repair_coverage()
-				I.obj_integrity = min(I.obj_integrity + 10 + skill, I.max_integrity)
-				if(do_after(user, CLICK_CD_MELEE, target = I))
+				if(XP_ON_SUCCESS > 0)
+					user.mind.add_sleep_experience(/datum/skill/misc/sewing, user.STAINT * XP_ON_SUCCESS)
+				I.obj_integrity = min(I.obj_integrity + BASE_SEW_REPAIR + skill * SEW_REPAIR_PER_LEVEL, I.max_integrity)
+				if(I.obj_broken && istype(I, /obj/item/clothing) && I.obj_integrity >= I.max_integrity)
+					var/obj/item/clothing/cloth = I
+					cloth.obj_fix()
+					return
+				if(do_after(user, AUTO_SEW_DELAY, target = I))
 					attack_obj(I, user)
 		return
 	return ..()
@@ -150,7 +193,7 @@
 	while(!QDELETED(target_wound) && !QDELETED(src) && \
 		!QDELETED(user) && (target_wound.sew_progress < target_wound.sew_threshold) && \
 		stringamt >= 1)
-		if(!do_after(doctor, 20, target = patient))
+		if(!do_after(doctor, 2 SECONDS, target = patient))
 			break
 		playsound(loc, 'sound/foley/sewflesh.ogg', 100, TRUE, -2)
 		target_wound.sew_progress = min(target_wound.sew_progress + moveup, target_wound.sew_threshold)
@@ -183,3 +226,10 @@
 	name = "needle of pestra"
 	desc = span_green("This needle has been blessed by the goddess of medicine herself!")
 	infinite = TRUE
+
+/obj/item/needle/aalloy
+	name = "decrepit needle"
+	icon_state = "aneedle"
+	desc = "This decrepit old needle doesn't seem helpful for much."
+	stringamt = 5
+	maxstring = 5

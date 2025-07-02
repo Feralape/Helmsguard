@@ -6,7 +6,7 @@
 	possible_transfer_amounts = list(3,6,9)
 	volume = 48		// 16 oz, One pint.
 	dropshrink = 1
-	sellprice = 5
+	sellprice = 10
 	closed = FALSE
 	slot_flags = ITEM_SLOT_HIP|ITEM_SLOT_NECK
 	obj_flags = CAN_BE_HIT

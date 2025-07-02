@@ -7,6 +7,7 @@
 	throwforce = 0
 	obj_flags = null
 	color = "#575e4a"
+	bundling_time = 1 SECONDS
 	firefuel = 5 MINUTES
 	resistance_flags = FLAMMABLE
 	slot_flags = ITEM_SLOT_MOUTH
@@ -18,15 +19,60 @@
 	sellprice = 2
 	bundletype = /obj/item/natural/bundle/fibers
 
+/obj/item/natural/fibers/Initialize()
+	. = ..()
+	var/static/list/slapcraft_recipe_list = list(
+		/datum/crafting_recipe/roguetown/survival/stonehoe,
+		/datum/crafting_recipe/roguetown/survival/woodhammer,
+		/datum/crafting_recipe/roguetown/survival/tneedle,
+		/datum/crafting_recipe/roguetown/survival/recurvepartial,
+		/datum/crafting_recipe/roguetown/survival/longbowpartial,
+		/datum/crafting_recipe/roguetown/survival/wickercloak,
+		/datum/crafting_recipe/roguetown/survival/torch,
+		/datum/crafting_recipe/roguetown/survival/woodhammer,
+		/datum/crafting_recipe/roguetown/survival/stonehoe,
+		/datum/crafting_recipe/roguetown/survival/stonesword,
+		/datum/crafting_recipe/roguetown/survival/woodsword,
+		/datum/crafting_recipe/roguetown/survival/bag,
+		/datum/crafting_recipe/roguetown/survival/bagx5,
+		/datum/crafting_recipe/roguetown/survival/rod,
+		/datum/crafting_recipe/roguetown/survival/pearlcross,
+		/datum/crafting_recipe/roguetown/survival/bpearlcross,
+		/datum/crafting_recipe/roguetown/survival/shellnecklace,
+		/datum/crafting_recipe/roguetown/survival/shellbracelet,
+		/datum/crafting_recipe/roguetown/survival/abyssoramulet,
+		/datum/crafting_recipe/roguetown/survival/broom,
+		/datum/crafting_recipe/roguetown/survival/woodcross,
+		/datum/crafting_recipe/roguetown/survival/mantrap,
+		/datum/crafting_recipe/roguetown/survival/tribalrags,
+		/datum/crafting_recipe/roguetown/survival/skullmask,
+		/datum/crafting_recipe/roguetown/survival/bonespear,
+		/datum/crafting_recipe/roguetown/survival/boneaxe,
+		/datum/crafting_recipe/roguetown/survival/goodluckcharm,
+		/datum/crafting_recipe/roguetown/survival/bouquet_rosa,
+		/datum/crafting_recipe/roguetown/survival/bouquet_salvia,
+		/datum/crafting_recipe/roguetown/survival/bouquet_matricaria,
+		/datum/crafting_recipe/roguetown/survival/bouquet_calendula,
+		/datum/crafting_recipe/roguetown/survival/flowercrown_rosa,
+		/datum/crafting_recipe/roguetown/survival/flowercrown_salvia,
+		/datum/crafting_recipe/roguetown/survival/slingpouchcraft,
+		)
+
+	AddElement(
+		/datum/element/slapcrafting,\
+		slapcraft_recipes = slapcraft_recipe_list,\
+		)
+
 /obj/item/natural/fibers/attack_right(mob/user)
+	if(user.get_active_held_item())
+		return
 	var/is_legendary = FALSE
 	if(user.mind.get_skill_level(/datum/skill/labor/farming) == SKILL_LEVEL_LEGENDARY) //check if the user has legendary farming skill
 		is_legendary = TRUE //they do
-	var/work_time = 1 SECONDS //time to gather fibers
 	if(is_legendary)
-		work_time = 2 //if legendary skill, the move_after is fast, 0.2 seconds
+		bundling_time = 2 //if legendary skill, the move_after is fast, 0.2 seconds
 	to_chat(user, span_warning("I start to collect [src]..."))
-	if(move_after(user, work_time, target = src))
+	if(move_after(user, bundling_time, target = src))
 		var/fibercount = 0
 		for(var/obj/item/natural/fibers/F in get_turf(src))
 			fibercount++
@@ -39,6 +85,7 @@
 				B.amount = clamp(fibercount, 2, 6)
 				B.update_bundle()
 				fibercount -= clamp(fibercount, 2, 6)
+				user.put_in_hands(B)
 		for(var/obj/item/natural/fibers/F in get_turf(src))
 			qdel(F)
 
@@ -51,6 +98,7 @@
 	throwforce = 0
 	obj_flags = null
 	color = "#e6e3db"
+	bundling_time = 1 SECONDS
 	firefuel = 5 MINUTES
 	resistance_flags = FLAMMABLE
 	slot_flags = ITEM_SLOT_MOUTH
@@ -63,7 +111,7 @@
 
 /obj/item/natural/silk/attack_right(mob/user)
 	to_chat(user, span_warning("I start to collect [src]..."))
-	if(move_after(user, 1 SECONDS, target = src))
+	if(move_after(user, bundling_time, target = src))
 		var/silkcount = 0
 		for(var/obj/item/natural/silk/F in get_turf(src))
 			silkcount++
@@ -104,11 +152,12 @@
 	force = 0
 	throwforce = 0
 	obj_flags = null
+	bundling_time = 2 SECONDS
 	firefuel = 5 MINUTES
 	resistance_flags = FLAMMABLE
 	slot_flags = ITEM_SLOT_MOUTH|ITEM_SLOT_HIP
 	body_parts_covered = null
-	experimental_onhip = TRUE
+	experimental_onhip = FALSE //rip
 	max_integrity = 20
 	muteinmouth = TRUE
 	w_class = WEIGHT_CLASS_TINY
@@ -120,9 +169,26 @@
 	/// Effectiveness when used as a bandage, how much bloodloss we can staunch
 	var/bandage_effectiveness = 0.9
 
+/obj/item/natural/cloth/Initialize()
+	. = ..()
+	var/static/list/slapcraft_recipe_list = list(
+		/datum/crafting_recipe/roguetown/survival/longbowpartial,
+		/datum/crafting_recipe/roguetown/survival/bag,
+		/datum/crafting_recipe/roguetown/survival/bagx5,
+		/datum/crafting_recipe/roguetown/survival/book_crafting_kit,
+		/datum/crafting_recipe/roguetown/survival/slingpouchcraft,
+		)
+
+	AddElement(
+		/datum/element/slapcrafting,\
+		slapcraft_recipes = slapcraft_recipe_list,\
+		)
+
 /obj/item/natural/cloth/attack_right(mob/user)
+	if(user.get_active_held_item())
+		return
 	to_chat(user, span_warning("I start to collect [src]..."))
-	if(move_after(user, 1 SECONDS, target = src))
+	if(move_after(user, bundling_time, target = src))
 		var/clothcount = 0
 		for(var/obj/item/natural/cloth/F in get_turf(src))
 			clothcount++
@@ -135,16 +201,15 @@
 				B.amount = clamp(clothcount, 2, 10)
 				B.update_bundle()
 				clothcount -= clamp(clothcount, 2, 10)
+				user.put_in_hands(B)
 		for(var/obj/item/natural/cloth/F in get_turf(src))
+			playsound(user, "rustle", 70, FALSE, -4)
 			qdel(F)
 
 /obj/item/natural/cloth/examine(mob/user)
 	. = ..()
 	if(wet)
 		. += span_notice("It's wet!")
-
-/obj/item/natural/cloth/bandit
-	color = "#ff0000"
 
 // CLEANING
 
@@ -240,6 +305,18 @@
 	embedding = list("embedded_unsafe_removal_time" = 20, "embedded_pain_chance" = 10, "embedded_pain_multiplier" = 1, "embed_chance" = 35, "embedded_fall_chance" = 0)
 	resistance_flags = FLAMMABLE
 	max_integrity = 20
+
+/obj/item/natural/thorn/Initialize()
+	. = ..()
+	var/static/list/slapcraft_recipe_list = list(
+		/datum/crafting_recipe/roguetown/survival/tneedle,
+		)
+
+	AddElement(
+		/datum/element/slapcrafting,\
+		slapcraft_recipes = slapcraft_recipe_list,\
+		)
+
 /obj/item/natural/thorn/attack_self(mob/living/user)
 	user.visible_message(span_warning("[user] snaps [src]."))
 	playsound(user,'sound/items/seedextract.ogg', 100, FALSE)
@@ -439,7 +516,7 @@
 
 /obj/item/natural/bowstring
 	name = "fibre bowstring"
-	desc = "A tough and durable length of woven plant fiber, prepared to launch many an arrow."
+	desc = "Wax-fed fibrous thread has been spun and dressed into a continuous loop."
 	icon_state = "fibers"
 	possible_item_intents = list(/datum/intent/use)
 	force = 0
@@ -455,6 +532,19 @@
 	spitoutmouth = FALSE
 	experimental_inhand = FALSE
 
+/obj/item/natural/bowstring/Initialize()
+	. = ..()
+	var/static/list/slapcraft_recipe_list = list(
+		/datum/crafting_recipe/roguetown/survival/bow,
+		/datum/crafting_recipe/roguetown/survival/recurvebow,
+		/datum/crafting_recipe/roguetown/survival/longbow,
+		)
+
+	AddElement(
+		/datum/element/slapcrafting,\
+		slapcraft_recipes = slapcraft_recipe_list,\
+		)
+
 /obj/item/natural/bundle/worms
 	name = "worms"
 	desc = "Multiple tiny creatures of the earth squirm and writhe together in a small pile."
@@ -468,10 +558,11 @@
 	icon3 = "worm6"
 	stacktype = /obj/item/natural/worms
 	stackname = "worms"
+	bundling_time = 1 SECONDS
 
 /obj/item/natural/worms/attack_right(mob/user)
 	to_chat(user, span_warning("I start to collect [src]..."))
-	if(move_after(user, 1 SECONDS, target = src))
+	if(move_after(user, bundling_time, target = src))
 		var/wormcount = 0
 		for(var/obj/item/natural/worms/F in get_turf(src))
 			wormcount++
@@ -484,6 +575,7 @@
 				B.amount = clamp(wormcount, 2, 12)
 				B.update_bundle()
 				wormcount -= clamp(wormcount, 2, 12)
+				user.put_in_hands(B)
 		for(var/obj/item/natural/worms/F in get_turf(src))
 			qdel(F)
 

@@ -46,9 +46,84 @@
 	destroy_sound = 'sound/items/pickbreak.ogg'
 	resistance_flags = FIRE_PROOF
 	associated_skill = /datum/skill/misc/lockpicking	//Doesn't do anything, for tracking purposes only
+	always_destroy = TRUE
 
 	grid_width = 32
 	grid_height = 64
+
+/obj/item/lockpick/goldpin
+	name = "gold hairpin"
+	desc = "Often used by wealthy courtesans and nobility to keep hair and clothing in place."
+	icon_state = "goldpin"
+	item_state = "goldpin"
+	icon = 'icons/roguetown/clothing/head.dmi'
+	mob_overlay_icon = 'icons/roguetown/clothing/onmob/head_items.dmi'
+	resistance_flags = FIRE_PROOF
+	slot_flags = ITEM_SLOT_HEAD|ITEM_SLOT_MASK|ITEM_SLOT_HIP
+	body_parts_covered = NONE
+	w_class = WEIGHT_CLASS_TINY
+	experimental_onhip = FALSE
+	possible_item_intents = list(/datum/intent/use, /datum/intent/stab)
+	force = 10
+	throwforce = 5
+	max_integrity = null
+	dropshrink = 0.7
+	drop_sound = 'sound/items/gems (2).ogg'
+	destroy_sound = 'sound/items/pickbreak.ogg'
+	anvilrepair = /datum/skill/craft/armorsmithing
+	associated_skill = /datum/skill/misc/lockpicking
+	var/material = "gold"
+
+	grid_width = 32
+	grid_height = 32
+
+/obj/item/lockpick/goldpin/equipped(mob/living/carbon/human/user, slot)
+	. = ..()
+	if(slot == SLOT_BELT_R)
+		icon_state = "[material]pin_beltr"
+		user.update_inv_belt()
+	if(slot == SLOT_BELT_L)
+		icon_state = "[material]pin_beltl"
+		user.update_inv_belt()
+	else
+		icon_state = "[material]pin"
+		user.update_icon()
+
+/obj/item/lockpick/goldpin/silver
+	name = "silver hairpin"
+	desc = "Often used by wealthy courtesans and nobility to keep hair and clothing in place. This one's silver - a rarity."
+	icon_state = "silverpin"
+	item_state = "silverpin"
+	icon = 'icons/roguetown/clothing/head.dmi'
+	mob_overlay_icon = 'icons/roguetown/clothing/onmob/head_items.dmi'
+	material = "silver"
+	is_silver = TRUE
+
+/obj/item/lockpick/goldpin/silver/pickup(mob/user)
+	. = ..()
+	var/mob/living/carbon/human/H = user
+	if(!H.mind)
+		return
+	var/datum/antagonist/vampirelord/V_lord = H.mind.has_antag_datum(/datum/antagonist/vampirelord/)
+	var/datum/antagonist/werewolf/W = H.mind.has_antag_datum(/datum/antagonist/werewolf/)
+	if(ishuman(H))
+		if(H.mind.has_antag_datum(/datum/antagonist/vampirelord/lesser))
+			to_chat(H, span_userdanger("I can't pick up the silver, it is my BANE!"))
+			H.Knockdown(10)
+			H.Paralyze(10)
+			H.adjustFireLoss(25)
+			H.fire_act(1,10)
+		if(V_lord)
+			if(V_lord.vamplevel < 4 && !H.mind.has_antag_datum(/datum/antagonist/vampirelord/lesser))
+				to_chat(H, span_userdanger("I can't pick up the silver, it is my BANE!"))
+				H.Knockdown(10)
+				H.adjustFireLoss(25)
+		if(W && W.transformed == TRUE)
+			to_chat(H, span_userdanger("I can't pick up the silver, it is my BANE!"))
+			H.Knockdown(10)
+			H.Paralyze(10)
+			H.adjustFireLoss(25)
+			H.fire_act(1,10)
 
 /obj/item/roguekey/lord
 	name = "master key"
@@ -146,6 +221,12 @@
 	icon_state = "hornkey"
 	lockid = "armory"
 
+/obj/item/roguekey/knight
+	name = "knight's key"
+	desc = "This is a key to the knight's chambers."
+	icon_state = "ekey"
+	lockid = "knight"
+
 /obj/item/roguekey/merchant
 	name = "merchant's key"
 	desc = "A merchant's key."
@@ -161,8 +242,14 @@
 /obj/item/roguekey/townie // For use in round-start available houses in town. Do not use default lockID.
 	name = "town dwelling key"
 	desc = "The key of some townie's home. Hope it's not lost."
-	icon_state ="brownkey"
+	icon_state = "brownkey"
 	lockid = "townie"
+
+/obj/item/roguekey/bath // For use in round-start available bathhouse quarters. Do not use default lockID.
+	name = "bathhouse quarter key"
+	desc = "The key to an employee's quarters. Hope it's not lost."
+	icon_state = "brownkey"
+	lockid = "bath"
 
 /obj/item/roguekey/tavern
 	name = "tavern key"
@@ -290,15 +377,17 @@
 	lockid = "mansionvampire"
 //
 
-/obj/item/roguekey/blacksmith
-	name = "blacksmith key"
-	desc = "This key opens a blacksmith's workshop."
+/obj/item/roguekey/crafterguild
+	name = "guild's key"
+	desc = "The key to the Crafter's Guild."
 	icon_state = "brownkey"
-	lockid = "blacksmith"
+	lockid = "crafterguild"
 
-/obj/item/roguekey/blacksmith/town
-	name = "town blacksmith key"
-	lockid = "townblacksmith"
+/obj/item/roguekey/craftermaster
+	name = "guildmaster's key"
+	desc = "The key of the Crafter's Guild Guildmaster."
+	icon_state = "hornkey"
+	lockid = "craftermaster"
 
 /obj/item/roguekey/walls
 	name = "walls key"
@@ -348,11 +437,6 @@
 	icon_state = "rustkey"
 	lockid = "graveyard"
 
-/obj/item/roguekey/artificer
-	name = "artificer's key"
-	desc = "This bronze key should open the Artificer's guild."
-	icon_state = "brownkey"
-	lockid = "artificer"
 
 /obj/item/roguekey/tailor
 	name = "tailor's key"
@@ -369,7 +453,7 @@
 /obj/item/roguekey/nightmaiden
 	name = "bathhouse key"
 	desc = "This regal key opens doors inside the bath-house."
-	icon_state = "brownkey"
+	icon_state = "bathkey"
 	lockid = "nightmaiden"
 
 /obj/item/roguekey/mercenary

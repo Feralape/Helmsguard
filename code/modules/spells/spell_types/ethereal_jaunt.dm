@@ -3,7 +3,7 @@
 	desc = ""
 
 	school = "transmutation"
-	charge_max = 300
+	recharge_time = 300
 	clothes_req = TRUE
 	invocation = "none"
 	invocation_type = "none"

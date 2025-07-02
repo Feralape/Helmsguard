@@ -23,10 +23,13 @@
 	belt = /obj/item/storage/belt/rogue/leather
 	beltr = /obj/item/roguekey/sund/sund_butcher
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
+	neck = /obj/item/storage/belt/rogue/pouch/coins/poor
 	backpack_contents = list(
 						/obj/item/kitchen/spoon,
 						/obj/item/reagent_containers/food/snacks/rogue/truffles,
 						/obj/item/flashlight/flare/torch = 1,
+						/obj/item/recipe_book/survival = 1,
+						/obj/item/reagent_containers/food/snacks/fat = 2 // make sausages :)
 						)
 	if(H.pronouns == SHE_HER || H.pronouns == THEY_THEM_F)
 		shirt = /obj/item/clothing/suit/roguetown/shirt/dress/gen/random
@@ -35,6 +38,6 @@
 		wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
 
 	if(H.mind)
-		H.change_stat("strength", 1)
-		H.change_stat("endurance", 1)
-		H.change_stat("intelligence", -1)
+		H.change_stat("strength", 1)	//Stat spread is decent; not great but decent. 
+		H.change_stat("endurance", 2)
+		H.change_stat("constitution", 2)

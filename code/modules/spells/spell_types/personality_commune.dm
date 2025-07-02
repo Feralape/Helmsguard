@@ -1,7 +1,7 @@
 /obj/effect/proc_holder/spell/targeted/personality_commune
 	name = "Personality Commune"
 	desc = ""
-	charge_max = 0
+	recharge_time = 0
 	clothes_req = FALSE
 	range = -1
 	include_user = TRUE
@@ -21,7 +21,7 @@
 		return
 	var/msg = stripped_input(usr, "What would you like to tell your other self?", null , "")
 	if(!msg)
-		charge_counter = charge_max
+		charge_counter = recharge_time
 		return
 	to_chat(user, span_boldnotice("I concentrate and send thoughts to your other self:</span> <span class='notice'>[msg]"))
 	to_chat(trauma.owner, span_boldnotice("[flufftext]</span> <span class='notice'>[msg]"))

@@ -7,7 +7,7 @@
 	that the new skeleton body will experience upon 'birth'. Note that \
 	becoming a lich destroys all internal organs except the brain."
 	school = "necromancy"
-	charge_max = 10
+	recharge_time = 10
 	clothes_req = FALSE
 	centcom_cancast = FALSE
 	invocation = "NECREM IMORTIUM!"

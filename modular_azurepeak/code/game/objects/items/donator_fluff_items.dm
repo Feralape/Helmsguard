@@ -3,7 +3,7 @@
 //Plexiant's donator item - rapier
 /obj/item/rogueweapon/sword/rapier/aliseo
 	name = "Rapier di Aliseo"
-	desc = "A rapier of sporting a steel blade and decrotive silver-plating. Elaborately designed in classic intricate yet functional Etrucian style, the pummel appears to be embedded with a cut emerald with a family crest engraved in the fine leather grip of the handle." 
+	desc = "A rapier of sporting a steel blade and decrotive silver-plating. Elaborately designed in classic intricate yet functional Etrucian style, the pummel appears to be embedded with a cut emerald with a family crest engraved in the fine leather grip of the handle."
 	icon_state = "plex"
 	icon = 'modular_azurepeak/icons/obj/items/donor_weapons_64.dmi'
 
@@ -25,8 +25,8 @@
 	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/donor_clothes.dmi'
 	sleeved = 'modular_azurepeak/icons/clothing/onmob/donor_sleeves_armor.dmi'
 
-//Strudles donator item - mage vest (same as base leather)
-/obj/item/clothing/suit/roguetown/armor/leather/vest/sofiavest
+//Strudles donator item - mage vest (same as robes)
+/obj/item/clothing/suit/roguetown/shirt/robe/sofiavest
 	name = "grenzelhoftian mages vest"
 	desc = "A vest often worn by those of the Grenzelhoftian mages college."
 	icon_state = "sofiavest"
@@ -35,10 +35,33 @@
 	icon = 'modular_azurepeak/icons/clothing/donor_clothes.dmi'
 	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/donor_clothes.dmi'
 	sleeved = 'modular_azurepeak/icons/clothing/onmob/donor_sleeves_armor.dmi'
+	flags_inv = HIDEBOOB
+	color = null
+	nodismemsleeves = TRUE // prevents sleeves from being torn
 
+//Bat's donator item - custom harp sprite
 /obj/item/rogue/instrument/harp/handcarved
 	name = "handcrafted harp"
 	desc = "A handcrafted harp."
 	icon_state = "batharp"
 	icon = 'modular_azurepeak/icons/obj/items/donor_objects.dmi'
 
+//Rebel0's donator item - visored sallet with a hood on under it. (Same as normal sallet)
+/obj/item/clothing/head/roguetown/helmet/sallet/visored/gilded
+	name = "gilded visored sallet"
+	desc = "A steel helmet with gilded trim which protects the ears, nose, and eyes."
+	icon_state = "gildedsallet_visor"
+	item_state = "gildedsallet_visor"
+	icon = 'modular_azurepeak/icons/clothing/donor_clothes.dmi'
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/donor_clothes.dmi'
+
+//Zydras donator item - merchant dress
+/obj/item/clothing/suit/roguetown/shirt/dress/silkydress/zydrasdress //Recolored silky dress
+	name = "Gold-Black silky dress"
+	desc = "A gorgeous black and gold dress. It seems the padding was removed."
+	icon_state = "zydrasdress"
+	item_state = "zydrasdress"
+	sleevetype = "zydrasdress"
+	icon = 'modular_azurepeak/icons/clothing/donor_clothes.dmi'
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/donor_clothes.dmi'
+	sleeved = 'modular_azurepeak/icons/clothing/onmob/donor_sleeves_armor.dmi' //No sleeves

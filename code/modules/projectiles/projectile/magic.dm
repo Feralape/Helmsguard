@@ -346,8 +346,7 @@
 			to_chat(L, span_danger("My weakened soul is completely consumed by the [src]!"))
 			L.mind.hasSoul = FALSE
 		for(var/obj/effect/proc_holder/spell/spell in L.mind.spell_list)
-			spell.charge_counter = spell.charge_max
-			spell.recharging = FALSE
+			spell.charge_counter = spell.recharge_time
 			spell.update_icon()
 
 /obj/projectile/magic/aoe

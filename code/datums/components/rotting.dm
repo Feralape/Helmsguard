@@ -44,7 +44,11 @@
 	ZOMBIFICATION
 */
 /datum/component/rot/corpse/process()
+	var/time_elapsed = last_process ? (world.time - last_process)/10 : 1
 	..()
+	if(has_world_trait(/datum/world_trait/pestra_mercy))
+		amount -= 5 * time_elapsed
+	
 	var/mob/living/carbon/C = parent
 	var/is_zombie
 	if(C.mind)
@@ -55,6 +59,9 @@
 			qdel(src)
 			return
 
+	var/area/A = get_area(C)
+	if (istype(A, /area/rogue/indoors/town))	//Stops rotting inside town buildings; will stop your zombification such as at church or appothocary.
+		return
 
 	if(!(C.mob_biotypes & (MOB_ORGANIC|MOB_UNDEAD)))
 		qdel(src)
@@ -76,21 +83,22 @@
 					B.rotted = TRUE
 					findonerotten = TRUE
 					shouldupdate = TRUE
-					C.change_stat("constitution", -8, "rottenlimbs")
+					C.apply_status_effect(/datum/status_effect/debuff/rotted_zombie)	//-8 con to rotting zombie corpse.
 			else
 				if(amount > C.skeletonize_time)
 					if(!is_zombie)
 						B.skeletonize()
 						if(C.dna && C.dna.species)
 							C.dna.species.species_traits |= NOBLOOD
-						C.change_stat("constitution", -99, "skeletonized")
+						C.apply_status_effect(/datum/status_effect/debuff/rotted_zombie)	//-8 con to rotting zombie corpse - duplicate as a failsafe.
 						shouldupdate = TRUE
 				else
 					findonerotten = TRUE
 		if(amount > C.dust_time)  // Code to delete a corpse after 35 minutes if it's not a zombie and not skeletonized. Possible failsafe.
 			if(!is_zombie)
-				if(B.skeletonized)
-					dustme = TRUE
+				if(!C.client)	// We want to dust NPC bodies, not player bodies.
+					if(B.skeletonized)
+						dustme = TRUE
 
 	if(dustme)
 		qdel(src)
@@ -99,7 +107,7 @@
 	if(findonerotten)
 		var/turf/open/T = C.loc
 		if(istype(T))
-			T.add_pollutants(/datum/pollutant/rot, 5)
+			T.pollute_turf(/datum/pollutant/rot, 5)
 			if(soundloop && soundloop.stopped && !is_zombie)
 				soundloop.start()
 		else
@@ -128,7 +136,7 @@
 			soundloop.start()
 		var/turf/open/T = get_turf(L)
 		if(istype(T))
-			T.add_pollutants(/datum/pollutant/rot, 5)
+			T.pollute_turf(/datum/pollutant/rot, 5)
 	if(amount > L.dust_time)
 		qdel(src)
 		return L.dust(drop_items=TRUE)

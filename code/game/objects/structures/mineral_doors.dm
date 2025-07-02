@@ -223,14 +223,12 @@
 				return
 			door_rattle()
 			return
-		if(TryToSwitchState(AM))
+		if(TryToSwitchState(user))
 			if(swing_closed)
-				if(isliving(AM))
-					var/mob/living/M = AM
-					if(M.m_intent == MOVE_INTENT_SNEAK)
-						addtimer(CALLBACK(src, PROC_REF(Close), TRUE), 25)
-					else
-						addtimer(CALLBACK(src, PROC_REF(Close), FALSE), 25)
+				if(user.m_intent == MOVE_INTENT_SNEAK)
+					addtimer(CALLBACK(src, PROC_REF(Close), TRUE), 25)
+				else
+					addtimer(CALLBACK(src, PROC_REF(Close), FALSE), 25)
 
 
 /obj/structure/mineral_door/attack_paw(mob/user)
@@ -265,23 +263,30 @@
 		return !opacity
 	return !density
 
-/obj/structure/mineral_door/proc/TryToSwitchState(atom/user)
-	if(isSwitchingStates || !anchored)
-		return
-	if(isliving(user))
-		var/mob/living/M = user
-		if(world.time - M.last_bumped <= 60)
-			return //NOTE do we really need that?
-		if(M.client)
-			if(iscarbon(M))
-				var/mob/living/carbon/C = M
-				if(!C.handcuffed)
-					if(C.m_intent == MOVE_INTENT_SNEAK)
-						SwitchState(TRUE)
-					else
-						SwitchState()
-			else
-				SwitchState()
+/obj/structure/mineral_door/CanAStarPass(ID, to_dir, datum/caller)
+	. = ..()
+	if(.) // we can already go through it
+		return TRUE
+	if(!anchored)
+		return FALSE
+	if(HAS_TRAIT(caller, TRAIT_BASHDOORS))
+		return TRUE // bash into it!
+	// it's openable
+	return ishuman(caller) && !locked // only humantype mobs can open doors, as funny as it'd be for a volf to walk in on you ERPing
+
+/obj/structure/mineral_door/proc/TryToSwitchState(mob/living/user)
+	if(!isliving(user) || isSwitchingStates || !anchored)
+		return FALSE
+	if(ishuman(user))
+		var/mob/living/carbon/human/human_user = user
+		// must have a client or be trying to pass through the door
+		if(!human_user.client && !length(human_user.myPath))
+			return FALSE
+		if(human_user.handcuffed)
+			return FALSE
+	else if(!user.client) // simplemobs aren't allowed to pathfind through doors, currently
+		return FALSE
+	SwitchState(user.m_intent == MOVE_INTENT_SNEAK) // silent when sneaking
 	return TRUE
 
 /obj/structure/mineral_door/proc/SwitchState(silent = FALSE)
@@ -500,7 +505,7 @@
 		return
 	if(lockbroken)
 		to_chat(user, span_warning("The lock to this door is broken."))
-	user.changeNext_move(CLICK_CD_MELEE)
+	user.changeNext_move(CLICK_CD_INTENTCAP)
 	if(istype(I,/obj/item/storage/keyring))
 		var/obj/item/storage/keyring/R = I
 		if(!R.contents.len)
@@ -545,7 +550,7 @@
 		return
 	if(lockbroken)
 		to_chat(user, "<span class='warning'>The lock to this door is broken.</span>")
-		user.changeNext_move(CLICK_CD_MELEE)
+		user.changeNext_move(CLICK_CD_INTENTCAP)
 	else
 		var/lockprogress = 0
 		var/locktreshold = lock_strength
@@ -591,7 +596,7 @@
 						message_admins("[H.real_name]([key_name(user)]) successfully lockpicked [src.name] & [locked ? "unlocked" : "locked"] it. [ADMIN_JMP(src)]")
 						log_admin("[H.real_name]([key_name(user)]) successfully lockpicked [src.name].")
 						record_featured_stat(FEATURED_STATS_CRIMINALS, user)
-						GLOB.blackmoor_round_stats[STATS_LOCKS_PICKED]++
+						GLOB.azure_round_stats[STATS_LOCKS_PICKED]++
 						var/obj/effect/track/structure/new_track = new(get_turf(src))
 						new_track.handle_creation(user)
 					lock_toggle(user)

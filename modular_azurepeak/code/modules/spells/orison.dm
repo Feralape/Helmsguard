@@ -263,7 +263,7 @@
 			var/upd = M.heal_wounds(1)
 			if (upd)
 				M.update_damage_overlays()
-		M.rogfat_add(0.5*REM)
+		M.stamina_add(0.5*REM)
 
 /obj/item/melee/touch_attack/orison/proc/create_water(atom/thing, mob/living/carbon/human/user)
 	// normally we wouldn't use fatigue here to keep in line w/ other holy magic, but we have to since water is a persistent resource
@@ -296,7 +296,7 @@
 			reagents_to_add.trans_to(thing, reagents_to_add.total_volume, transfered_by = user, method = INGEST)
 
 			fatigue_spent += fatigue_used
-			user.rogfat_add(fatigue_used)
+			user.stamina_add(fatigue_used)
 			user.devotion?.update_devotion(-1.0)
 
 			if (prob(80))

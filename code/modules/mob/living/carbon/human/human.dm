@@ -24,6 +24,7 @@
 				if(do_after(user, 50, needhand = 1, target = src))
 					facial_hairstyle = "None"
 					update_hair()
+					GLOB.azure_round_stats[STATS_BEARDS_SHAVED]++
 					if(dna?.species)
 						if(dna.species.id == "dwarf")
 							add_stress(/datum/stressevent/dwarfshaved)
@@ -78,6 +79,8 @@
 	var/obj/item/bodypart/affecting
 	var/dam = levels * rand(10,50)
 	add_stress(/datum/stressevent/felldown)
+	GLOB.azure_round_stats[STATS_MOAT_FALLERS]-- // If you get your ankles broken you fall. This makes sure only those that DIDN'T get damage get counted.
+	GLOB.azure_round_stats[STATS_ANKLES_BROKEN]++
 	var/chat_message
 	switch(rand(1,4))
 		if(1)
@@ -517,56 +520,56 @@
 			else
 				hud_used.healthdoll.icon_state = "healthdoll_DEAD"*/
 
-		if(hud_used.fats)
+		if(hud_used.stamina)
 			if(stat != DEAD)
 				. = 1
-				if(rogfat >= maxrogfat)
-					hud_used.fats.icon_state = "fat0"
-				else if(rogfat > maxrogfat*0.90)
-					hud_used.fats.icon_state = "fat10"
-				else if(rogfat > maxrogfat*0.80)
-					hud_used.fats.icon_state = "fat20"
-				else if(rogfat > maxrogfat*0.70)
-					hud_used.fats.icon_state = "fat30"
-				else if(rogfat > maxrogfat*0.60)
-					hud_used.fats.icon_state = "fat40"
-				else if(rogfat > maxrogfat*0.50)
-					hud_used.fats.icon_state = "fat50"
-				else if(rogfat > maxrogfat*0.40)
-					hud_used.fats.icon_state = "fat60"
-				else if(rogfat > maxrogfat*0.30)
-					hud_used.fats.icon_state = "fat70"
-				else if(rogfat > maxrogfat*0.20)
-					hud_used.fats.icon_state = "fat80"
-				else if(rogfat > maxrogfat*0.10)
-					hud_used.fats.icon_state = "fat90"
-				else if(rogfat >= 0)
-					hud_used.fats.icon_state = "fat100"
-		if(hud_used.stams)
+				if(stamina >= max_stamina)
+					hud_used.stamina.icon_state = "stam0"
+				else if(stamina > max_stamina*0.90)
+					hud_used.stamina.icon_state = "stam10"
+				else if(stamina > max_stamina*0.80)
+					hud_used.stamina.icon_state = "stam20"
+				else if(stamina > max_stamina*0.70)
+					hud_used.stamina.icon_state = "stam30"
+				else if(stamina > max_stamina*0.60)
+					hud_used.stamina.icon_state = "stam40"
+				else if(stamina > max_stamina*0.50)
+					hud_used.stamina.icon_state = "stam50"
+				else if(stamina > max_stamina*0.40)
+					hud_used.stamina.icon_state = "stam60"
+				else if(stamina > max_stamina*0.30)
+					hud_used.stamina.icon_state = "stam70"
+				else if(stamina > max_stamina*0.20)
+					hud_used.stamina.icon_state = "stam80"
+				else if(stamina > max_stamina*0.10)
+					hud_used.stamina.icon_state = "stam90"
+				else if(stamina >= 0)
+					hud_used.stamina.icon_state = "stam100"
+		if(hud_used.energy)
 			if(stat != DEAD)
 				. = 1
-				if(rogstam <= 0)
-					hud_used.stams.icon_state = "stam0"
-				else if(rogstam > maxrogstam*0.90)
-					hud_used.stams.icon_state = "stam100"
-				else if(rogstam > maxrogstam*0.80)
-					hud_used.stams.icon_state = "stam90"
-				else if(rogstam > maxrogstam*0.70)
-					hud_used.stams.icon_state = "stam80"
-				else if(rogstam > maxrogstam*0.60)
-					hud_used.stams.icon_state = "stam70"
-				else if(rogstam > maxrogstam*0.50)
-					hud_used.stams.icon_state = "stam60"
-				else if(rogstam > maxrogstam*0.40)
-					hud_used.stams.icon_state = "stam50"
-				else if(rogstam > maxrogstam*0.30)
-					hud_used.stams.icon_state = "stam40"
-				else if(rogstam > maxrogstam*0.20)
-					hud_used.stams.icon_state = "stam30"
-				else if(rogstam > maxrogstam*0.10)
-					hud_used.stams.icon_state = "stam20"
-				else if(rogstam > 0)
-					hud_used.stams.icon_state = "stam10"
+				if(energy <= 0)
+					hud_used.energy.icon_state = "energy0"
+				else if(energy > max_energy*0.90)
+					hud_used.energy.icon_state = "energy100"
+				else if(energy > max_energy*0.80)
+					hud_used.energy.icon_state = "energy90"
+				else if(energy > max_energy*0.70)
+					hud_used.energy.icon_state = "energy80"
+				else if(energy > max_energy*0.60)
+					hud_used.energy.icon_state = "energy70"
+				else if(energy > max_energy*0.50)
+					hud_used.energy.icon_state = "energy60"
+				else if(energy > max_energy*0.40)
+					hud_used.energy.icon_state = "energy50"
+				else if(energy > max_energy*0.30)
+					hud_used.energy.icon_state = "energy40"
+				else if(energy > max_energy*0.20)
+					hud_used.energy.icon_state = "energy30"
+				else if(energy > max_energy*0.10)
+					hud_used.energy.icon_state = "energy20"
+				else if(energy > 0)
+					hud_used.energy.icon_state = "energy10"
 
 		if(hud_used.zone_select)
 			hud_used.zone_select.update_icon()

@@ -2,7 +2,7 @@
 	name = "Instant Summons"
 	desc = ""
 	school = "transmutation"
-	charge_max = 100
+	recharge_time = 100
 	clothes_req = FALSE
 	invocation = "GAR YOK"
 	invocation_type = "whisper"

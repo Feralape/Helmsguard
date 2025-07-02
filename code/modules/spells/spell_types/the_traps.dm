@@ -2,7 +2,7 @@
 	name = "The Traps!"
 	desc = ""
 
-	charge_max = 250
+	recharge_time = 250
 	cooldown_min = 50
 
 	clothes_req = TRUE

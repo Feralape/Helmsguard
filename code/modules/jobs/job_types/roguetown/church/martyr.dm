@@ -10,7 +10,7 @@
 	var/next_activation = 0
 	var/end_activation = 0
 	var/ignite_chance = 2
-	var/traits_applied = list(TRAIT_NOPAIN, TRAIT_NOPAINSTUN, TRAIT_NOMOOD, TRAIT_NOHUNGER, TRAIT_STRONGBITE)
+	var/traits_applied = list(TRAIT_NOPAIN, TRAIT_NOPAINSTUN, TRAIT_NOMOOD, TRAIT_NOHUNGER, TRAIT_NOBREATH, TRAIT_BLOODLOSS_IMMUNE, TRAIT_LONGSTRIDER, TRAIT_STRONGBITE, TRAIT_STRENGTH_UNCAPPED)
 	var/stat_bonus_martyr = 3
 	var/mob/living/current_holder
 	var/is_active = FALSE
@@ -272,7 +272,7 @@
 				current_holder.STAINT += stat_bonus_martyr
 				current_holder.STAPER += stat_bonus_martyr
 				current_holder.STALUC += stat_bonus_martyr
-				H.rogstam_add(9999)
+				H.energy_add(9999)
 			if(STATE_MARTYRULT)	//This is ONLY accessed during the last 30 seconds of the shorter variant.
 				current_holder.STASTR = 20
 				current_holder.STASPD = 20
@@ -281,7 +281,7 @@
 				current_holder.STAINT = 20
 				current_holder.STAPER = 20
 				current_holder.STALUC = 20
-				H.rogstam_add(9999)//Go get 'em, Martyrissimo, it's your last 30 seconds, it's a frag or be fragged world
+				H.energy_add(9999)//Go get 'em, Martyrissimo, it's your last 30 seconds, it's a frag or be fragged world
 				if(H.mind)
 					H.mind.adjust_skillrank_up_to(/datum/skill/combat/wrestling, 6, FALSE)
 					H.mind.adjust_skillrank_up_to(/datum/skill/combat/swords, 6, FALSE)
@@ -442,8 +442,10 @@
 	//No undeath-adjacent virtues for a role that can sacrifice itself. The Ten like their sacrifices 'pure'. (I actually didn't want to code returning those virtue traits post-sword use)
 	//They get those traits during sword activation, anyway. 
 	//Dual wielder is there to stand-in for ambidextrous in case they activate their sword in their off-hand.
-	virtue_restrictions = list(/datum/virtue/utility/noble, /datum/virtue/combat/rotcured, /datum/virtue/utility/deadened, /datum/virtue/utility/deathless, /datum/virtue/heretic/seer, /datum/virtue/combat/dualwielder)
+	virtue_restrictions = list(/datum/virtue/utility/noble, /datum/virtue/combat/rotcured, /datum/virtue/utility/deadened, /datum/virtue/utility/deathless, /datum/virtue/combat/dualwielder, /datum/virtue/heretic/zchurch_keyholder)
 
+/datum/outfit/job/roguetown/martyr
+	job_bitflag = BITFLAG_CHURCH
 
 /datum/outfit/job/roguetown/martyr/pre_equip(mob/living/carbon/human/H)
 	..()
@@ -480,7 +482,6 @@
 		ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
-		ADD_TRAIT(H, TRAIT_NOSEGRAB, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_SILVER_BLESSED, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_DUALWIELDER, TRAIT_GENERIC)	//You can't dual wield the unique weapon, this is more to cover for the NODROP weapon that might end up in an off-hand.
 		H.change_stat("strength", 2)
@@ -522,6 +523,7 @@
 	smeltresult = /obj/item/ingot/gold
 	is_silver = FALSE
 	toggle_state = null
+	is_important = TRUE
 
 /obj/item/rogueweapon/sword/long/martyr/Initialize()
 	AddComponent(/datum/component/martyrweapon)
@@ -558,7 +560,7 @@
 /obj/item/rogueweapon/sword/long/martyr/Destroy()
 	var/datum/component/martyr = GetComponent(/datum/component/martyrweapon)
 	if(martyr)
-		martyr.RemoveComponent()
+		martyr.ClearFromParent()
 	return ..()
 
 
@@ -593,7 +595,7 @@
 	sleeved = 'icons/roguetown/clothing/onmob/helpers/sleeves_armor.dmi'
 	sleevetype = "silverarmor"
 	mob_overlay_icon = 'icons/roguetown/clothing/special/onmob/martyr.dmi'
-	armor = list("blunt" = 80, "slash" = 100, "stab" = 80, "piercing" = 10, "fire" = 0, "acid" = 0)
+	armor = ARMOR_PLATE
 	sellprice = 1000
 	smeltresult = /obj/item/ingot/silver
 	smelt_bar_num = 4
@@ -607,7 +609,7 @@
 	sleevetype = "silverlegs"
 	icon_state = "silverlegs"
 	item_state = "silverlegs"
-	armor = list("blunt" = 90, "slash" = 100, "stab" = 80, "piercing" = 10, "fire" = 0, "acid" = 0)
+	armor = ARMOR_PLATE
 	sellprice = 1000
 	smeltresult = /obj/item/ingot/silver
 	smelt_bar_num = 3
@@ -629,26 +631,8 @@
 	smeltresult = /obj/item/ingot/silver
 	smelt_bar_num = 3
 
-/obj/item/clothing/head/roguetown/helmet/heavy/holysee/AdjustClothes(mob/user)
-	if(loc == user)
-		playsound(user, "sound/items/visor.ogg", 100, TRUE, -1)
-		if(adjustable == CAN_CADJUST)
-			adjustable = CADJUSTED
-			icon_state = "silverbascinet_raised"
-			body_parts_covered = HEAD|EARS|HAIR
-			flags_inv = HIDEEARS
-			flags_cover = null
-			if(ishuman(user))
-				var/mob/living/carbon/H = user
-				H.update_inv_head()
-			block2add = null
-		else if(adjustable == CADJUSTED)
-			ResetAdjust(user)
-			if(user)
-				if(ishuman(user))
-					var/mob/living/carbon/H = user
-					H.update_inv_head()
-		user.update_fov_angles()
+/obj/item/clothing/head/roguetown/helmet/heavy/holysee/ComponentInitialize()
+	AddComponent(/datum/component/adjustable_clothing, (HEAD|EARS|HAIR), (HIDEEARS|HIDEHAIR), null, 'sound/items/visor.ogg', null, UPD_HEAD)	//Standard helmet
 
 /obj/item/clothing/cloak/holysee
 	name = "holy silver vestments"

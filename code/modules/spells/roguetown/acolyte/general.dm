@@ -12,7 +12,7 @@
 	invocation_type = "none"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = TRUE
-	charge_max = 10 SECONDS
+	recharge_time = 10 SECONDS
 	miracle = TRUE
 	devotion_cost = 10
 
@@ -20,20 +20,26 @@
 	. = ..()
 	if(isliving(targets[1]))
 		var/mob/living/target = targets[1]
+		if(HAS_TRAIT(target, TRAIT_PSYDONITE))
+			target.visible_message(span_info("[target] stirs for a moment, the miracle dissipates."), span_notice("A dull warmth swells in your heart, only to fade as quickly as it arrived."))
+			user.playsound_local(user, 'sound/magic/PSY.ogg', 100, FALSE, -1)
+			playsound(target, 'sound/magic/PSY.ogg', 100, FALSE, -1)
+			return FALSE
 		if(user.patron?.undead_hater && (target.mob_biotypes & MOB_UNDEAD)) //positive energy harms the undead
 			target.visible_message(span_danger("[target] is burned by holy light!"), span_userdanger("I'm burned by holy light!"))
 			target.adjustFireLoss(10)
 			target.fire_act(1,10)
 			return TRUE
+		if(target.has_status_effect(/datum/status_effect/buff/healing))
+			to_chat(user, span_warning("They are already under the effects of a healing aura!"))
+			revert_cast()
+			return FALSE
 		var/conditional_buff = FALSE
 		var/situational_bonus = 1
 		var/message_out
 		var/message_self
 		//this if chain is stupid, replace with variables on /datum/patron when possible?
 		switch(user.patron.type)
-			if(/datum/patron/old_god)
-				message_out = span_info("A strange stirring feeling pours from [target]!")
-				message_self = span_info("Sentimental thoughts drive away my pains!")
 			if(/datum/patron/divine/astrata)
 				message_out = span_info("A wreath of gentle light passes over [target]!")
 				message_self = ("I'm bathed in holy light!")
@@ -214,7 +220,7 @@
 	invocation_type = "none"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = TRUE
-	charge_max = 20 SECONDS
+	recharge_time = 20 SECONDS
 	miracle = TRUE
 	devotion_cost = 20
 
@@ -222,6 +228,11 @@
 	. = ..()
 	if(isliving(targets[1]))
 		var/mob/living/target = targets[1]
+		if(HAS_TRAIT(target, TRAIT_PSYDONITE))
+			target.visible_message(span_info("[target] stirs for a moment, the miracle dissipates."), span_notice("A dull warmth swells in your heart, only to fade as quickly as it arrived."))
+			user.playsound_local(user, 'sound/magic/PSY.ogg', 100, FALSE, -1)
+			playsound(target, 'sound/magic/PSY.ogg', 100, FALSE, -1)
+			return FALSE
 		if(user.patron?.undead_hater && (target.mob_biotypes & MOB_UNDEAD)) //positive energy harms the undead
 			target.visible_message(span_danger("[target] is burned by holy light!"), span_userdanger("I'm burned by holy light!"))
 			target.adjustFireLoss(25)
@@ -251,7 +262,7 @@
 	invocation_type = "none"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = TRUE
-	charge_max = 10 SECONDS
+	recharge_time = 10 SECONDS
 	miracle = TRUE
 	devotion_cost = 10
 
@@ -284,7 +295,7 @@
 	invocation_type = "none"
 	associated_skill = /datum/skill/magic/holy
 	antimagic_allowed = TRUE
-	charge_max = 20 SECONDS
+	recharge_time = 20 SECONDS
 	miracle = TRUE
 	devotion_cost = 20
 
@@ -311,7 +322,7 @@
 	releasedrain = 35
 	chargedrain = 1
 	chargetime = 30
-	charge_max = 60 SECONDS
+	recharge_time = 60 SECONDS
 	warnie = "spellwarning"
 	no_early_release = TRUE
 	movement_interrupt = FALSE
@@ -326,6 +337,7 @@
 	var/toxin = 0
 	var/turf/origin
 	var/firestacks = 0
+	var/divinefirestacks = 0
 	var/blood = 0
 	miracle = TRUE
 	devotion_cost = 30
@@ -341,6 +353,7 @@
 		toxin = target.getToxLoss()
 		origin = get_turf(target)
 		firestacks = target.fire_stacks
+		divinefirestacks = target.divine_fire_stacks
 		blood = target.blood_volume
 		to_chat(target, span_warning("I feel a part of me was left behind..."))
 		play_indicator(target,'icons/mob/overhead_effects.dmi', "timestop", 100, OBJ_LAYER)
@@ -351,6 +364,7 @@
 /obj/effect/proc_holder/spell/invoked/stasis/proc/remove_buff(mob/living/carbon/target)
 	do_teleport(target, origin, no_effects=TRUE)
 	target.adjust_fire_stacks(target.fire_stacks*-1 + firestacks)
+	target.adjust_divine_fire_stacks(target.divine_fire_stacks*-1 + divinefirestacks)
 	var/brutenew = target.getBruteLoss()
 	var/burnnew = target.getFireLoss()
 	var/oxynew = target.getOxyLoss()

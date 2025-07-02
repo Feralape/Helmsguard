@@ -27,6 +27,7 @@
 		hood = W
 
 /obj/item/clothing/attack_right(mob/user)
+	. = ..()
 	if(hoodtype)
 		ToggleHood()
 	if(adjustable > 0)
