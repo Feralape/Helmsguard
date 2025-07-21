@@ -107,7 +107,7 @@
 		/obj/item/storage/belt/rogue/pouch/coins/rich = 1,
 		)
 
-/// JUSTICIAR
+/// Justiciar. You focus on your gun instead of your blade, mastering the skills needed to keep whoever attracted your ire just alive enough to deliver them to your confession booth.
 
 /datum/advclass/puritan/justiciar
 	name = "Justiciar"
@@ -122,23 +122,21 @@
 /datum/outfit/job/roguetown/puritan/justiciar/pre_equip(mob/living/carbon/human/H)
 	..()
 	if(H.mind)
-		H.adjust_skillrank(/datum/skill/misc/lockpicking, 3, TRUE)
-		H.adjust_skillrank(/datum/skill/misc/tracking, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/lockpicking, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/tracking, 2, TRUE)
 		H.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
 		H.adjust_skillrank(/datum/skill/combat/swords, 3, TRUE)
 		H.adjust_skillrank(/datum/skill/combat/whipsflails, 3, TRUE)
-		H.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/knives, 4, TRUE) 
 		H.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
 		H.adjust_skillrank(/datum/skill/misc/athletics, 4, TRUE)
-		H.adjust_skillrank(/datum/skill/combat/crossbows, 3, TRUE)
-		H.adjust_skillrank(/datum/skill/combat/firearms, 5, TRUE)	
+		H.adjust_skillrank(/datum/skill/combat/firearms, 5, TRUE) // You'd rely on your gun the most, far worse at swinging with weapons than your other counterparts
 		H.adjust_skillrank(/datum/skill/misc/riding, 3, TRUE)	
-		H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
-		H.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
-		H.adjust_skillrank(/datum/skill/combat/shields, 3, TRUE)
-		H.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE)
-		H.adjust_skillrank(/datum/skill/misc/medicine, 3, TRUE)
-		H.adjust_skillrank(/datum/skill/misc/sewing, 2, TRUE)
+		H.adjust_skillrank(/datum/skill/combat/wrestling, 4, TRUE) // Need to extract those confessions somehow
+		H.adjust_skillrank(/datum/skill/combat/unarmed, 4, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/reading, 6, TRUE) // Should be smart enough to be considered a judge
+		H.adjust_skillrank(/datum/skill/misc/medicine, 4, TRUE)
+		H.adjust_skillrank(/datum/skill/misc/sewing, 4, TRUE) // Don't want the victims to bleed out on the spot
 		H.change_stat("strength", 2)
 		H.change_stat("endurance", 2)
 		H.change_stat("constitution", 3)
@@ -154,7 +152,7 @@
 	ADD_TRAIT(H, TRAIT_PERFECT_TRACKER, TRAIT_GENERIC)
 	ADD_TRAIT(H, TRAIT_PURITAN, JOB_TRAIT)
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/puritan
-	belt = /obj/item/storage/belt/rogue/leather/knifebelt/black/psydon
+	belt = /obj/item/storage/belt/rogue/leather
 	neck = /obj/item/clothing/neck/roguetown/gorget
 	shoes = /obj/item/clothing/shoes/roguetown/boots/otavan/inqboots
 	pants = /obj/item/clothing/under/roguetown/heavy_leather_pants
@@ -166,7 +164,14 @@
 	wrists = /obj/item/clothing/neck/roguetown/psicross/silver
 	beltl = /obj/item/gun/ballistic/arquebus_pistol
 	armor = /obj/item/clothing/suit/roguetown/armor/plate/scale/inqcoat
-	backpack_contents = list(/obj/item/storage/keyring/puritan = 1, /obj/item/powderflask = 1, /obj/item/storage/belt/rogue/pouch/coins/rich = 1)
+	backpack_contents = list(
+		/obj/item/powderflask = 1,
+		/obj/item/storage/belt/rogue/pouch/coins/rich = 1,
+		/obj/item/storage/belt/rogue/surgery_bag/full = 1,
+		/obj/item/rope/chain = 1,
+		/obj/item/rogueweapon/katar = 1,
+		/obj/item/storage/keyring/puritan = 1,
+		)
 
 
 
