@@ -31,3 +31,4 @@
 - Guns damage factor fixed, for real this time, trust
 - Mouthgrab now take coverage into account, in line with strangling
 - Pestra's cure rot spell now removes zombie rot and zombified status, but does not revive
+- Ported Rotational Power and Engineering from Vanderlin
