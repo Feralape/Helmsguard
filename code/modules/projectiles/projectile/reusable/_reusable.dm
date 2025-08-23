@@ -19,9 +19,19 @@
 /obj/projectile/bullet/reusable/on_hit()
 	if(drop_ammo)
 		dropped = new ammo_type(src)
+	else
+		dropped = null
+		light_system = null
+		light_color = null
+		light_power = null
+		light_outer_range = null
+		qdel(src)  //If we don't drop ammo, delete the projectile
 	..()
 
 /obj/projectile/bullet/reusable/on_range()
 	if(drop_ammo)
 		handle_drop()
+	else	
+		spark_act()
+		qdel(src)	
 	..()

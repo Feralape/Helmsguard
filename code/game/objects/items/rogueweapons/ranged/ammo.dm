@@ -47,12 +47,17 @@
 	icon_state = "bolt_proj"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/bolt
 	range = 15
-	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
+	hitsound = list(
+	'sound/combat/hits/hi_bolt (1).ogg',
+	'sound/combat/hits/hi_bolt (2).ogg',
+	'sound/combat/hits/hi_bolt (3).ogg'
+	)
 	embedchance = 100
 	woundclass = BCLASS_PIERCE
 	flag = "piercing"
 	speed = 0.5
 	npc_damage_mult = 2
+	drop_ammo = TRUE // Whether the bolt should drop as an item on hit
 
 /obj/projectile/bullet/reusable/bolt/aalloy
 	damage = 40
@@ -95,6 +100,7 @@
 	possible_item_intents = list(/datum/intent/dagger/cut, /datum/intent/dagger/thrust)
 	max_integrity = 10
 
+
 /obj/item/ammo_casing/caseless/rogue/arrow/stone
 	name = "stone arrow"
 	desc = "A simple dowel sports lashed flint knapped and honed to a razor edge. Folk \
@@ -129,6 +135,7 @@
 	desc = "a bodkin formed of ancient metals. Aeon's grasp lifted from its form."
 	icon_state = "ancientarrow"
 	projectile_type = /obj/projectile/bullet/reusable/arrow/steel/paalloy
+	
 
 /obj/projectile/bullet/reusable/arrow
 	name = "arrow"
@@ -140,11 +147,16 @@
 	icon_state = "arrow_proj"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow
 	range = 15
-	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
+	hitsound = list(
+	'sound/combat/hits/hi_arrow.ogg',
+	'sound/combat/hits/hi_arrow2.ogg',
+	'sound/combat/hits/hi_arrow3.ogg'
+	)
 	embedchance = 25
 	woundclass = BCLASS_PIERCE
 	flag = "piercing"
 	speed = 0.4
+	drop_ammo = TRUE // Whether the arrow should drop as an item on hit
 
 /obj/projectile/bullet/reusable/arrow/on_hit(atom/target)
 	..()
@@ -227,7 +239,6 @@
 	icon_state = "arrow_proj"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/iron
 	range = 15
-	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
 	poisontype = /datum/reagent/stampoison
 	poisonamount = 2
 	slur = 10
@@ -413,12 +424,16 @@
 	icon_state = "musketball_proj"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/bullet
 	range = 25		//Higher than arrow, but not halfway through the entire town.
-	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
+	hitsound = list(
+	'sound/combat/hits/hi_bolt (1).ogg',
+	'sound/combat/hits/hi_bolt (2).ogg',
+	'sound/combat/hits/hi_bolt (3).ogg'
+	)
 	embedchance = 100
 	woundclass = BCLASS_PIERCE
 	flag = "bullet"
 	armor_penetration = 100	//Crossbow-on-crack AP. Armor only goes up to 100 protection normally; so this ignores most of it but not all. Wear good armor!
-	speed = 0.1		//ZOOM!!!!!
+	speed = 1		//ZOOM!!!!!
 	drop_ammo = FALSE // Don't drop ammo on hit, as this is a reusable bullet
 
 /obj/projectile/bullet/reusable/bullet/rogue/on_hit(atom/target, mob/living/shooter, blocked = FALSE)
@@ -431,14 +446,13 @@
 				span_danger("[shooter] hits [M] with a [src.name]!"),
 				span_warning("You shoot [M] with your [src.name]!")
 			)
-	dropped = null
-	qdel(src) // Delete the bullet after it hits something, as it is a reusable bullet and not a projectile that should persist
+	if(isturf(target))
+		if(prob(30))
+			spark_act()
+			new /obj/effect/particle_effect/sparks/muzzle(get_turf(target))
 	..()
 
-/obj/projectile/bullet/reusable/on_range()
-	. = ..()
-	spark_act()
-	qdel(src)
+
 
 /obj/item/ammo_casing/caseless/rogue/bullet
 	name = "iron sphere"
@@ -450,7 +464,7 @@
 	dropshrink = 0.5
 	possible_item_intents = list(/datum/intent/use)
 	max_integrity = 0
-
+	firing_effect_type = /obj/effect/temp_visual/dir_setting/firing_effect
 	armor_penetration = 70
 	w_class = WEIGHT_CLASS_TINY
 //mob projectiles
@@ -463,7 +477,6 @@
 	icon_state = "arrow_proj"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/stone
 	range = 15
-	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
 	embedchance = 100
 	woundclass = BCLASS_STAB
 	flag = "piercing"
@@ -477,7 +490,11 @@
 	icon_state = "arrow_proj"
 	ammo_type = /obj/item/ammo_casing/caseless/rogue/arrow/stone
 	range = 15
-	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
+	hitsound = list(
+	'sound/combat/hits/hi_arrow.ogg',
+	'sound/combat/hits/hi_arrow2.ogg',
+	'sound/combat/hits/hi_arrow3.ogg'
+	)
 	embedchance = 100
 	woundclass = BCLASS_STAB
 	flag = "piercing"
@@ -491,7 +508,11 @@
 	icon_state = "arrow_proj"
 	ammo_type = /obj/projectile/bullet/reusable/bolt
 	range = 15
-	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
+	hitsound = list(
+	'sound/combat/hits/hi_arrow.ogg',
+	'sound/combat/hits/hi_arrow2.ogg',
+	'sound/combat/hits/hi_arrow3.ogg'
+	)
 	embedchance = 100
 	woundclass = BCLASS_STAB
 	flag = "bullet"
@@ -509,7 +530,11 @@
 	icon_state = "stone1"
 	ammo_type = /obj/item/natural/stone
 	range = 15
-	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
+	hitsound = list(
+	'sound/combat/hits/hi_arrow.ogg',
+	'sound/combat/hits/hi_arrow2.ogg',
+	'sound/combat/hits/hi_arrow3.ogg'
+	)
 	embedchance = 50
 	woundclass = BCLASS_STAB
 	flag = "piercing"
@@ -523,7 +548,10 @@
 	icon = 'modular/Mapping/icons/webbing.dmi'
 	icon_state = "webglob"
 	range = 15
-	hitsound = 'sound/combat/hits/hi_arrow2.ogg'
+	hitsound = list(
+	'sound/combat/hits/blunt/bluntsmall (1).ogg',
+	'sound/combat/hits/blunt/bluntsmall (2).ogg'
+	)
 	embedchance = 0
 	//Will not cause wounds.
 	woundclass = null

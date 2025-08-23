@@ -12,7 +12,7 @@
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	movement_type = FLYING
 	//The sound this plays on impact.
-	var/hitsound = 'sound/blank.ogg'
+	var/list/hitsound = list('sound/blank.ogg')
 	var/hitsound_wall = ""
 	glide_size = 8
 	resistance_flags = LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF

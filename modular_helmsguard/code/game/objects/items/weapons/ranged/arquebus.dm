@@ -39,8 +39,8 @@
 	casing_ejector = FALSE
 	pickup_sound = 'modular_helmsguard/sound/sheath_sounds/draw_from_holster.ogg'
 	holster_sound = 'modular_helmsguard/sound/sheath_sounds/put_back_to_holster.ogg'
+	damfactor = 5 // Multiplier for projectile damage. Used by arquebuses.
 	var/spread_num = 10
-	var/damfactor = 4
 	var/reloaded = FALSE
 	var/load_time = 50
 	var/gunpowder = FALSE
@@ -49,7 +49,7 @@
 	associated_skill = /datum/skill/combat/firearms // NPC related
 	npc_reload_sound = 'modular_helmsguard/sound/NPC_reload/npc_musket_reload.ogg'
 	npc_aim_sound = 'modular_helmsguard/sound/arquebus/musketcock.ogg'
-	muzzle = TRUE // Whether the gun has a muzzle effect when firing, used for NPCs
+	muzzle = "heavy" // Whether the gun has a muzzle effect when firing, used for NPCs
 
 /obj/item/gun/ballistic/arquebus/getonmobprop(tag)
 	. = ..()
@@ -310,7 +310,7 @@
 	pickup_sound = 'modular_helmsguard/sound/sheath_sounds/draw_from_holster.ogg'
 	holster_sound = 'modular_helmsguard/sound/sheath_sounds/put_back_to_holster.ogg'
 	slot_flags = ITEM_SLOT_HIP
-	var/damfactor = 3
+	damfactor = 3
 	var/reloaded = FALSE
 	var/load_time = 50
 	var/gunpowder = FALSE
@@ -320,7 +320,7 @@
 	var/last_spunned
 	var/spin_cooldown = 3 SECONDS
 	associated_skill = /datum/skill/combat/firearms // NPC related
-	muzzle = TRUE // Whether the gun has a muzzle effect when firing, used for NPCs
+	muzzle = "heavy"// Whether the gun has a muzzle effect when firing, used for NPCs
 	npc_reload_sound = 'modular_helmsguard/sound/NPC_reload/npc_musket_reload.ogg'
 	npc_aim_sound = 'modular_helmsguard/sound/arquebus/musketcock.ogg'
 

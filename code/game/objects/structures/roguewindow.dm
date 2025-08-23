@@ -25,6 +25,9 @@
 	update_icon()
 	..()
 
+/obj/structure/roguewindow/add_debris_element()
+	AddElement(/datum/element/debris, DEBRIS_GLASS, -10, 5, 1)
+
 /obj/structure/roguewindow/obj_destruction(damage_flag)
 	..()
 

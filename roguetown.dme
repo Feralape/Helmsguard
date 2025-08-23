@@ -2507,7 +2507,11 @@
 #include "modular_helmsguard\code\modules\mobs\farm\mimic.dm"
 #include "modular_helmsguard\code\modules\mobs\farm\simple_gobs.dm"
 #include "modular_helmsguard\code\modules\mobs\farm\skeleton_corpse.dm"
+#include "modular_meridia\bullet.dm"
 #include "modular_solaris\code\solaristrees.dm"
+#include "modular_meridia\ammo.dm"
+#include "modular_meridia\internal.dm"
+#include "modular_meridia\guns\revolver.dm"
 #include "modular_stonehedge\eldertrees.dm"
 #include "modular_stonehedge\code\datums\traits\object\mob_spawner.dm"
 // END_INCLUDE

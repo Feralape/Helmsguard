@@ -31,3 +31,13 @@
 
 /obj/effect/projectile/muzzle/pointline
 	icon_state = "point"
+
+/obj/effect/projectile/muzzle/bullet
+	name = "muzzle_bullet"
+	icon = 'icons/obj/projectiles_muzzle.dmi'
+
+/obj/effect/projectile/muzzle/bullet/Initialize()
+	. = ..()
+	spawn(5)
+		if(!QDELETED(src))
+			qdel(src) //Delete the muzzle flash after 5 seconds

@@ -38,6 +38,9 @@
 	var/automatic = 0 //can gun use it, 0 is no, anything above 0 is the delay between clicks in ds
 	var/pb_knockback = 0
 
+	var/muzzle = null //Whether the gun has a muzzle effect when firing, also used for NPCs
+
+
 /obj/item/gun/Destroy()
 	if(chambered) //Not all guns are chambered (EMP'ed energy guns etc)
 		QDEL_NULL(chambered)
@@ -66,7 +69,20 @@
 /obj/item/gun/proc/shoot_live_shot(mob/living/user as mob|obj, pointblank = 0, mob/pbtarget = null, message = 1)
 	if(recoil)
 		shake_camera(user, recoil + 1, recoil)
-
+	if(muzzle)
+		switch(muzzle)
+			if("light")
+				new /obj/effect/particle_effect/sparks/muzzle(get_ranged_target_turf(user, user.dir, 1))
+				spawn (5)
+					new/obj/effect/particle_effect/smoke/revolver(get_ranged_target_turf(user, user.dir, 1))
+			if("heavy")	
+				new /obj/effect/particle_effect/sparks/muzzle(get_ranged_target_turf(user, user.dir, 1))
+				spawn (5)
+					new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(user, user.dir, 1))
+				spawn (10)
+					new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(user, user.dir, 2))
+				spawn (16)
+					new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(user, user.dir, 1))
 	playsound(user, pick(fire_sound), fire_sound_volume, vary_fire_sound)
 	if(message)
 		user.visible_message("<span class='danger'>[user] shoots [src]!</span>", \
@@ -122,7 +138,7 @@
 
 /obj/item/gun/proc/process_fire(atom/target, mob/living/user, message = TRUE, params = null, zone_override = "", bonus_spread = 0)
 	add_fingerprint(user)
-
+	
 	var/sprd = 0
 	var/randomized_gun_spread = 0
 	if(spread)

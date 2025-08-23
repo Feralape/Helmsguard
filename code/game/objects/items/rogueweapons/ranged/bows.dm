@@ -109,6 +109,7 @@
 	npc_min_reload_time = 3 SECONDS
 	npc_reload_sound = 'modular_helmsguard/sound/NPC_reload/npc_bow_reload.ogg'// NPC related
 	npc_aim_sound = 'sound/combat/Ranged/bow-draw-01.ogg'// NPC related
+	damfactor = 1
 
 /obj/item/gun/ballistic/revolver/grenadelauncher/bow/Initialize()
 	. = ..()

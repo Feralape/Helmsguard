@@ -791,9 +791,9 @@
 	if(reload_skill)
 		var/skill_level = get_reloading_skill_npc()
 		if(skill_level >= 5)
-			return 1 SECONDS
+			return 0.5 SECONDS
 		else if(skill_level >= 3)
-			return 2 SECONDS
+			return 1 SECONDS
 		else if(skill_level >= 1)
 			return 3 SECONDS
 	return 3 SECONDS
@@ -852,15 +852,20 @@
 			P.preparePixelProjectile(targeted_atom, src)
 			P.speed = 1.5
 			if(G.muzzle)
-				new /obj/effect/particle_effect/sparks/muzzle(get_ranged_target_turf(src, src.dir, 1))
-				spawn (5)
-					new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(src, src.dir, 1))
-				spawn (10)
-					new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(src, src.dir, 2))
-				spawn (16)
-					new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(src, src.dir, 1))
+				switch(G.muzzle)
+					if("light")
+						new /obj/effect/particle_effect/sparks/muzzle(get_ranged_target_turf(src, src.dir, 1))
+						spawn (5)
+							new/obj/effect/particle_effect/smoke/revolver(get_ranged_target_turf(src, src.dir, 1))
+					if("heavy")	
+						new /obj/effect/particle_effect/sparks/muzzle(get_ranged_target_turf(src, src.dir, 1))
+						spawn (5)
+							new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(src, src.dir, 1))
+						spawn (10)
+							new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(src, src.dir, 2))
+						spawn (16)
+							new/obj/effect/particle_effect/smoke/arquebus(get_ranged_target_turf(src, src.dir, 1))
 			P.fire()
-
 			shots_fired++
 			return P
 

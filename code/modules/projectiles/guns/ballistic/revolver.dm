@@ -14,6 +14,9 @@
 	tac_reloads = FALSE
 	var/spin_delay = 10
 	var/recent_spin = 0
+	damfactor = 1 // Multiplier for projectile damage. Used by revolvers.
+	recoil = 1.5 // Recoil factor for the revolver, affects how much the gun moves when fired
+
 
 /obj/item/gun/ballistic/revolver/chamber_round(spin_cylinder = TRUE)
 	if(spin_cylinder)
