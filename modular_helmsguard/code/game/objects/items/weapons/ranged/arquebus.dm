@@ -165,7 +165,7 @@
 	var/load_time_skill = get_reloading_time(user)
 	gunchannel = SSsounds.random_available_channel()
 
-	if(istype(A, /obj/item/ammo_box) || istype(A, /obj/item/ammo_casing))
+	if(istype(A, /obj/item/ammo_box) || istype(A, /obj/item/ammo_casing/caseless/rogue/bullet))
 		if(chambered)
 			to_chat(user, "<span class='warning'>There is already a [chambered] in the [src]!</span>")
 			return
@@ -323,6 +323,7 @@
 	muzzle = "heavy"// Whether the gun has a muzzle effect when firing, used for NPCs
 	npc_reload_sound = 'modular_helmsguard/sound/NPC_reload/npc_musket_reload.ogg'
 	npc_aim_sound = 'modular_helmsguard/sound/arquebus/musketcock.ogg'
+	muzzle = "heavy"
 
 /obj/item/gun/ballistic/arquebus_pistol/getonmobprop(tag)
 	. = ..()

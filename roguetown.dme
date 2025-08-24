@@ -2511,7 +2511,9 @@
 #include "modular_solaris\code\solaristrees.dm"
 #include "modular_meridia\ammo.dm"
 #include "modular_meridia\internal.dm"
-#include "modular_meridia\guns\revolver.dm"
 #include "modular_stonehedge\eldertrees.dm"
 #include "modular_stonehedge\code\datums\traits\object\mob_spawner.dm"
+#include "modular_meridia\guns\get_firearms_skill.dm"
+#include "modular_meridia\guns\revolver.dm"
+#include "modular_meridia\guns\shotgun.dm"
 // END_INCLUDE

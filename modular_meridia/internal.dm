@@ -48,3 +48,11 @@
 
 	return FALSE
 
+
+/// SHOTGUN
+/obj/item/ammo_box/magazine/internal/shotgun
+	name = "shotgun internal magazine"
+	ammo_type = /obj/item/ammo_casing/bullet/shotgun
+	caliber = "shotgun"
+	max_ammo = 2
+	multiload = FALSE

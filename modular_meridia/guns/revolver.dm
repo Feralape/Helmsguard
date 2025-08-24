@@ -30,10 +30,9 @@
 	var/last_spunned
 	var/spin_cooldown = 3 SECONDS
 	associated_skill = /datum/skill/combat/firearms // NPC related
-	muzzle = TRUE // Whether the gun has a muzzle effect when firing, used for NPCs
 	npc_reload_sound = 'modular_meridia/sounds/guns/revolver/npc_revolver_reload.ogg'
 	npc_aim_sound = 'modular_meridia/sounds/guns/revolver/empty.ogg'
-//	muzzle = "light" // Whether the gun has a muzzle effect when firing, used for NPCs
+	muzzle = "light" // Whether the gun has a muzzle effect when firing, used for NPCs
 
 /obj/item/gun/ballistic/revolver/pistol/examine(mob/user)
 	. = ..()
@@ -118,7 +117,8 @@
 		user.visible_message("<span class='emote'>[user] spins the [src] around their fingers [string]!</span>")
 		playsound(src, spin_sound, 100, FALSE, ignore_walls = FALSE)
 		last_spunned = world.time
-		if(firearm_skill <= 2)
+		can_spin = FALSE
+/*		if(firearm_skill <= 2)
 			if(prob(35))
 				shoot_live_shot(message = 0)
 				user.visible_message("<span class='danger'>[user] accidentally discharged the [src]!</span>")
@@ -126,15 +126,22 @@
 			if(prob(50))
 				user.visible_message("<span class='danger'>[user] accidentally dropped the [src]!</span>")
 				user.dropItemToGround(src)
-		can_spin = FALSE
+*/
 
+
+
+/obj/item/gun/ballistic/revolver/pistol/process_fire(atom/target, mob/living/user, message, params, zone_override, bonus_spread)
+	. = ..()
+	user.changeNext_move(get_click_speed(user))
+
+/obj/item/gun/ballistic/revolver/pistol/equipped(mob/user, slot, initial)
+	. = ..()
+	spread = get_spread_amount(user)
 
 /obj/effect/particle_effect/smoke/revolver
 	name = "smoke"
-	icon = 'icons/effects/96x96.dmi'
+	icon = 'icons/effects/effects.dmi'
 	icon_state = "smoke"
-	pixel_x = -32
-	pixel_y = -32
 	opacity = FALSE
 	layer = FLY_LAYER
 	plane = GAME_PLANE_UPPER
@@ -142,13 +149,34 @@
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	animate_movement = 0
 	amount = 1
-	lifetime = 1
+	lifetime = 2
 	opaque = FALSE
 
 
 /datum/intent/shoot/revolver_pistol
 	chargedrain = 0
 
+/datum/intent/arc/revolver_pistol
+	chargedrain = 0
+
+
+/datum/intent/shoot/revolver_pistol/prewarning()
+	if(mastermob)
+		playsound(mastermob, pick('modular_meridia/sounds/guns/revolver/empty.ogg'), 100, FALSE)
+
+/datum/intent/arc/revolver_pistol/prewarning()
+	if(mastermob)
+		playsound(mastermob, pick('modular_meridia/sounds/guns/revolver/empty.ogg'), 100, FALSE)
+
+
+
+
+
+
+
+
+
+/*
 /datum/intent/shoot/revolver_pistol/get_chargetime()
 	if(mastermob && chargetime)
 		var/newtime = chargetime
@@ -168,8 +196,6 @@
 	if(mastermob)
 		return TRUE
 
-/datum/intent/arc/revolver_pistol
-	chargedrain = 0
 
 
 /datum/intent/arc/revolver_pistol/get_chargetime()
@@ -193,16 +219,8 @@
 		return TRUE
 
 
-/datum/intent/shoot/revolver_pistol/prewarning()
-	if(mastermob)
-		mastermob.visible_message(span_warning("[mastermob] prepares [masteritem] to fire!"))
-		playsound(mastermob, pick('modular_meridia/sounds/guns/revolver/empty.ogg'), 100, FALSE)
-
-/datum/intent/arc/revolver_pistol/prewarning()
-	if(mastermob)
-		mastermob.visible_message(span_warning("[mastermob] prepares [masteritem] to fire!"))
-		playsound(mastermob, pick('modular_meridia/sounds/guns/revolver/empty.ogg'), 100, FALSE)
 
 /obj/item/gun/ballistic/revolver/pistol/shoot_with_empty_chamber()
 	playsound(src.loc, 'modular_meridia/sounds/guns/revolver/dry_fire.ogg', 100, FALSE)
 	update_icon()
+*/

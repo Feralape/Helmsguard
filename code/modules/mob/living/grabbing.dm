@@ -708,5 +708,5 @@
 		if(VampDrinker && VampDrinker.wretch_antag)
 			VampDrinker.vitae = min(VampDrinker.vitae + 400, 5000)
 			to_chat(user, span_notice("I gain 400 vitae from drinking blood. Current vitae: [VampDrinker.vitae]"))
-		else if(VampDrinker && !C.mind)
-			to_chat(user, span_warning("This blood is not pure enough to nourish me properly."))
+//		else if(VampDrinker && !C.mind)
+//			to_chat(user, span_warning("This blood is not pure enough to nourish me properly."))

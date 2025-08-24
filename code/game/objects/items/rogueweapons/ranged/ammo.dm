@@ -433,7 +433,7 @@
 	woundclass = BCLASS_PIERCE
 	flag = "bullet"
 	armor_penetration = 100	//Crossbow-on-crack AP. Armor only goes up to 100 protection normally; so this ignores most of it but not all. Wear good armor!
-	speed = 1		//ZOOM!!!!!
+	speed = 0.3		//ZOOM!!!!!
 	drop_ammo = FALSE // Don't drop ammo on hit, as this is a reusable bullet
 
 /obj/projectile/bullet/reusable/bullet/rogue/on_hit(atom/target, mob/living/shooter, blocked = FALSE)

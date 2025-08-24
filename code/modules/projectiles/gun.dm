@@ -37,10 +37,8 @@
 
 	var/automatic = 0 //can gun use it, 0 is no, anything above 0 is the delay between clicks in ds
 	var/pb_knockback = 0
-
-	var/muzzle = null //Whether the gun has a muzzle effect when firing, also used for NPCs
-
-
+	var/muzzle = null 
+	
 /obj/item/gun/Destroy()
 	if(chambered) //Not all guns are chambered (EMP'ed energy guns etc)
 		QDEL_NULL(chambered)
