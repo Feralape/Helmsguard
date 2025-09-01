@@ -118,7 +118,7 @@
 					r_hand = /obj/item/rogueweapon/sword/iron/messer
 					armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat
 					H.adjust_skillrank(/datum/skill/combat/shields, 1, TRUE)
-				if("Koto blade")
+				if("Foreign Straight Sword")
 					r_hand = /obj/item/rogueweapon/sword/sabre/mulyeog // Meant to not have the special foreign scabbards.
 					beltr = /obj/item/rogueweapon/scabbard/sword
 					armor = /obj/item/clothing/suit/roguetown/armor/basiceast

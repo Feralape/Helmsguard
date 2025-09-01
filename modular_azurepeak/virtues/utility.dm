@@ -359,3 +359,12 @@
 	name = "Heresiarch"
 	desc = "The 'Holy' See has their blood-stained grounds, and so do we. Underneath their noses, we pray to the true gods - I know the location of the local heretic conclave. Secrecy is paramount. If found out, I will surely be killed."
 	added_traits = list(TRAIT_HERESIARCH)
+
+/datum/virtue/utility/ritualist
+	name = "Ritualist"
+	desc = "I am skilled in the holy arts. Using ritual chalk, I can more deftly channel my God's powers via runes."
+	added_traits = list(TRAIT_RITUALIST)
+
+/datum/virtue/utility/ritualist/apply_to_human(mob/living/carbon/human/recipient)
+	var/obj/item/ritechalk = new /obj/item/ritechalk(get_turf(recipient))
+	recipient.put_in_hands(ritechalk, forced = TRUE)

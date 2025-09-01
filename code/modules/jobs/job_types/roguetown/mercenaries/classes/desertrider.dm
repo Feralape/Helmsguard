@@ -171,6 +171,8 @@
 			gloves = /obj/item/clothing/gloves/roguetown/angle
 			pants = /obj/item/clothing/under/roguetown/trou/leather/pontifex/raneshen
 			backr = /obj/item/storage/backpack/rogue/satchel/black
+			r_hand = /obj/item/rogueweapon/sword/sabre/shamshir
+			beltr = /obj/item/rogueweapon/scabbard/sword
 			backpack_contents = list(
 				/obj/item/roguekey/mercenary,
 				/obj/item/rogueweapon/huntingknife/idagger/navaja,
@@ -183,9 +185,4 @@
 
 	shoes = /obj/item/clothing/shoes/roguetown/shalal
 	belt = /obj/item/storage/belt/rogue/leather/shalal
-	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
-	beltl = /obj/item/rogueweapon/scabbard
-	l_hand = /obj/item/rogueweapon/sword/sabre/shamshir
-
-
-
+	beltl = /obj/item/storage/belt/rogue/pouch/coins/poor
