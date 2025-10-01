@@ -2117,15 +2117,6 @@
 /obj/machinery/light/rogue/wallfire/candle/blue/r,
 /turf/open/floor/rogue/blocks,
 /area/rogue/indoors)
-"qK" = (
-/obj/effect/landmark/start/adventurer{
-	dir = 1
-	},
-/obj/effect/landmark/start/adventurerlate{
-	dir = 1
-	},
-/turf/open/floor/rogue/naturalstone,
-/area/rogue/under/cave/adventurer_cave)
 "qO" = (
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/inhumen)
@@ -19174,7 +19165,7 @@ Vo
 Vo
 Vo
 Vo
-qK
+Vo
 zr
 vJ
 vJ
@@ -19304,7 +19295,7 @@ Vo
 Vo
 Vo
 Vo
-qK
+Vo
 zr
 vJ
 vJ
@@ -19434,7 +19425,7 @@ jP
 Vo
 Vo
 Vo
-qK
+Vo
 zr
 vJ
 vJ
@@ -19564,7 +19555,7 @@ We
 Vo
 Vo
 Vo
-qK
+Vo
 zr
 vJ
 vJ
@@ -19694,7 +19685,7 @@ Tv
 Vo
 Vo
 Vo
-qK
+Vo
 zr
 vJ
 vJ
@@ -19824,7 +19815,7 @@ We
 Vo
 Vo
 Vo
-qK
+Vo
 zr
 vJ
 vJ
@@ -19954,7 +19945,7 @@ jP
 Vo
 Vo
 Vo
-qK
+Vo
 zr
 vJ
 vJ
