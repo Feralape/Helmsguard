@@ -17,6 +17,12 @@
 	var/amount = 4
 	var/lifetime = 5
 	var/opaque = 1 //whether the smoke can block the view when in enough amount
+	var/mist = 0
+
+/obj/effect/particle_effect/smoke/mist
+	amount = 4
+	mist = 1
+
 
 /obj/effect/particle_effect/smoke/arquebus
 	name = "smoke"
@@ -63,7 +69,7 @@
 
 /obj/effect/particle_effect/smoke/process()
 	lifetime--
-	if(lifetime < 1)
+	if((lifetime < 1) && !(mist))
 		kill_smoke()
 		return 0
 	for(var/mob/living/L in range(0,src))
